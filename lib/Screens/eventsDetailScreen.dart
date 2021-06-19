@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:nilay_dtuotg_2/models/events.dart';
 import 'package:nilay_dtuotg_2/models/screenArguments.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import '../providers/info_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/events.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 
 class EventsDetailScreen extends StatefulWidget {
   static const routeName = '/EventsDetailScreen';
@@ -69,12 +72,178 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text('eve detail'),
-      ),
-      body: Container(
+    return waiting
+        ? Scaffold(
+            backgroundColor: Colors.cyan[200],
+            body: Center(
+              child: FadingText('Loading...'),
+            ),
+          )
+        : Scaffold(
+            floatingActionButton: FloatingActionButton.extended(
+              backgroundColor: Colors.amber,
+              onPressed: () async {
+                BuildContext bc =
+                    Provider.of<MaterialNavigatorKey>(context, listen: false)
+                        .get()
+                        .currentContext;
+                var scf = Provider.of<SCF>(args.context, listen: false).get();
+                bool registered = _eventDetails.registered
+                    ? await scf.unregisterForEvent(_eventDetails.id, bc)
+                    : await scf.registerForEvent(_eventDetails.id, bc);
+                // if (_eventDetails.registered != registered) {
+                //   //still not being added or removed from schedule
+                //  Provider.of<EventsData>(bc, listen: false)
+                //    .changeFavoriteStatus(_eventDetails.id);
+                // }
+                if (mounted)
+                  setState(() {
+                    _eventDetails.registered = registered;
+                  });
+              },
+              label: Text(
+                _eventDetails.registered ? 'registered' : 'register',
+                style: TextStyle(
+                  color:
+                      _eventDetails.registered ? Colors.redAccent : Colors.blue,
+                ),
+              ),
+              icon: Icon(
+                _eventDetails.registered
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                color:
+                    _eventDetails.registered ? Colors.redAccent : Colors.blue,
+              ),
+            ),
+            backgroundColor: Colors.cyan[100],
+            key: _scaffoldKey,
+            appBar: AppBar(
+              backgroundColor: Colors.cyan,
+              elevation: 3,
+              title: Text(
+                '${_eventDetails.name}',
+                style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
+              ),
+            ),
+            body: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("Assets/newframe.png"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 22, horizontal: 22),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Card(
+                    color: Color(0xffF2EFE4), // Colors.cyan,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 11, horizontal: 54),
+                      child: Icon(
+                        Icons.image,
+                        size: 200,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Card(
+                        color: Colors.amber[100],
+                        child: Container(
+                          margin:
+                              EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 11, horizontal: 44),
+                          child: Text('Date',
+                              style: TextStyle(
+                                  color: Colors.grey[800],
+                                  fontWeight: FontWeight.w900,
+                                  fontStyle: FontStyle.italic,
+                                  fontFamily: 'Open Sans',
+                                  fontSize: 20)),
+                        ),
+                      ),
+                      Card(
+                        color: Colors.amber[100],
+                        child: Container(
+                          margin:
+                              EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 11, horizontal: 11),
+                          child: Text(
+                              '${_eventDetails.dateTime.day} / ${_eventDetails.dateTime.month} / ${_eventDetails.dateTime.year}',
+                              style: TextStyle(
+                                  color: Colors.grey[800],
+                                  fontWeight: FontWeight.w900,
+                                  fontStyle: FontStyle.italic,
+                                  fontFamily: 'Open Sans',
+                                  fontSize: 20)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Card(
+                    color: Color(0xffF2EFE4), // Colors.redAccent[100],
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 33, horizontal: 44),
+                      child: Text(
+                        'This is the description of this event, explaining all the details about it. ',
+                        style: TextStyle(
+                            color: Colors.blueGrey[800],
+                            fontWeight: FontWeight.w900,
+                            fontStyle: FontStyle.italic,
+                            fontFamily: 'Open Sans',
+                            fontSize: 20),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.amber[100],
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                      child: Text(
+                        'Happening in - DTU',
+                        style: TextStyle(
+                            color: Colors.blueGrey[800],
+                            fontWeight: FontWeight.w900,
+                            fontStyle: FontStyle.italic,
+                            fontFamily: 'Open Sans',
+                            fontSize: 20),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.redAccent[100],
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                      child: Text(
+                        'People registered  ${_eventDetails.count.toString()}',
+                        style: TextStyle(
+                            color: Colors.blueGrey[800],
+                            fontWeight: FontWeight.w900,
+                            fontStyle: FontStyle.italic,
+                            fontFamily: 'Open Sans',
+                            fontSize: 20),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+  }
+}
+/*  Container(
         child: Center(
             child: waiting
                 ? CircularProgressIndicator()
@@ -146,7 +315,4 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                       )
                     ],
                   )),
-      ),
-    );
-  }
-}
+      ) */
