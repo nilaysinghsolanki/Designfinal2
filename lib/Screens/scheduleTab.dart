@@ -186,7 +186,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   Padding(
                     padding: const EdgeInsets.only(top: 0),
                     child: Text(
-                      'empty events today',
+                      '',
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
@@ -203,6 +203,13 @@ class _ScheduleTabState extends State<ScheduleTab> {
                       itemCount: Provider.of<EventsData>(context).events.length,
                       itemBuilder: (context, index) {
                         var events = Provider.of<EventsData>(context).events;
+                        var eventsedRegester = [];
+
+                        events.forEach((element) {
+                          if (element.favorite) {
+                            eventsedRegester.add(element);
+                          }
+                        });
 
                         return Padding(
                           padding: const EdgeInsets.symmetric(

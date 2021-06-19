@@ -35,17 +35,31 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your profile'),
-        backgroundColor: Colors.pinkAccent,
+        title: Text('Your profile',
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w900,
+                fontStyle: FontStyle.italic,
+                fontFamily: 'Open Sans',
+                fontSize: 20)),
+        backgroundColor: Colors.cyan,
       ),
       body: !initialized
           ? Center(
               child: FadingText('Loading...'),
             )
-          : SingleChildScrollView(
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
+          : Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("Assets/newframe.png"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: SingleChildScrollView(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Container(
                     child: Image.network(
@@ -58,33 +72,132 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                         //   exception,
                         //   stackTrace,
                         // );
-                        return ListTile(
-                          title: Text('😢 Can\'t load image'),
-                          leading: Icon(Icons.image_rounded),
+                        return Card(
+                          color: Colors.cyan,
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 11, horizontal: 4),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 11, horizontal: 44),
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.person_outline,
+                                  size: 55,
+                                ),
+                                Text('😢 Can\'t load image',
+                                    style: TextStyle(
+                                        color: Colors.grey[800],
+                                        fontWeight: FontWeight.w900,
+                                        fontStyle: FontStyle.normal,
+                                        fontFamily: 'Open Sans',
+                                        fontSize: 20)),
+                              ],
+                            ),
+                          ),
                         );
                       },
                     ),
                   ),
-                  ListTile(
-                    title: Text(data['name'].toString()),
+                  Card(
+                    color: Colors.redAccent[100],
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                      child: Text('name - ' + data['name'].toString(),
+                          style: TextStyle(
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20)),
+                    ),
                   ),
-                  ListTile(
-                    title: Text(data['roll_no'].toString()),
+                  Card(
+                    color: Colors.amber[100],
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                      child: Text('roll no. ' + data['roll_no'].toString(),
+                          style: TextStyle(
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20)),
+                    ),
                   ),
-                  ListTile(
-                    title: Text(data['branch'].toString()),
+                  Card(
+                    color: Colors.redAccent[100],
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                      child: Text('Branch ' + data['branch'].toString(),
+                          style: TextStyle(
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20)),
+                    ),
                   ),
-                  ListTile(
-                    title: Text(data['batch'].toString()),
+
+                  Card(
+                    color: Colors.amber[100],
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                      child: Text('Batch ' + data['batch'].toString(),
+                          style: TextStyle(
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20)),
+                    ),
                   ),
-                  ListTile(
-                    title: Text(data['year'].toString()),
+
+                  Card(
+                    color: Colors.redAccent[100],
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                      child: Text('year ' + data['year'].toString(),
+                          style: TextStyle(
+                              color: Colors.grey[800],
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20)),
+                    ),
                   ),
-                  ListTile(
-                    title: Text(data['who_sent'].toString()),
-                  ),
+
+                  // Card(
+                  //   color: Colors.amber[100],
+                  //   child: Container(
+                  //     margin:
+                  //         EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                  //     padding:
+                  //         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                  //     child: Text('roll no. ' + data['roll_no'].toString(),
+                  //         style: TextStyle(
+                  //             color: Colors.grey[800],
+                  //             fontWeight: FontWeight.w900,
+                  //             fontStyle: FontStyle.italic,
+                  //             fontFamily: 'Open Sans',
+                  //             fontSize: 20)),
+                  //   ),
+                  // ),
+                  // ListTile(
+                  //   title: Text(data['who_sent'].toString()),
+                  // ),
                 ],
-              ),
+              )),
             ),
     );
   }
