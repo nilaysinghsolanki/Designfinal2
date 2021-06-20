@@ -74,7 +74,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         };
 
         http.Response response = await http.get(
-          Uri.https('dtu-otg.herokuapp.com', 'auth/check-auth'),
+          Uri.https('dtuotg.azurewebsites.net', 'auth/check-auth'),
           headers: headersAccessToken,
         );
         int statusCode = response.statusCode;

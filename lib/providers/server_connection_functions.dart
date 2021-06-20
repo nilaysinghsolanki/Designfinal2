@@ -22,7 +22,7 @@ class Server_Connection_Functions {
     };
 
     http.Response response = await http.get(
-      Uri.https('dtu-otg.herokuapp.com', '/auth/profile/view/$username'),
+      Uri.https('dtuotg.azurewebsites.net', '/auth/profile/view/$username'),
       headers: headers,
     );
     int statusCode = response.statusCode;
@@ -49,7 +49,7 @@ class Server_Connection_Functions {
       "event_id": "$eventId",
     };
     http.Response response = await http.post(
-        Uri.https('dtu-otg.herokuapp.com', 'events/register/'),
+        Uri.https('dtuotg.azurewebsites.net', 'events/register/'),
         headers: headersRegisterEvent,
         body: json.encode(mapjsonBody));
     print(json.encode(mapjsonBody));
@@ -79,7 +79,7 @@ class Server_Connection_Functions {
       "event_id": "$eventId",
     };
     http.Response response = await http.post(
-        Uri.https('dtu-otg.herokuapp.com', 'events/unregister/'),
+        Uri.https('dtuotg.azurewebsites.net', 'events/unregister/'),
         headers: headersUnregisterEvent,
         body: json.encode(mapjsonBody));
     print(json.encode(mapjsonBody));
@@ -108,7 +108,7 @@ class Server_Connection_Functions {
       "Authorization": "Bearer $accessTokenValue"
     };
     http.Response response = await http.get(
-      Uri.https('dtu-otg.herokuapp.com', 'events'),
+      Uri.https('dtuotg.azurewebsites.net', 'events'),
       headers: headersEvents,
     );
     int statusCode = response.statusCode;
@@ -175,7 +175,7 @@ class Server_Connection_Functions {
     };
     print('1');
     http.Response response = await http.post(
-        Uri.https('dtu-otg.herokuapp.com', 'events/create/'),
+        Uri.https('dtuotg.azurewebsites.net', 'events/create/'),
         headers: headersCreateEvent,
         body: json.encode(mapjsonBody));
     print('///////resp CREATE EVENT  ${response.body}');
@@ -194,7 +194,7 @@ class Server_Connection_Functions {
     };
     Map mapjsonBody = {"email": "$email"};
     http.Response response = await http.post(
-        Uri.https('dtu-otg.herokuapp.com', 'auth/send-email/'),
+        Uri.https('dtuotg.azurewebsites.net', 'auth/send-email/'),
         headers: headersInvite,
         body: json.encode(mapjsonBody));
     print(json.encode(mapjsonBody));
@@ -218,7 +218,7 @@ class Server_Connection_Functions {
     };
     print('2');
     http.Response response = await http.get(
-      Uri.https('dtu-otg.herokuapp.com', 'timetable/',
+      Uri.https('dtuotg.azurewebsites.net', 'timetable/',
           {"year": "2k19", "batchgrp": "A", "batchnum": "1"}),
       headers: headersTimeTable,
     );

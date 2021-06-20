@@ -135,7 +135,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                         "image": _image
                       };
                       http.Response response = await http.patch(
-                          Uri.https('dtu-otg.herokuapp.com',
+                          Uri.https('dtuotg.azurewebsites.net',
                               'auth/profile/$username'),
                           headers: headersProfile,
                           body: json.encode(mapjsonnprofile));

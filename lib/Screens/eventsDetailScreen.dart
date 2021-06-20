@@ -40,7 +40,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
         "Authorization": "Bearer $accessTokenValue"
       };
       http.Response response = await http.get(
-        Uri.https('dtu-otg.herokuapp.com', 'events/details/$eventID'),
+        Uri.https('dtuotg.azurewebsites.net', 'events/details/$eventID'),
         headers: headersEventDetails,
       );
       print('/////////$eventID');

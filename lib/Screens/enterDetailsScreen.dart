@@ -83,7 +83,7 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                 };
                 http.Response response = await http.put(
                     Uri.https(
-                        'dtu-otg.herokuapp.com', 'auth/profile/$username'),
+                        'dtuotg.azurewebsites.net', 'auth/profile/$username'),
                     headers: headersProfile,
                     body: json.encode(mapjsonnprofile));
                 int statusCode = response.statusCode;

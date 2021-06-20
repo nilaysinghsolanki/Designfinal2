@@ -29,8 +29,6 @@ class _AuthScreenState extends State<AuthScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-
   }
 
   final username = TextEditingController();
@@ -47,22 +45,21 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-      
-
         body: //AuthForm(),
             Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(image: AssetImage("Assets/newframe.png"), fit: BoxFit.cover,),
-              ),
-              child: Form(
-          key: formGlobalKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: Column(
-              children: [
-                //.......................HEADING
-                Container(
-
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("Assets/newframe.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Form(
+        key: formGlobalKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: Column(
+          children: [
+            //.......................HEADING
+            Container(
               child: Text(
                 signingUp ? 'Sign Up' : 'Log in',
                 style: TextStyle(
@@ -71,10 +68,10 @@ class _AuthScreenState extends State<AuthScreen> {
                     color: Colors.amber),
               ),
               margin: EdgeInsets.only(top: 60, bottom: 20),
-                ),
-                //......................TEXT ENTRYING
+            ),
+            //......................TEXT ENTRYING
 
-                if (signingUp)
+            if (signingUp)
               //  if (!signUpOtpStep)
               Padding(
                 child: CupertinoTextFormFieldRow(
@@ -104,8 +101,8 @@ class _AuthScreenState extends State<AuthScreen> {
                 padding:
                     EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
               ),
-                //   if (!signUpOtpStep)
-                Padding(
+            //   if (!signUpOtpStep)
+            Padding(
               child: CupertinoTextFormFieldRow(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
 
@@ -130,10 +127,9 @@ class _AuthScreenState extends State<AuthScreen> {
                   }
                 },
               ),
-              padding:
-                  EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
-                ),
-                if (!forgotPassword)
+              padding: EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+            ),
+            if (!forgotPassword)
               //  if (!signUpOtpStep)
               Padding(
                 child: CupertinoTextFormFieldRow(
@@ -161,7 +157,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 padding:
                     EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
               ),
-                if (signingUp)
+            if (signingUp)
               //   if (!signUpOtpStep)
               Padding(
                 child: CupertinoTextFormFieldRow(
@@ -191,9 +187,9 @@ class _AuthScreenState extends State<AuthScreen> {
                 padding:
                     EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
               ),
-                //////
+            //////
 
-                if (signingUp)
+            if (signingUp)
               //  if (!signUpOtpStep)
               Padding(
                 child: CupertinoTextFormFieldRow(
@@ -220,47 +216,46 @@ class _AuthScreenState extends State<AuthScreen> {
                 padding:
                     EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
               ),
-                //////
-                //  if (signUpOtpStep)
-                // Padding(
-                //   child: CupertinoTextFormFieldRow(
-                //     autovalidateMode: AutovalidateMode.onUserInteraction,
-                //     maxLength: 6,
-                //     decoration: BoxDecoration(
-                //       color: Colors.white,
-                //     ),
-                //     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                //     controller: otp,
-                //     //  restorationId: 'otp',
-                //     placeholder: 'enter OTP',
-                //     keyboardType: TextInputType.number,
-                //     //  clearButtonMode: OverlayVisibilityMode.editing,
-                //     obscureText: false,
-                //     autocorrect: false,
-                //     validator: (value) {
-                //       if (signingUp && signUpOtpStep) {
-                //         if (value.contains(' ')) {
-                //           return 'no spaces allowed';
-                //         }
-                //         if (value.contains('.')) {
-                //           return '. not allowed';
-                //         }
-                //         if (value.length != 6) {
-                //           return '6 digits bro';
-                //         }
-                //         if (value.isEmpty) {
-                //           return 'enter otp';
-                //         }
-                //       }
-                //     },
-                //   ),
-                //   padding:
-                //       EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
-                // ),
-                //    if (!signUpOtpStep)
-                Padding(
-              padding:
-                  EdgeInsets.only(left: 22, top: 0, bottom: 0, right: 22),
+            //////
+            //  if (signUpOtpStep)
+            // Padding(
+            //   child: CupertinoTextFormFieldRow(
+            //     autovalidateMode: AutovalidateMode.onUserInteraction,
+            //     maxLength: 6,
+            //     decoration: BoxDecoration(
+            //       color: Colors.white,
+            //     ),
+            //     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            //     controller: otp,
+            //     //  restorationId: 'otp',
+            //     placeholder: 'enter OTP',
+            //     keyboardType: TextInputType.number,
+            //     //  clearButtonMode: OverlayVisibilityMode.editing,
+            //     obscureText: false,
+            //     autocorrect: false,
+            //     validator: (value) {
+            //       if (signingUp && signUpOtpStep) {
+            //         if (value.contains(' ')) {
+            //           return 'no spaces allowed';
+            //         }
+            //         if (value.contains('.')) {
+            //           return '. not allowed';
+            //         }
+            //         if (value.length != 6) {
+            //           return '6 digits bro';
+            //         }
+            //         if (value.isEmpty) {
+            //           return 'enter otp';
+            //         }
+            //       }
+            //     },
+            //   ),
+            //   padding:
+            //       EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+            // ),
+            //    if (!signUpOtpStep)
+            Padding(
+              padding: EdgeInsets.only(left: 22, top: 0, bottom: 0, right: 22),
               child: CupertinoButton(
                   onPressed: () {
                     setState(() {
@@ -269,12 +264,13 @@ class _AuthScreenState extends State<AuthScreen> {
                   },
                   child: Text(
                     obscureText ? 'show password' : 'hide password',
-                    style: TextStyle(color: Colors.amber,backgroundColor:Color(0xffF2EFE4)),
-
+                    style: TextStyle(
+                        color: Colors.amber,
+                        backgroundColor: Color(0xffF2EFE4)),
                   )),
-                ),
-                //    if (!signUpOtpStep)
-                if (!waiting)
+            ),
+            //    if (!signUpOtpStep)
+            if (!waiting)
               Padding(
                 padding:
                     EdgeInsets.only(left: 22, top: 0, bottom: 0, right: 22),
@@ -286,13 +282,13 @@ class _AuthScreenState extends State<AuthScreen> {
                     },
                     child: Text(
                       signingUp ? 'or log in' : 'or signup',
-                                           style: TextStyle(color: Colors.amber, backgroundColor:Color(0xffF2EFE4)),
-
+                      style: TextStyle(
+                          color: Colors.amber,
+                          backgroundColor: Color(0xffF2EFE4)),
                     )),
               ),
-                Padding(
-              padding:
-                  EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+            Padding(
+              padding: EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
               child: ElevatedButton(
                   style: ButtonStyle(
                     overlayColor: MaterialStateProperty.all(Colors.amber),
@@ -320,7 +316,8 @@ class _AuthScreenState extends State<AuthScreen> {
                           "password": "${pswd.text}"
                         };
                         http.Response response = await http.post(
-                            Uri.https('dtu-otg.herokuapp.com', 'auth/login/'),
+                            Uri.https(
+                                'dtuotg.azurewebsites.net', 'auth/login/'),
                             headers: headerslogin,
                             body: json.encode(mapjsonnlogin));
                         int statusCode = response.statusCode;
@@ -358,21 +355,19 @@ class _AuthScreenState extends State<AuthScreen> {
                                       listen: false)
                                   .setTokenAndDate(
                                       resp["tokens"]["access"].toString());
-                              Provider.of<UsernameData>(context,
-                                      listen: false)
+                              Provider.of<UsernameData>(context, listen: false)
                                   .addUsername(username.text);
                               Navigator.of(context).pushNamed(
                                   '/EnterDetailsScreen',
-                                  arguments: ScreenArguments(
-                                      username: username.text));
+                                  arguments:
+                                      ScreenArguments(username: username.text));
                             } else {
                               Provider.of<AccessTokenData>(context,
                                       listen: false)
                                   .addAccessToken(
                                       resp["tokens"]["access"].toString(),
                                       DateTime.now());
-                              Provider.of<UsernameData>(context,
-                                      listen: false)
+                              Provider.of<UsernameData>(context, listen: false)
                                   .addUsername(username.text);
 
                               Navigator.of(context).pushNamed('/homeScreen');
@@ -544,11 +539,11 @@ class _AuthScreenState extends State<AuthScreen> {
                           // : '            send otp            '
                           ? '   sign up   '
                           : '              log in              ')),
-                )
-              ],
-          ),
+            )
+          ],
         ),
-            ));
+      ),
+    ));
     //////////////////////////////////////////////////////////////////////////
     //FUNCTIONS...LOGIN SIGNUP_SENDOTP...OTP_VERIFY
   }
