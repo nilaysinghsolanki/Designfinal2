@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
+import 'dart:io';
 import '../providers/info_provider.dart';
 //import 'package:path/path.dart' as path; //otherwise context error
 
@@ -134,7 +135,8 @@ class Server_Connection_Functions {
       String description,
       int type,
       DateTime dateTime,
-      TimeOfDay timeOfDay) async {
+      TimeOfDay timeOfDay,
+      File image) async {
     print('x1');
     var hours =
         await Provider.of<AddEventScreenData>(context, listen: false).hours;
@@ -171,7 +173,8 @@ class Server_Connection_Functions {
       "latitude": "27.204600000",
       "longitude": "77.497700000",
       "type_event": "${type.toString()}",
-      "user_registered": true
+      "user_registered": true,
+      "image": image
     };
     print('1');
     http.Response response = await http.post(

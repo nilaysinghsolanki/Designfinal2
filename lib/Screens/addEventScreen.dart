@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class AddEventScreen extends StatefulWidget {
   static const routeName = 'AddEventScreen';
@@ -17,9 +19,7 @@ class AddEventScreen extends StatefulWidget {
 }
 
 class _AddEventScreenState extends State<AddEventScreen> {
-  final name = TextEditingController(
-
-  );
+  final name = TextEditingController();
   final description = TextEditingController();
   @override
   void initState() {
@@ -31,6 +31,35 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
   DateTime dateTime;
   TimeOfDay timeOfDay;
+
+  File _image;
+  final picker = ImagePicker();
+
+  Future getImage() async {
+    print('a');
+    PickedFile pickedFile;
+    // final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    try {
+      print('b');
+      pickedFile = await picker.getImage(
+        source: ImageSource.gallery,
+      );
+      print('${pickedFile.path}');
+    } catch (e) {
+      print('c');
+      print(e.code);
+    }
+    setState(() {
+      print('d');
+      if (pickedFile != null) {
+        print('e');
+        _image = File(pickedFile.path);
+      } else {
+        print('f');
+        print('No image selected.');
+      }
+    });
+  }
 
   final formGlobalKey = GlobalKey<FormState>();
   bool waiting = false;
@@ -44,15 +73,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
     //     Provider.of<TabsScreenContext>(context, listen: false).get();
     var data = Provider.of<AddEventScreenData>(context, listen: true);
     return Scaffold(
-      backgroundColor:  Colors.brown,
+      backgroundColor: Colors.brown,
       persistentFooterButtons: [
         ElevatedButton.icon(
-
-          style: ElevatedButton.styleFrom(
-            primary: Colors.white ,
-            elevation: 0
-          ),
-
+            style:
+                ElevatedButton.styleFrom(primary: Colors.white, elevation: 0),
             onPressed: () async {
               print('1');
               setState(() {
@@ -65,8 +90,14 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   type != null) {
                 print('2');
                 var scf = Provider.of<SCF>(context, listen: false).get();
-                Map<String, dynamic> resp = await scf.createEvent(context,
-                    name.text, description.text, type, dateTime, timeOfDay);
+                Map<String, dynamic> resp = await scf.createEvent(
+                    context,
+                    name.text,
+                    description.text,
+                    type,
+                    dateTime,
+                    timeOfDay,
+                    _image);
                 scf.fetchListOfEvents(context);
 
                 print('3');
@@ -89,9 +120,16 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 waiting = false;
               });
             },
-            icon: Icon(Icons.save,color: Colors.brown,),
-            label: waiting ? CircularProgressIndicator() : Text('save',style: TextStyle(color: Colors.brown),))
-
+            icon: Icon(
+              Icons.save,
+              color: Colors.brown,
+            ),
+            label: waiting
+                ? CircularProgressIndicator()
+                : Text(
+                    'save',
+                    style: TextStyle(color: Colors.brown),
+                  ))
       ],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -99,21 +137,33 @@ class _AddEventScreenState extends State<AddEventScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-            image: DecorationImage(image: AssetImage("Assets/newframe.png"), fit: BoxFit.cover),
+            image: DecorationImage(
+                image: AssetImage("Assets/newframe.png"), fit: BoxFit.cover),
             borderRadius: BorderRadius.circular(20)),
-
         child: SingleChildScrollView(
           child: Form(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              _image == null
+                  ? ListTile(
+                      leading: Icon(Icons.add_a_photo),
+                      title: Text('No image selected.'),
+                      onTap: getImage,
+                    )
+                  : Container(
+                      child: Image.file(_image),
+                      height: 100,
+                    ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  primary: Colors.white,
-                  side: BorderSide(color: Colors.brown,width: 2)
+                    elevation: 0,
+                    primary: Colors.white,
+                    side: BorderSide(color: Colors.brown, width: 2)),
+                child: Text(
+                  'Pick A Date',
+                  style: TextStyle(color: Colors.brown),
                 ),
-                child: Text('Pick A Date',style: TextStyle(color: Colors.brown),),
                 autofocus: true,
                 clipBehavior: Clip.hardEdge,
                 onPressed: () async {
@@ -129,8 +179,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 style: ElevatedButton.styleFrom(
                     elevation: 0,
                     primary: Colors.white,
-                    side: BorderSide(color: Colors.brown,width: 2)
-                ),
+                    side: BorderSide(color: Colors.brown, width: 2)),
                 onPressed: () async {
                   timeOfDay = await showTimePicker(
                     context: context,
@@ -138,14 +187,18 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   );
                   print('$timeOfDay');
                 },
-                child: Text("startingTime?",style: TextStyle(color: Colors.brown),),
+                child: Text(
+                  "startingTime?",
+                  style: TextStyle(color: Colors.brown),
+                ),
               ),
               Container(
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage("Assets/newframe.png"), fit: BoxFit.cover),),
-
+                  image: DecorationImage(
+                      image: AssetImage("Assets/newframe.png"),
+                      fit: BoxFit.cover),
+                ),
                 child: ListTile(
-
                   leading: Icon(Icons.timelapse),
                   tileColor: Colors.white,
                   title: Text('Duration?'),
@@ -176,8 +229,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 child: CupertinoTextFormFieldRow(
                   cursorColor: Colors.brown,
 
-                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))
-                  ,color: Colors.white),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.white),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
 
                   maxLength: 20,
@@ -204,8 +258,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
               Padding(
                 child: CupertinoTextFormFieldRow(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))
-                      ,color: Colors.white),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.white),
                   maxLength: 2000, maxLines: 8, minLines: 1,
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                   controller: description,
@@ -262,7 +317,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   hintText: 'choose event type',
                 ),
               ),
-
             ],
           )),
         ),

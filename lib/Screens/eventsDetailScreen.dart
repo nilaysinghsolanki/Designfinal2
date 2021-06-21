@@ -143,9 +143,41 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                       margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                       padding:
                           EdgeInsets.symmetric(vertical: 11, horizontal: 54),
-                      child: Icon(
-                        Icons.image,
-                        size: 200,
+                      child: Image.network(
+                        resp['image'],
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace stackTrace) {
+                          // Appropriate logging or analytics, e.g.
+                          // myAnalytics.recordError(
+                          //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
+                          //   exception,
+                          //   stackTrace,
+                          // );
+                          return Card(
+                            color: Colors.cyan,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 11, horizontal: 4),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 11, horizontal: 44),
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.person_outline,
+                                    size: 55,
+                                  ),
+                                  Text('😢 Can\'t load image',
+                                      style: TextStyle(
+                                          color: Colors.grey[800],
+                                          fontWeight: FontWeight.w900,
+                                          fontStyle: FontStyle.normal,
+                                          fontFamily: 'Open Sans',
+                                          fontSize: 20)),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),
