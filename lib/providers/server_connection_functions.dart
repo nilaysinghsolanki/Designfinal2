@@ -156,7 +156,7 @@ class Server_Connection_Functions {
 //await Provider.of<OwnerIdData>(context, listen: false).fetchAndSetData();
     int owner1 = Provider.of<OwnerIdData>(context, listen: false).ownerID[0];
     Map<String, String> headersCreateEvent = {
-      "Content-type": "application/json",
+      "Content-type": "multipart/form-data",
       "accept": "application/json",
       "Authorization": "Bearer $accessTokenValue"
     };
