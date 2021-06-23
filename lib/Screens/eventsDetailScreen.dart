@@ -166,7 +166,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                                     Icons.person_outline,
                                     size: 55,
                                   ),
-                                  Text('😢 Can\'t load image',
+                                  Text('😢 Can\'t load image ',
                                       style: TextStyle(
                                           color: Colors.grey[800],
                                           fontWeight: FontWeight.w900,
@@ -225,7 +225,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                       padding:
                           EdgeInsets.symmetric(vertical: 33, horizontal: 44),
                       child: Text(
-                        'This is the description of this event, explaining all the details about it. ',
+                        _eventDetails.description,
                         style: TextStyle(
                             color: Colors.blueGrey[800],
                             fontWeight: FontWeight.w900,
