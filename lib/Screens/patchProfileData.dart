@@ -113,7 +113,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                         waiting = true;
                       });
                       Map<String, String> headersProfile = {
-                        "Content-type": "application/json",
+                        "Content-type": "multipart/form-data",
                         "accept": "application/json",
                         "Authorization": "Bearer $accessTokenValue"
                       };
