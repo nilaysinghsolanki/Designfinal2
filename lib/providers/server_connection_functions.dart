@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import '../models/events.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -129,15 +130,11 @@ class Server_Connection_Functions {
     return true;
   }
 
-  Future<dynamic> createEvent(
-      BuildContext context,
-      String name,
-      String description,
-      int type,
-      DateTime dateTime,
-      TimeOfDay timeOfDay,
-      File image) async {
-    print('x1');
+  Future<int> createEvent(BuildContext context, String name, String description,
+      int type, DateTime dateTime, TimeOfDay timeOfDay, File image) async {
+    var accessToken =
+        await Provider.of<AccessTokenData>(context, listen: false).accessToken;
+
     var hours =
         await Provider.of<AddEventScreenData>(context, listen: false).hours;
     print('$hours');
@@ -145,16 +142,10 @@ class Server_Connection_Functions {
         await Provider.of<AddEventScreenData>(context, listen: false).minutes;
     print('$minutes');
 
-    var accessToken =
-        await Provider.of<AccessTokenData>(context, listen: false).accessToken;
-    print('$accessToken');
-
     var accessTokenValue = accessToken[0];
     print('1');
-//it takes time to fetch and function moves on..
-//its better to fetch it on loading screen
-//await Provider.of<OwnerIdData>(context, listen: false).fetchAndSetData();
     int owner1 = Provider.of<OwnerIdData>(context, listen: false).ownerID[0];
+
     Map<String, String> headersCreateEvent = {
       "Content-type": "multipart/form-data",
       "accept": "application/json",
@@ -164,7 +155,11 @@ class Server_Connection_Functions {
     DateTime date_time = DateTime(dateTime.year, dateTime.month, dateTime.day,
         timeOfDay.hour, timeOfDay.minute);
     print('1');
-    Map mapjsonBody = {
+
+    ///
+    Response response;
+    var dio = Dio();
+    var formdata = FormData.fromMap({
       "owner": owner1,
       "name": "$name",
       "description": "$description",
@@ -174,17 +169,46 @@ class Server_Connection_Functions {
       "longitude": "77.497700000",
       "type_event": "${type.toString()}",
       "user_registered": true,
-      "image": image
-    };
-    print('1');
-    http.Response response = await http.post(
-        Uri.https('dtuotg.azurewebsites.net', 'events/create/'),
+      "image": await MultipartFile.fromFile(
+        image.path,
+        filename: image.path,
+      )
+    });
+    response = await dio.post(
+      'https://dtuotg.azurewebsites.net/events/create/',
+      data: formdata,
+      options: Options(
         headers: headersCreateEvent,
-        body: json.encode(mapjsonBody));
-    print('///////resp CREATE EVENT  ${response.body}');
-    print('1');
-    Map<String, dynamic> resp = json.decode(response.body);
-    return resp;
+      ),
+      onSendProgress: (int sent, int total) {
+        print('$sent $total');
+      },
+    );
+
+    ///
+    //   Map mapjsonBody = {
+    //     "owner": owner1,
+    //     "name": "$name",
+    //     "description": "$description",
+    //     "date_time": "${date_time.toIso8601String()}",
+    //     "duration": "$hours:$minutes:00",
+    //     "latitude": "27.204600000",
+    //     "longitude": "77.497700000",
+    //     "type_event": "${type.toString()}",
+    //     "user_registered": true,
+    //     "image": image.readAsBytesSync()
+    //   };
+    //   print('1');
+
+    //   http.Response response = await http.post(
+    //       Uri.https('dtuotg.azurewebsites.net', 'events/create/'),
+    //       headers: headersCreateEvent,
+    //       body: json.encode(mapjsonBody));
+    //   print('///////resp CREATE EVENT  ${response.body}');
+    //   print('1');
+    //   Map<String, dynamic> resp = json.decode(response.body);
+    return response.statusCode;
+    //
   }
 
   Future<dynamic> invite(String email, BuildContext context) async {
@@ -207,7 +231,7 @@ class Server_Connection_Functions {
     return resp;
   }
 
-  //
+  // //
   Future<Map<String, dynamic>> timeTableDownload(BuildContext context) async {
     var accessToken =
         Provider.of<AccessTokenData>(context, listen: false).accessToken;

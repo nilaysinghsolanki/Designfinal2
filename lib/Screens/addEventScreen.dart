@@ -90,14 +90,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   type != null) {
                 print('2');
                 var scf = Provider.of<SCF>(context, listen: false).get();
-                Map<String, dynamic> resp = await scf.createEvent(
-                    context,
-                    name.text,
-                    description.text,
-                    type,
-                    dateTime,
-                    timeOfDay,
-                    _image);
+                int resp = await scf.createEvent(context, name.text,
+                    description.text, type, dateTime, timeOfDay, _image);
                 scf.fetchListOfEvents(context);
 
                 print('3');
@@ -112,7 +106,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       );
                     });
 
-                if (resp["status"] == "OK") {
+                if (resp <= 205) {
                   Navigator.of(context).pop();
                 }
               }

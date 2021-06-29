@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nilay_dtuotg_2/Screens/testingScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import '../plus_controller.dart';
@@ -80,7 +81,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
         int statusCode = response.statusCode;
         var resp = json.decode(response.body);
         if (resp["status"] == 'OK') {
-          Navigator.of(context).pushReplacementNamed('/homeScreen');
+          Navigator.of(context).pushReplacementNamed(TestingScreen.routeName);
+          //Navigator.of(context).pushReplacementNamed('/homeScreen');
         } else {
           Navigator.of(context).pushReplacementNamed('/AuthScreen');
         }

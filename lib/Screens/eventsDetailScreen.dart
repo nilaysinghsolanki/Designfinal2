@@ -144,7 +144,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                       padding:
                           EdgeInsets.symmetric(vertical: 11, horizontal: 54),
                       child: Image.network(
-                        resp['image'],
+                        resp['image'].toString().replaceFirst("http", 'https'),
                         errorBuilder: (BuildContext context, Object exception,
                             StackTrace stackTrace) {
                           // Appropriate logging or analytics, e.g.

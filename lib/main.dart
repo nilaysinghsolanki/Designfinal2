@@ -1,6 +1,7 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
 import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
+import 'package:nilay_dtuotg_2/Screens/testingScreen.dart';
 import './Screens/tabsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +77,7 @@ class MyApp extends StatelessWidget {
         navigatorKey: materialNavigatorKey, // GlobalKey()
 
         routes: {
+          TestingScreen.routeName: (context) => TestingScreen(),
           '/ProfileDetailsScreem': (context) => ProfileDetailsScreem(),
           'patchProfileScreen': (context) => PatchProfileScreen(),
           'inviteScreen': (context) => InviteScreen(),

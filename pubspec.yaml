@@ -43,6 +43,7 @@ dependencies:
   date_time_picker: ^2.0.0
   time_range_picker: ^2.0.1
   progress_indicators: ^1.0.0
+  dio: ^4.0.0
 
 
 
