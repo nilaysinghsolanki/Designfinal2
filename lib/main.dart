@@ -27,6 +27,7 @@ import './models/screenArguments.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:nilay_dtuotg_2/Designs/eventsdetailsDESIGN.dart';
 
 void main() => runApp(MyApp());
 var event_name;
@@ -88,7 +89,8 @@ class MyApp extends StatelessWidget {
           '/TabsScreen': (context) => TabsScreen(),
           '/schedule': (context1) => ScheduleTab(),
           '/homeScreen': (context1) => HomeScreen(),
-          '/loading': (context1) => LoadingScreen()
+          '/loading': (context1) => LoadingScreen(),
+          '/eventdetailsdesign':(context1)=>EventsDetailsDesign(),
         },
         title: 'Rive Flutter Demo',
         home: LoadingScreen(),
@@ -205,6 +207,24 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.brown,
             backgroundColor: Color(0xffF2EFE4),
             fontSize: 20),
+      ),
+    ),
+    Builder(
+      builder:(_) =>ListTile(
+         onTap: () {
+        Navigator.of(_).pushNamed('/eventdetailsdesign');
+},
+        leading: CircleAvatar(
+          child: Icon(Icons.motorcycle_rounded, color: Colors.brown),
+          backgroundColor: Color(0xffF2EFE4),
+        ),
+        title: Text(
+          "Designs",
+          style: TextStyle(
+              color: Colors.brown,
+              backgroundColor: Color(0xffF2EFE4),
+              fontSize: 20),
+        ),
       ),
     ),
     ListTile(
@@ -1294,7 +1314,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("Assets/Frame 4.png"),
+          image: AssetImage("Assets/newframe.png"),
           fit: BoxFit.cover,
         ),
       ),
@@ -1305,12 +1325,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
         children: [
           if (_adding_to_app_pressed == false && _events_pressed == false)
             Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("Assets/Frame 4.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
+              color: Colors.transparent,
               height: 200,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -1399,12 +1414,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
           else
             Container(
               height: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("Assets/Frame 4.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
+              color: Colors.transparent,
             ),
 
           //NAVIGATION OF PAGES
@@ -1493,12 +1503,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                       }
                     },
                     child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("Assets/Frame 4.png"),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                     color: Colors.transparent,
                       child: Rive(
                         artboard: _riveArtboard,
                         alignment: Alignment.bottomCenter,

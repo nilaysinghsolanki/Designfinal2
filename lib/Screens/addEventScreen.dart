@@ -23,8 +23,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
   final description = TextEditingController();
   @override
   void initState() {
-    name.text = 'name';
-    description.text = 'description';
+    name.text = 'Name of the Event';
+    description.text = 'Description';
     // TODO: implement initState
     super.initState();
   }
@@ -127,7 +127,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
             label: waiting
                 ? CircularProgressIndicator()
                 : Text(
-                    'save',
+                    'SAVE',
                     style: TextStyle(color: Colors.brown),
                   ))
       ],
@@ -136,10 +136,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
         title: Text('add event'),
       ),
       body: Container(
+
         decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage("Assets/newframe.png"), fit: BoxFit.cover),
-            borderRadius: BorderRadius.circular(20)),
+            borderRadius: BorderRadius.circular(0)),
         child: SingleChildScrollView(
           child: Form(
               child: Column(
@@ -153,7 +154,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     )
                   : Container(
                       child: Image.file(_image),
-                      height: 100,
+
                     ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -192,26 +193,44 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   style: TextStyle(color: Colors.brown),
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("Assets/newframe.png"),
-                      fit: BoxFit.cover),
-                ),
-                child: ListTile(
-                  leading: Icon(Icons.timelapse),
-                  tileColor: Colors.white,
-                  title: Text('Duration?'),
-                  trailing: Text('${data.getHours()}h ${data.getMinutes()}min'),
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Dialog(child: DurationPicker());
-                        });
-                  },
-                ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                child: ElevatedButton(
+
+
+
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+
+                    elevation: 0,
+                    side: BorderSide(color: Colors.brown, width: 2),
+                  ),
+                    onPressed: (){
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(child: DurationPicker());
+                          });
+                    },
+
+
+
+
+
+
+
+                    child: ListTile(
+
+                      tileColor: Colors.white,
+                      title: Text('Duration?'),
+                      trailing: Text('${data.getHours()}h ${data.getMinutes()}min'),
+                      onTap: () {
+
+                      },
+                    ),
+                  ),
               ),
+
               // ListTile(
               //   leading: Icon(Icons.people),
               //   tileColor: Colors.blue[200],
@@ -290,15 +309,15 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   valueField: 'value',
                   dataSource: [
                     {
-                      "display": "type1",
+                      "display": "University",
                       "value": 1,
                     },
                     {
-                      "display": "type2",
+                      "display": "Society",
                       "value": 2,
                     },
                     {
-                      "display": "type3",
+                      "display": "Social",
                       "value": 3,
                     },
                   ],

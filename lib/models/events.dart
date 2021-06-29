@@ -28,6 +28,7 @@ class EventDetails with ChangeNotifier {
   String type;
   bool registered;
   int count;
+  String image;
   EventDetails({
     this.id,
     this.owner,

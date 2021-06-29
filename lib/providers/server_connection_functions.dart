@@ -116,6 +116,7 @@ class Server_Connection_Functions {
     List<dynamic> resp = json.decode(response.body);
     eves = resp.map<Event>((e) {
       return Event(
+
         favorite: e['registered'],
         name: e['name'],
         owner: e['owner'],
@@ -174,7 +175,7 @@ class Server_Connection_Functions {
       "longitude": "77.497700000",
       "type_event": "${type.toString()}",
       "user_registered": true,
-      "image": image
+      "image": image.readAsBytesSync()
     };
     print('1');
     http.Response response = await http.post(

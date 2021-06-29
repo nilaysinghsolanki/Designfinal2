@@ -72,6 +72,7 @@ flutter:
     - Assets/Frame 4.png
     - Assets/newframe.png
     - Assets/BT_animation.riv
+    - Assets/Registration_animation.riv
 
   # To add assets to your application, add an assets section, like this:
   # assets:
