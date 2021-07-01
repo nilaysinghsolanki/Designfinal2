@@ -21,6 +21,8 @@ class AddEventScreen extends StatefulWidget {
 class _AddEventScreenState extends State<AddEventScreen> {
   final name = TextEditingController();
   final description = TextEditingController();
+  final whatsInItForYou = TextEditingController();
+  final link = TextEditingController();
   @override
   void initState() {
     name.text = 'name';
@@ -90,8 +92,18 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   type != null) {
                 print('2');
                 var scf = Provider.of<SCF>(context, listen: false).get();
-                int resp = await scf.createEvent(context, name.text,
-                    description.text, type, dateTime, timeOfDay, _image);
+                int resp = await scf.createEvent(
+                    context,
+                    name.text,
+                    description.text +
+                        '~\$' +
+                        whatsInItForYou.text +
+                        '\$~' +
+                        link.text,
+                    type,
+                    dateTime,
+                    timeOfDay,
+                    _image);
                 scf.fetchListOfEvents(context);
 
                 print('3');
@@ -270,6 +282,60 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     }
                     if (value.isEmpty) {
                       return 'enter description';
+                    }
+                  },
+                ),
+                padding:
+                    EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+              ),
+              Padding(
+                child: CupertinoTextFormFieldRow(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.white),
+                  maxLength: 2000, maxLines: 8, minLines: 1,
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                  controller: whatsInItForYou,
+                  //  restorationId: 'username',
+                  placeholder: "",
+                  keyboardType: TextInputType.multiline,
+                  //   clearButtonMode: OverlayVisibilityMode.editing,
+                  obscureText: false,
+                  autocorrect: false,
+                  validator: (value) {
+                    if (value.length > 2000) {
+                      return 'string too long';
+                    }
+                    if (value.isEmpty) {
+                      return 'what\'s In It For students';
+                    }
+                  },
+                ),
+                padding:
+                    EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+              ),
+              Padding(
+                child: CupertinoTextFormFieldRow(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.white),
+                  maxLength: 2000, maxLines: 8, minLines: 1,
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                  controller: link,
+                  //  restorationId: 'username',
+                  placeholder: "",
+                  keyboardType: TextInputType.multiline,
+                  //   clearButtonMode: OverlayVisibilityMode.editing,
+                  obscureText: false,
+                  autocorrect: false,
+                  validator: (value) {
+                    if (value.length > 2000) {
+                      return 'string too long';
+                    }
+                    if (value.isEmpty) {
+                      return 'link for event or website';
                     }
                   },
                 ),

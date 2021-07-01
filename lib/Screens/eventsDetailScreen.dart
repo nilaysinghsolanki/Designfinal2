@@ -1,5 +1,6 @@
 import 'dart:ui';
-
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/link.dart';
 import 'package:nilay_dtuotg_2/models/events.dart';
 import 'package:nilay_dtuotg_2/models/screenArguments.dart';
 import 'package:flutter/material.dart';
@@ -225,7 +226,16 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                       padding:
                           EdgeInsets.symmetric(vertical: 33, horizontal: 44),
                       child: Text(
-                        _eventDetails.description,
+                        _eventDetails.description.toString().substring(
+                            0,
+                            _eventDetails.description
+                                        .toString()
+                                        .indexOf('~\$') ==
+                                    -1
+                                ? _eventDetails.description.toString().length
+                                : _eventDetails.description
+                                    .toString()
+                                    .indexOf('~\$')),
                         style: TextStyle(
                             color: Colors.blueGrey[800],
                             fontWeight: FontWeight.w900,
@@ -235,6 +245,74 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                       ),
                     ),
                   ),
+                  if (_eventDetails.description.toString().indexOf('~\$') != -1)
+                    Card(
+                      color: Color(0xffF2EFE4), // Colors.redAccent[100],
+                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 33, horizontal: 44),
+                        child: Text(
+                          _eventDetails.description.toString().substring(
+                              _eventDetails.description
+                                          .toString()
+                                          .indexOf('~\$') ==
+                                      -1
+                                  ? 0
+                                  : _eventDetails.description
+                                          .toString()
+                                          .indexOf('~\$') +
+                                      2,
+                              _eventDetails.description
+                                          .toString()
+                                          .indexOf('\$~') ==
+                                      -1
+                                  ? 0
+                                  : _eventDetails.description
+                                      .toString()
+                                      .indexOf('\$~')),
+                          style: TextStyle(
+                              color: Colors.blueGrey[800],
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  if (_eventDetails.description.toString().indexOf('\$~') != -1)
+                    Card(
+                      color: Color(0xffF2EFE4), // Colors.redAccent[100],
+                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 33, horizontal: 44),
+                        child: Link(
+                          uri: Uri.parse(
+                              _eventDetails.description.toString().substring(
+                                    _eventDetails.description
+                                                .toString()
+                                                .indexOf('\$~') ==
+                                            -1
+                                        ? 0
+                                        : _eventDetails.description
+                                                .toString()
+                                                .indexOf('\$~') +
+                                            2,
+                                  )),
+                          target: LinkTarget.blank,
+                          builder: (ctx, openLink) {
+                            return TextButton.icon(
+                              onPressed: openLink,
+                              label: Text('Link '),
+                              icon: Icon(Icons.read_more),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                   Card(
                     color: Colors.amber[100],
                     child: Container(
