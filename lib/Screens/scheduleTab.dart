@@ -41,6 +41,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
   bool initialized = false;
 
   List<Lecture> lectures = [];
+  var eventsedRegester = [];
   int weekDayIndex = 1;
   List<Event> evesForSchedule = [];
   @override
@@ -171,7 +172,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   events0Schedule1 = index;
                 });
               },
-              labels: ['events', 'schedule'],
+              labels: ['events ${eventsedRegester.length+1}', 'schedule'],
               activeBgColor: Colors.brown,
               activeFgColor: Colors.white,
               inactiveFgColor: Colors.brown,
@@ -203,11 +204,13 @@ class _ScheduleTabState extends State<ScheduleTab> {
                       itemCount: Provider.of<EventsData>(context).events.length,
                       itemBuilder: (context, index) {
                         var events = Provider.of<EventsData>(context).events;
-                        var eventsedRegester = [];
+
 
                         events.forEach((element) {
                           if (element.favorite) {
-                            eventsedRegester.add(element);
+                            if(element.dateime.day==_selectedDay.day) {
+                              eventsedRegester.add(element);
+                            }
                           }
                         });
 
@@ -219,15 +222,15 @@ class _ScheduleTabState extends State<ScheduleTab> {
                               Navigator.of(context).pushNamed(
                                   '/EventsDetailScreen',
                                   arguments: ScreenArguments(
-                                      id: events[index].id,
+                                      id: eventsedRegester[index].id,
                                       scf: Server_Connection_Functions(),
                                       context: context));
                             },
-                            tileColor: events[index].favorite
+                            tileColor: eventsedRegester[index].favorite
                                 ? Colors.orange[50]
                                 : Colors.black12,
                             subtitle: Text(
-                              events[index].eventType,
+                              eventsedRegester[index].eventType,
                               style: TextStyle(
                                 color: Colors.brown,
                               ),
@@ -237,7 +240,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                               color: Colors.brown,
                             ),
                             title: Text(
-                              events[index].name,
+                              eventsedRegester[index].name,
                               style:
                                   TextStyle(color: Colors.brown, fontSize: 19),
                             ),
