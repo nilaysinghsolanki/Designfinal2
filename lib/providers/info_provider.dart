@@ -1,5 +1,7 @@
 import '../models/events.dart';
 import '../models/lecture.dart';
+import 'package:http/http.dart' as http;
+
 import '../models/lecture.dart';
 import '../providers/server_connection_functions.dart';
 import 'package:flutter/material.dart';
@@ -37,11 +39,51 @@ class TabsScreenContext with ChangeNotifier {
   }
 }
 
+class EventsImages with ChangeNotifier {
+  bool imgFetched = false;
+  List<String> imageUrls = [];
+  List<int> id = [];
+  Future<void> fetchList(List<Event> events, String accessTokenValue) async {
+    await events.forEach((event) async {
+      Map<String, dynamic> resp;
+
+      Map<String, String> headersEventDetails = {
+        "Content-type": "application/json",
+        "accept": "application/json",
+        "Authorization": "Bearer $accessTokenValue"
+      };
+      http.Response response = await http.get(
+        Uri.https('dtuotg.azurewebsites.net', 'events/details/${event.id}'),
+        headers: headersEventDetails,
+      );
+      print('/////////${event.id}');
+      int statusCode = response.statusCode;
+      resp = json.decode(response.body);
+
+      if (resp['image'] != null) {
+        imageUrls.add(resp['image']);
+        id.add(resp['id']);
+      }
+      print(resp['image']);
+      imgFetched = true;
+      notifyListeners();
+    });
+    notifyListeners();
+  }
+}
+
 class EventsData with ChangeNotifier {
   DateTime lastRefreshed = DateTime(2000);
   setLastRefreshed() {
     lastRefreshed = DateTime.now();
   }
+
+  bool onceDownloaded = false;
+  setOnceDownloaded(bool _) {
+    onceDownloaded = _;
+  }
+
+  bool getOnceDownloaded() => onceDownloaded;
 
   DateTime getLastRefreshed() {
     return lastRefreshed;

@@ -1,5 +1,6 @@
 import 'dart:ui';
-
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/link.dart';
 import 'package:nilay_dtuotg_2/models/events.dart';
 import 'package:nilay_dtuotg_2/models/screenArguments.dart';
 import 'package:flutter/material.dart';
@@ -126,150 +127,229 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                 style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
               ),
             ),
-            body: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("Assets/newframe.png"),
-                  fit: BoxFit.cover,
+            body: SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("Assets/newframe.png"),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              padding: EdgeInsets.symmetric(vertical: 22, horizontal: 22),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Card(
-                    color: Color(0xffF2EFE4), // Colors.cyan,
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 11, horizontal: 54),
-                      child: Image.network(
-                        resp['image'].toString().replaceFirst("http", 'https'),
-                        errorBuilder: (BuildContext context, Object exception,
-                            StackTrace stackTrace) {
-                          // Appropriate logging or analytics, e.g.
-                          // myAnalytics.recordError(
-                          //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
-                          //   exception,
-                          //   stackTrace,
-                          // );
-                          return Card(
-                            color: Colors.cyan,
-                            child: Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 11, horizontal: 4),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 11, horizontal: 44),
-                              child: Column(
-                                children: [
-                                  Icon(
-                                    Icons.person_outline,
-                                    size: 55,
-                                  ),
-                                  Text('😢 Can\'t load image ',
-                                      style: TextStyle(
-                                          color: Colors.grey[800],
-                                          fontWeight: FontWeight.w900,
-                                          fontStyle: FontStyle.normal,
-                                          fontFamily: 'Open Sans',
-                                          fontSize: 20)),
-                                ],
+                padding: EdgeInsets.symmetric(vertical: 22, horizontal: 22),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Card(
+                      color: Color(0xffF2EFE4), // Colors.cyan,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 54),
+                        child: Image.network(
+                          resp['image'].toString().replaceFirst("http", 'https'),
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace stackTrace) {
+                            // Appropriate logging or analytics, e.g.
+                            // myAnalytics.recordError(
+                            //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
+                            //   exception,
+                            //   stackTrace,
+                            // );
+                            return Card(
+                              color: Colors.cyan,
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 11, horizontal: 4),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 11, horizontal: 44),
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.person_outline,
+                                      size: 55,
+                                    ),
+                                    Text('😢 Can\'t load image ',
+                                        style: TextStyle(
+                                            color: Colors.grey[800],
+                                            fontWeight: FontWeight.w900,
+                                            fontStyle: FontStyle.normal,
+                                            fontFamily: 'Open Sans',
+                                            fontSize: 20)),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Card(
-                        color: Colors.amber[100],
-                        child: Container(
-                          margin:
-                              EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 11, horizontal: 44),
-                          child: Text('Date',
-                              style: TextStyle(
-                                  color: Colors.grey[800],
-                                  fontWeight: FontWeight.w900,
-                                  fontStyle: FontStyle.italic,
-                                  fontFamily: 'Open Sans',
-                                  fontSize: 20)),
+                            );
+                          },
                         ),
                       ),
+                    ),
+                    Row(
+                      children: [
+                        Card(
+                          color: Colors.amber[100],
+                          child: Container(
+                            margin:
+                                EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 11, horizontal: 44),
+                            child: Text('Date',
+                                style: TextStyle(
+                                    color: Colors.grey[800],
+                                    fontWeight: FontWeight.w900,
+                                    fontStyle: FontStyle.italic,
+                                    fontFamily: 'Open Sans',
+                                    fontSize: 20)),
+                          ),
+                        ),
+                        Card(
+                          color: Colors.amber[100],
+                          child: Container(
+                            margin:
+                                EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 11, horizontal: 11),
+                            child: Text(
+                                '${_eventDetails.dateTime.day} / ${_eventDetails.dateTime.month} / ${_eventDetails.dateTime.year}',
+                                style: TextStyle(
+                                    color: Colors.grey[800],
+                                    fontWeight: FontWeight.w900,
+                                    fontStyle: FontStyle.italic,
+                                    fontFamily: 'Open Sans',
+                                    fontSize: 20)),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Card(
+                      color: Color(0xffF2EFE4), // Colors.redAccent[100],
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 33, horizontal: 44),
+                        child: Text(
+                          _eventDetails.description.toString().substring(
+                              0,
+                              _eventDetails.description
+                                          .toString()
+                                          .indexOf('~\$') ==
+                                      -1
+                                  ? _eventDetails.description.toString().length
+                                  : _eventDetails.description
+                                      .toString()
+                                      .indexOf('~\$')),
+                          style: TextStyle(
+                              color: Colors.blueGrey[800],
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20),
+                        ),
+                      ),
+                    ),
+                    if (_eventDetails.description.toString().indexOf('~\$') != -1)
                       Card(
-                        color: Colors.amber[100],
+                        color: Color(0xffF2EFE4), // Colors.redAccent[100],
                         child: Container(
                           margin:
                               EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 11, horizontal: 11),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 33, horizontal: 44),
                           child: Text(
-                              '${_eventDetails.dateTime.day} / ${_eventDetails.dateTime.month} / ${_eventDetails.dateTime.year}',
-                              style: TextStyle(
-                                  color: Colors.grey[800],
-                                  fontWeight: FontWeight.w900,
-                                  fontStyle: FontStyle.italic,
-                                  fontFamily: 'Open Sans',
-                                  fontSize: 20)),
+                            _eventDetails.description.toString().substring(
+                                _eventDetails.description
+                                            .toString()
+                                            .indexOf('~\$') ==
+                                        -1
+                                    ? 0
+                                    : _eventDetails.description
+                                            .toString()
+                                            .indexOf('~\$') +
+                                        2,
+                                _eventDetails.description
+                                            .toString()
+                                            .indexOf('\$~') ==
+                                        -1
+                                    ? 0
+                                    : _eventDetails.description
+                                        .toString()
+                                        .indexOf('\$~')),
+                            style: TextStyle(
+                                color: Colors.blueGrey[800],
+                                fontWeight: FontWeight.w900,
+                                fontStyle: FontStyle.italic,
+                                fontFamily: 'Open Sans',
+                                fontSize: 20),
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                  Card(
-                    color: Color(0xffF2EFE4), // Colors.redAccent[100],
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 33, horizontal: 44),
-                      child: Text(
-                        _eventDetails.description,
-                        style: TextStyle(
-                            color: Colors.blueGrey[800],
-                            fontWeight: FontWeight.w900,
-                            fontStyle: FontStyle.italic,
-                            fontFamily: 'Open Sans',
-                            fontSize: 20),
+                    if (_eventDetails.description.toString().indexOf('\$~') != -1)
+                      Card(
+                        color: Color(0xffF2EFE4), // Colors.redAccent[100],
+                        child: Container(
+                          margin:
+                              EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 33, horizontal: 44),
+                          child: Link(
+                            uri: Uri.parse(
+                                _eventDetails.description.toString().substring(
+                                      _eventDetails.description
+                                                  .toString()
+                                                  .indexOf('\$~') ==
+                                              -1
+                                          ? 0
+                                          : _eventDetails.description
+                                                  .toString()
+                                                  .indexOf('\$~') +
+                                              2,
+                                    )),
+                            target: LinkTarget.blank,
+                            builder: (ctx, openLink) {
+                              return TextButton.icon(
+                                onPressed: openLink,
+                                label: Text('Link '),
+                                icon: Icon(Icons.read_more),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    Card(
+                      color: Colors.amber[100],
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                        child: Text(
+                          'Happening in - DTU',
+                          style: TextStyle(
+                              color: Colors.blueGrey[800],
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20),
+                        ),
                       ),
                     ),
-                  ),
-                  Card(
-                    color: Colors.amber[100],
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                      child: Text(
-                        'Happening in - DTU',
-                        style: TextStyle(
-                            color: Colors.blueGrey[800],
-                            fontWeight: FontWeight.w900,
-                            fontStyle: FontStyle.italic,
-                            fontFamily: 'Open Sans',
-                            fontSize: 20),
+                    Card(
+                      color: Colors.redAccent[100],
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                        child: Text(
+                          'People registered  ${_eventDetails.count.toString()}',
+                          style: TextStyle(
+                              color: Colors.blueGrey[800],
+                              fontWeight: FontWeight.w900,
+                              fontStyle: FontStyle.italic,
+                              fontFamily: 'Open Sans',
+                              fontSize: 20),
+                        ),
                       ),
-                    ),
-                  ),
-                  Card(
-                    color: Colors.redAccent[100],
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                      child: Text(
-                        'People registered  ${_eventDetails.count.toString()}',
-                        style: TextStyle(
-                            color: Colors.blueGrey[800],
-                            fontWeight: FontWeight.w900,
-                            fontStyle: FontStyle.italic,
-                            fontFamily: 'Open Sans',
-                            fontSize: 20),
-                      ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           );

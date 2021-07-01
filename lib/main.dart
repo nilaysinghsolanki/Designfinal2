@@ -3,6 +3,7 @@ import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
 import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
 import 'package:nilay_dtuotg_2/Screens/testingScreen.dart';
 import './Screens/tabsScreen.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './Screens/enterDetailsScreen.dart';
@@ -24,6 +25,8 @@ import './providers/info_provider.dart';
 import './providers/server_connection_functions.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
+import 'package:progress_indicators/progress_indicators.dart';
+
 import './models/screenArguments.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -64,6 +67,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: TimeTableData()),
         Provider.value(value: SCF(Server_Connection_Functions())),
         ChangeNotifierProvider.value(value: TabsScreenContext()),
+        ChangeNotifierProvider.value(value: EventsImages()),
         ChangeNotifierProvider.value(value: OwnerIdData()),
         ChangeNotifierProvider.value(value: AddEventScreenData()),
         ChangeNotifierProvider.value(value: Event()),
@@ -326,10 +330,20 @@ class _HomePageState extends State<HomePage> {
   void didChangeDependencies() async {
     print('home init');
     if (!eventsInitialized) {
-      scf = Provider.of<SCF>(context, listen: false).get();
-      await scf.fetchListOfEvents(context);
+      if (!Provider.of<EventsData>(context, listen: false)
+          .getOnceDownloaded()) {
+        scf = Provider.of<SCF>(context, listen: false).get();
+        await scf.fetchListOfEvents(context);
+        Provider.of<EventsData>(context, listen: false).setOnceDownloaded(true);
+
+        Provider.of<EventsImages>(context, listen: false).fetchList(
+            Provider.of<EventsData>(context, listen: false).getEvents(),
+            Provider.of<AccessTokenData>(context, listen: false)
+                .getAccessToken());
+      }
       sheduledToday =
           Provider.of<EventsData>(context, listen: false).getEvents();
+
       setState(() {
         eventsInitialized = true;
       });
@@ -341,6 +355,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool imgFetched =
+        Provider.of<EventsImages>(context, listen: true).imgFetched;
     List<Widget> ScatteredListtiles = [
       Column(
         children: [
@@ -414,10 +430,89 @@ class _HomePageState extends State<HomePage> {
           trailing: Icon(Icons.schedule),
           onTap: () {}),
       Container(
-        alignment: Alignment.bottomCenter,
-        child: ListTile(
-          trailing: Text("Projects", style: general_text_style),
-        ),
+        color: Colors.transparent,
+        alignment: Alignment.center,
+        child: imgFetched
+            ? Center(
+                child: CarouselSlider.builder(
+                    itemCount: Provider.of<EventsImages>(context, listen: false)
+                        .imageUrls
+                        .length,
+                    itemBuilder: (context, itemIndex, pageViewIndex) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed('/EventsDetailScreen',
+                              arguments: ScreenArguments(
+                                  id: Provider.of<EventsImages>(context,
+                                          listen: false)
+                                      .id[itemIndex],
+                                  scf: scf,
+                                  context: context));
+                        },
+                        child: Card(
+                          color: Color(0xffF2EFE4), // Colors.cyan,
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 4),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 5),
+                            child: Image.network(
+                              Provider.of<EventsImages>(context, listen: false)
+                                  .imageUrls[itemIndex]
+                                  .toString()
+                                  .replaceFirst("http", 'https'),
+                              errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace stackTrace) {
+                                // Appropriate logging or analytics, e.g.
+                                // myAnalytics.recordError(
+                                //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
+                                //   exception,
+                                //   stackTrace,
+                                // );
+                                return FittedBox(
+                                  child: Card(
+                                    color: Colors.cyan,
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: 11, horizontal: 4),
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 11, horizontal: 44),
+                                      child: Column(
+                                        children: [
+                                          Icon(
+                                            Icons.person_outline,
+                                            size: 55,
+                                          ),
+                                          Text('😢 Can\'t load image ',
+                                              style: TextStyle(
+                                                  color: Colors.grey[800],
+                                                  fontWeight: FontWeight.w900,
+                                                  fontStyle: FontStyle.normal,
+                                                  fontFamily: 'Open Sans',
+                                                  fontSize: 20)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              loadingBuilder: (context, x, _) {
+                                return Center(
+                                  child: FittedBox(
+                                      fit: BoxFit.cover,
+                                      child: FadingText('image loading...')),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    options: CarouselOptions(autoPlay: true)),
+              )
+            : ListTile(
+                trailing: Text("Projects", style: general_text_style),
+              ),
       ),
       ListTile(
         title: Text("Internship/Job Opportunities", style: general_text_style),

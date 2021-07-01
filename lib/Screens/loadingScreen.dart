@@ -81,7 +81,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
         int statusCode = response.statusCode;
         var resp = json.decode(response.body);
         if (resp["status"] == 'OK') {
+
           //Navigator.of(context).pushReplacementNamed(TestingScreen.routeName);
+
+          // Navigator.of(context).pushReplacementNamed(TestingScreen.routeName);
+
           Navigator.of(context).pushReplacementNamed('/homeScreen');
         } else {
           Navigator.of(context).pushReplacementNamed('/AuthScreen');
