@@ -46,6 +46,7 @@ dependencies:
   dio: ^4.0.0
   carousel_slider: ^4.0.0
   url_launcher: ^6.0.8
+  crop_your_image: ^0.5.3
 
 
 
