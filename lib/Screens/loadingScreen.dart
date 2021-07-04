@@ -101,14 +101,18 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Expanded(
-          child: Rive(
-            artboard: _riveArtboard,
-            alignment: Alignment.bottomCenter,
-            useArtboardSize: true,
-          ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Rive(
+                artboard: _riveArtboard,
+                alignment: Alignment.center,
+                useArtboardSize: true,
+              ),
+            ),
+          ],
         ),
-      ),
+      )
     );
   }
 }

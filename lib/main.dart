@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
           'AddEventScreen': (context) => AddEventScreen(),
           '/EventsDetailScreen': (context) => EventsDetailScreen(
                 key: _scaffoldKey,
-              ),
+               ),
           '/AuthScreen': (context) => AuthScreen(),
           '/EnterDetailsScreen': (context) => EnterDetailsScreen(),
           '/TabsScreen': (context) => TabsScreen(),

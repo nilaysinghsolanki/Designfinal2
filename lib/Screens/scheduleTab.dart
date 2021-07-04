@@ -41,7 +41,6 @@ class _ScheduleTabState extends State<ScheduleTab> {
   bool initialized = false;
 
   List<Lecture> lectures = [];
-  var eventsedRegester = [];
   int weekDayIndex = 1;
   List<Event> evesForSchedule = [];
   @override
@@ -118,10 +117,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("Assets/newframe.png"),
-            fit: BoxFit.cover,
-          ),
+
         ),
         padding: EdgeInsets.only(top: 0),
         child: Column(
@@ -172,7 +168,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   events0Schedule1 = index;
                 });
               },
-              labels: ['events ${eventsedRegester.length+1}', 'schedule'],
+              labels: ['events', 'schedule'],
               activeBgColor: Colors.brown,
               activeFgColor: Colors.white,
               inactiveFgColor: Colors.brown,
@@ -204,11 +200,11 @@ class _ScheduleTabState extends State<ScheduleTab> {
                       itemCount: Provider.of<EventsData>(context).events.length,
                       itemBuilder: (context, index) {
                         var events = Provider.of<EventsData>(context).events;
-
+                        var eventsedRegester = [];
 
                         events.forEach((element) {
-                          if (element.favorite) {
-                            if(element.dateime.day==_selectedDay.day) {
+                          if (element.favorite ) {
+                            if(element.dateime==_selectedDay) {
                               eventsedRegester.add(element);
                             }
                           }
@@ -228,7 +224,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                             },
                             tileColor: eventsedRegester[index].favorite
                                 ? Colors.orange[50]
-                                : Colors.black12,
+                                : Colors.blue,
                             subtitle: Text(
                               eventsedRegester[index].eventType,
                               style: TextStyle(
@@ -242,7 +238,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                             title: Text(
                               eventsedRegester[index].name,
                               style:
-                                  TextStyle(color: Colors.brown, fontSize: 19),
+                              TextStyle(color: Colors.brown, fontSize: 19),
                             ),
                           ),
                         );
@@ -272,9 +268,9 @@ class _ScheduleTabState extends State<ScheduleTab> {
                         happeningNow = true;
                       } else {
                         if ((lectures[index].time.hour <
-                                TimeOfDay.now().hour) &&
+                            TimeOfDay.now().hour) &&
                             ((lectures[index].time.hour +
-                                    lectures[index].length) >
+                                lectures[index].length) >
                                 TimeOfDay.now().hour)) {
                           happeningNow = true;
                         }
@@ -291,79 +287,76 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                     child: Container(
                                       decoration: lectures[index].free
                                           ? BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              border: Border(
-                                                  top: BorderSide(
-                                                      width: 2,
-                                                      color: Colors.lightGreen),
-                                                  bottom: BorderSide(
-                                                      width: 2,
-                                                      color: Colors.lightGreen),
-                                                  right: BorderSide(
-                                                      width: 2,
-                                                      color: Colors.lightGreen),
-                                                  left: BorderSide(
-                                                      width: 2,
-                                                      color:
-                                                          Colors.lightGreen)))
+
+                                          border: Border(
+                                            left: BorderSide(
+                                                width: 8,
+                                                color: Colors.lightGreen),
+                                          ))
                                           : BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              border: Border(
-                                                  top: BorderSide(
-                                                      width: 2,
-                                                      color: Colors.brown),
-                                                  bottom: BorderSide(
-                                                      width: 2,
-                                                      color: Colors.brown),
-                                                  right: BorderSide(
-                                                      width: 2,
-                                                      color: Colors.brown),
-                                                  left:
-                                                      BorderSide(width: 2, color: Colors.brown))),
+
+                                          border: Border(
+                                            left: BorderSide(
+                                                width: 8,
+                                                color: Colors.brown),
+                                            right:happeningNow? BorderSide(
+                                                width: 2,
+                                                color: Colors.purple)
+                                                :BorderSide(width: 0),
+                                            top: happeningNow? BorderSide(
+                                                width: 2,
+                                                color: Colors.purple)
+                                                :BorderSide(width: 0),
+                                            bottom: happeningNow? BorderSide(
+                                                width: 2,
+                                                color: Colors.purple)
+                                                :BorderSide(width: 0),
+
+
+                                          )),
                                       child: ListTile(
                                           leading: happeningNow
                                               ? Text(
-                                                  'now',
-                                                  style: TextStyle(
-                                                      fontSize: 30,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                )
+                                            'NOW',
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight:
+                                                FontWeight.normal),
+                                          )
                                               : Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .access_time_outlined,
-                                                    ),
-                                                    Text(
-                                                        '$hour-${hour + length}')
-                                                  ],
-                                                ),
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceEvenly,
+                                            children: [
+                                              Icon(
+                                                Icons
+                                                    .access_time_outlined,
+                                              ),
+                                              Text(
+                                                  '$hour-${hour + length}')
+                                            ],
+                                          ),
                                           subtitle: Text('AP102'),
                                           tileColor: lectures[index].free
                                               ? Colors.white
                                               : happeningNow
-                                                  ? Colors.lightGreenAccent
-                                                  : Colors.white,
+                                              ? Colors.white
+                                              : Colors.white,
                                           title: lectures[index].free
                                               ? Text(
-                                                  'FREE',
-                                                  style: TextStyle(
-                                                      color: Colors.lightGreen),
-                                                )
+                                            'FREE',
+                                            style: TextStyle(
+                                                color: Colors.lightGreen),
+                                          )
                                               : Text(
-                                                  lectures[index].name,
-                                                  style: TextStyle(
-                                                      color: FreePeriodColor),
-                                                ),
+                                            lectures[index].name,
+                                            style: TextStyle(
+                                                color: FreePeriodColor),
+                                          ),
                                           trailing: Text(
                                             '$length hour',
                                             style: TextStyle(
+                                                color: Colors.brown,
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.normal),
                                           )),

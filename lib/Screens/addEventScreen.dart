@@ -161,11 +161,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
           if (imagePicked && !imageCroped)
             ElevatedButton(
               child: Text('Crop it!'),
+
               onPressed: () => controller.crop(),
             ),
         ],
       ),
-      body: (imagePicked && !imageCroped)
+      body: (imagePicked && imageCroped)
           ? Container(
               width: double.infinity,
               height: double.infinity,
