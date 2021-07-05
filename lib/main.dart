@@ -2,6 +2,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
 import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
 import 'package:nilay_dtuotg_2/Screens/testingScreen.dart';
+import 'package:nilay_dtuotg_2/models/lecture.dart';
 import './Screens/tabsScreen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -88,7 +89,7 @@ class MyApp extends StatelessWidget {
           'AddEventScreen': (context) => AddEventScreen(),
           '/EventsDetailScreen': (context) => EventsDetailScreen(
                 key: _scaffoldKey,
-               ),
+              ),
           '/AuthScreen': (context) => AuthScreen(),
           '/EnterDetailsScreen': (context) => EnterDetailsScreen(),
           '/TabsScreen': (context) => TabsScreen(),
@@ -295,6 +296,8 @@ class _HomePageState extends State<HomePage> {
   List<Event> evesForSchedule = [];
   List<Event> sheduled = [];
   double width = 500;
+  int weekDayIndex = 1;
+
   double height = 200;
   List<Event> sheduledToday = [];
 
@@ -423,12 +426,7 @@ class _HomePageState extends State<HomePage> {
                     )),
         ],
       ),
-      ListTile(
-          leading: Text("PE-204", style: general_text_style),
-          title: Text("3-4AM", style: general_text_style),
-          subtitle: Text("TG6-TF8", style: general_text_style),
-          trailing: Icon(Icons.schedule),
-          onTap: () {}),
+      TimeTableHomeScreenListTile(),
       Container(
         color: Colors.transparent,
         alignment: Alignment.center,
@@ -551,6 +549,95 @@ class _HomePageState extends State<HomePage> {
         crossAxisSpacing: 4.0,
       ),
     );
+  }
+}
+
+class TimeTableHomeScreenListTile extends StatefulWidget {
+  const TimeTableHomeScreenListTile({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _TimeTableHomeScreenListTileState createState() =>
+      _TimeTableHomeScreenListTileState();
+}
+
+class _TimeTableHomeScreenListTileState
+    extends State<TimeTableHomeScreenListTile> {
+  bool initialized = false;
+
+  int weekDayIndex = 1;
+  List<Lecture> lectures = [];
+  Lecture _lecture;
+  DateTime _selectedDay = DateTime.now();
+  @override
+  void didChangeDependencies() async {
+    if (!initialized) {
+      weekDayIndex = DateTime.now().weekday > 5 ? 5 : DateTime.now().weekday;
+      await Provider.of<TimeTableData>(context, listen: false)
+          .fetchAndSetData(context);
+      lectures =
+          Provider.of<TimeTableData>(context, listen: false).get(weekDayIndex);
+      if (lectures.isNotEmpty) {
+        lectures.forEach((element) {
+          int hour = element.time.hour;
+          int length = element.length;
+          bool happeningNow = false;
+
+          if (element.time.hour == TimeOfDay.now().hour) {
+            happeningNow = true;
+          } else {
+            if ((element.time.hour < TimeOfDay.now().hour) &&
+                ((element.time.hour + element.length) > TimeOfDay.now().hour)) {
+              happeningNow = true;
+            }
+          }
+          if (happeningNow) {
+            _lecture = element;
+          }
+        });
+      }
+      setState(() {
+        initialized = true;
+      });
+    }
+
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    //_selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay));
+    // TODO: implement initState
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    int lectureStart =
+        _lecture.time.hour > 12 ? _lecture.time.hour - 12 : _lecture.time.hour;
+    int lectureEnd =
+        lectureStart == 12 ? _lecture.length : lectureStart + _lecture.length;
+    return initialized
+        ? lectures.isNotEmpty
+            ? _lecture.free
+                ? GlowingProgressIndicator(child: Text('free time'))
+                : ListTile(
+                    title: Text(_lecture.name, style: general_text_style),
+                    subtitle: Text(
+                        lectureStart.toString() +
+                            '-' +
+                            '${lectureEnd.toString()}',
+                        style: general_text_style),
+                    trailing: GlowingProgressIndicator(
+                      child: Icon(Icons.schedule),
+                    ),
+                    onTap: () {})
+            : Text('No lectures')
+        : Center(
+            child: FadingText('Loading...'),
+          );
   }
 }
 

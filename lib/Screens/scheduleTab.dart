@@ -100,7 +100,16 @@ class _ScheduleTabState extends State<ScheduleTab> {
         sheduledToday.add(element);
       }
     });
+    var events = Provider.of<EventsData>(context).events;
 
+    var eventsedRegester = [];
+
+    events.forEach((element) {
+      if (element.favorite) {
+        eventsedRegester.add(element);
+        if (element.dateime == _selectedDay) {}
+      }
+    });
     return Scaffold(
       backgroundColor: Color(0xffF2EFE4),
       appBar: AppBar(
@@ -116,9 +125,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
         elevation: 0,
       ),
       body: Container(
-        decoration: BoxDecoration(
-
-        ),
+        decoration: BoxDecoration(),
         padding: EdgeInsets.only(top: 0),
         child: Column(
           children: [
@@ -197,19 +204,8 @@ class _ScheduleTabState extends State<ScheduleTab> {
                           parent: AlwaysScrollableScrollPhysics()),
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: Provider.of<EventsData>(context).events.length,
+                      itemCount: eventsedRegester.length,
                       itemBuilder: (context, index) {
-                        var events = Provider.of<EventsData>(context).events;
-                        var eventsedRegester = [];
-
-                        events.forEach((element) {
-                          if (element.favorite ) {
-                            if(element.dateime==_selectedDay) {
-                              eventsedRegester.add(element);
-                            }
-                          }
-                        });
-
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 3, vertical: 5),
@@ -238,7 +234,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                             title: Text(
                               eventsedRegester[index].name,
                               style:
-                              TextStyle(color: Colors.brown, fontSize: 19),
+                                  TextStyle(color: Colors.brown, fontSize: 19),
                             ),
                           ),
                         );
@@ -268,9 +264,9 @@ class _ScheduleTabState extends State<ScheduleTab> {
                         happeningNow = true;
                       } else {
                         if ((lectures[index].time.hour <
-                            TimeOfDay.now().hour) &&
+                                TimeOfDay.now().hour) &&
                             ((lectures[index].time.hour +
-                                lectures[index].length) >
+                                    lectures[index].length) >
                                 TimeOfDay.now().hour)) {
                           happeningNow = true;
                         }
@@ -287,72 +283,73 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                     child: Container(
                                       decoration: lectures[index].free
                                           ? BoxDecoration(
-
-                                          border: Border(
-                                            left: BorderSide(
-                                                width: 8,
-                                                color: Colors.lightGreen),
-                                          ))
+                                              border: Border(
+                                              left: BorderSide(
+                                                  width: 8,
+                                                  color: Colors.lightGreen),
+                                            ))
                                           : BoxDecoration(
-
-                                          border: Border(
-                                            left: BorderSide(
-                                                width: 8,
-                                                color: Colors.brown),
-                                            right:happeningNow? BorderSide(
-                                                width: 2,
-                                                color: Colors.purple)
-                                                :BorderSide(width: 0),
-                                            top: happeningNow? BorderSide(
-                                                width: 2,
-                                                color: Colors.purple)
-                                                :BorderSide(width: 0),
-                                            bottom: happeningNow? BorderSide(
-                                                width: 2,
-                                                color: Colors.purple)
-                                                :BorderSide(width: 0),
-
-
-                                          )),
+                                              border: Border(
+                                              left: BorderSide(
+                                                  width: 8,
+                                                  color: Colors.brown),
+                                              right: happeningNow
+                                                  ? BorderSide(
+                                                      width: 2,
+                                                      color: Colors.purple)
+                                                  : BorderSide(width: 0),
+                                              top: happeningNow
+                                                  ? BorderSide(
+                                                      width: 2,
+                                                      color: Colors.purple)
+                                                  : BorderSide(width: 0),
+                                              bottom: happeningNow
+                                                  ? BorderSide(
+                                                      width: 2,
+                                                      color: Colors.purple)
+                                                  : BorderSide(width: 0),
+                                            )),
                                       child: ListTile(
-                                          leading: happeningNow
+                                          leading: _focusedDay ==
+                                                      DateTime.now() &&
+                                                  happeningNow
                                               ? Text(
-                                            'NOW',
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight:
-                                                FontWeight.normal),
-                                          )
+                                                  'NOW',
+                                                  style: TextStyle(
+                                                      fontSize: 17,
+                                                      fontWeight:
+                                                          FontWeight.normal),
+                                                )
                                               : Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .spaceEvenly,
-                                            children: [
-                                              Icon(
-                                                Icons
-                                                    .access_time_outlined,
-                                              ),
-                                              Text(
-                                                  '$hour-${hour + length}')
-                                            ],
-                                          ),
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Icon(
+                                                      Icons
+                                                          .access_time_outlined,
+                                                    ),
+                                                    Text(
+                                                        '$hour-${hour + length}')
+                                                  ],
+                                                ),
                                           subtitle: Text('AP102'),
                                           tileColor: lectures[index].free
                                               ? Colors.white
                                               : happeningNow
-                                              ? Colors.white
-                                              : Colors.white,
+                                                  ? Colors.white
+                                                  : Colors.white,
                                           title: lectures[index].free
                                               ? Text(
-                                            'FREE',
-                                            style: TextStyle(
-                                                color: Colors.lightGreen),
-                                          )
+                                                  'FREE',
+                                                  style: TextStyle(
+                                                      color: Colors.lightGreen),
+                                                )
                                               : Text(
-                                            lectures[index].name,
-                                            style: TextStyle(
-                                                color: FreePeriodColor),
-                                          ),
+                                                  lectures[index].name,
+                                                  style: TextStyle(
+                                                      color: FreePeriodColor),
+                                                ),
                                           trailing: Text(
                                             '$length hour',
                                             style: TextStyle(
