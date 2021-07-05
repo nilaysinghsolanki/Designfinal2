@@ -426,7 +426,7 @@ class _HomePageState extends State<HomePage> {
                     )),
         ],
       ),
-      TimeTableHomeScreenListTile(),
+      DateTime.now().hour <= 17 ? TimeTableHomeScreenListTile() : ListTile(),
       Container(
         color: Colors.transparent,
         alignment: Alignment.center,
@@ -494,11 +494,28 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 );
                               },
-                              loadingBuilder: (context, x, _) {
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent loadingProgress) {
+                                if (loadingProgress == null) return child;
                                 return Center(
                                   child: FittedBox(
-                                      fit: BoxFit.cover,
-                                      child: FadingText('image loading...')),
+                                    child: Row(
+                                      children: [
+                                        FadingText('image loading...'),
+                                        CircularProgressIndicator(
+                                          value: loadingProgress
+                                                      .expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes
+                                              : null,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 );
                               },
                             ),

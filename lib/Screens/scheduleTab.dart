@@ -196,8 +196,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   ),
             if (events0Schedule1 == 0)
               if (true) //(sheduledToday.isNotEmpty)
-                Container(
-                  height: 500,
+                Expanded(
                   child: ListView.builder(
                       padding: EdgeInsets.all(0),
                       physics: const BouncingScrollPhysics(
