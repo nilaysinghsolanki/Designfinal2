@@ -106,7 +106,9 @@ class _ScheduleTabState extends State<ScheduleTab> {
 
     events.forEach((element) {
       if (element.favorite) {
-        eventsedRegester.add(element);
+        if(element.dateime.day==_selectedDay.day && element.dateime.month==_selectedDay.month && element.dateime.year==_selectedDay.year) {
+          eventsedRegester.add(element);
+        }
         if (element.dateime == _selectedDay) {}
       }
     });
