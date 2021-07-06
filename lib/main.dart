@@ -1333,7 +1333,7 @@ class _AddingPageState extends State<AddingPage> {
             onTap: () {
               //  Navigator.push(context,
               //     MaterialPageRoute(builder: (context) => CustomPage()));
-              Navigator.of(context).pushNamed('AddEventScreen');
+              Navigator.of(context).pushNamed('AddEventScreen', arguments: 1);
             },
             leading: Icon(
               FontAwesomeIcons.star,
@@ -1351,19 +1351,59 @@ class _AddingPageState extends State<AddingPage> {
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddToSchedulePage()));
+              //  Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => CustomPage()));
+              Navigator.of(context).pushNamed('AddEventScreen', arguments: 2);
             },
             leading: Icon(
-              Icons.schedule_outlined,
-              color: Colors.black,
+              FontAwesomeIcons.star,
+              color: Colors.purple,
             ),
-            title: Text("Add to Schedule", style: general_text_style),
+            title: Text("Add to projects", style: general_text_style),
             subtitle: Text(
-                "Update your personal schedule with new tasks assigned like self study,sports.etc"),
+                "Update via this feature to let people know the details of any event"),
           ),
         ),
       ),
+      Card(
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            onTap: () {
+              //  Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => CustomPage()));
+              Navigator.of(context).pushNamed('AddEventScreen', arguments: 3);
+            },
+            leading: Icon(
+              FontAwesomeIcons.star,
+              color: Colors.purple,
+            ),
+            title: Text("Add to internships/jobs", style: general_text_style),
+            subtitle: Text(
+                "Update via this feature to let people know the details of any event"),
+          ),
+        ),
+      ),
+      // Card(
+      //   elevation: 0,
+      //   child: Padding(
+      //     padding: const EdgeInsets.all(8.0),
+      //     child: ListTile(
+      //       onTap: () {
+      //         Navigator.push(context,
+      //             MaterialPageRoute(builder: (context) => AddToSchedulePage()));
+      //       },
+      //       leading: Icon(
+      //         Icons.schedule_outlined,
+      //         color: Colors.black,
+      //       ),
+      //       title: Text("Add to Schedule", style: general_text_style),
+      //       subtitle: Text(
+      //           "Update your personal schedule with new tasks assigned like self study,sports.etc"),
+      //     ),
+      //   ),
+      // ),
       Card(
         elevation: 0,
         child: Padding(
@@ -1392,7 +1432,7 @@ class _AddingPageState extends State<AddingPage> {
         color: Colors.transparent,
         child: ListView.builder(
           physics: BouncingScrollPhysics(),
-          itemCount: 3,
+          itemCount: 4,
           itemBuilder: (BuildContext context, int index) {
             return AnimationConfiguration.staggeredList(
               position: index,
