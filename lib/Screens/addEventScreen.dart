@@ -111,7 +111,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         whatsInItForYou.text +
                         '\$~' +
                         link.text,
-                    type,
+                    1,
                     dateTime,
                     timeOfDay,
                     _image);
@@ -354,40 +354,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
               ),
 
-              Container(
-                padding: EdgeInsets.all(20),
-                child: DropDownFormField(
-                  textField: 'display',
-                  valueField: 'value',
-                  dataSource: [
-                    {
-                      "display": "type1",
-                      "value": 1,
-                    },
-                    {
-                      "display": "type2",
-                      "value": 2,
-                    },
-                    {
-                      "display": "type3",
-                      "value": 3,
-                    },
-                  ],
-                  onSaved: (value) {
-                    setState(() {
-                      type = value;
-                    });
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      type = value;
-                    });
-                  },
-                  titleText: 'event type',
-                  value: type,
-                  hintText: 'choose event type',
-                ),
-              ),
+
             ],
           )),
         ),

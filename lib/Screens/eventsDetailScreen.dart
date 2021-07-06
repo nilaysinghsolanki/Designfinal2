@@ -202,6 +202,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                           ),
                         ),
                         Card(
+                          /////////////////DATE
                           color: Colors.amber[100],
                           child: Container(
                             margin:
@@ -221,6 +222,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                       ],
                     ),
                     Card(
+                      /////////////////DESCRIPTION
                       color: Color(0xffF2EFE4), // Colors.redAccent[100],
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
@@ -248,6 +250,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                     ),
                     if (_eventDetails.description.toString().indexOf('~\$') != -1)
                       Card(
+                        //////////WHATSINIT
                         color: Color(0xffF2EFE4), // Colors.redAccent[100],
                         child: Container(
                           margin:
@@ -274,7 +277,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                                         .toString()
                                         .indexOf('\$~')),
                             style: TextStyle(
-                                color: Colors.blueGrey[800],
+                                color: Colors.black,
                                 fontWeight: FontWeight.w900,
                                 fontStyle: FontStyle.italic,
                                 fontFamily: 'Open Sans',
@@ -284,6 +287,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                       ),
                     if (_eventDetails.description.toString().indexOf('\$~') != -1)
                       Card(
+                        ////////////LINK
                         color: Color(0xffF2EFE4), // Colors.redAccent[100],
                         child: Container(
                           margin:
@@ -307,31 +311,16 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                             builder: (ctx, openLink) {
                               return TextButton.icon(
                                 onPressed: openLink,
-                                label: Text('Link '),
+                                label: Text('${_eventDetails.type}'),
                                 icon: Icon(Icons.read_more),
                               );
                             },
                           ),
                         ),
                       ),
+
                     Card(
-                      color: Colors.amber[100],
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                        child: Text(
-                          'Happening in - DTU',
-                          style: TextStyle(
-                              color: Colors.blueGrey[800],
-                              fontWeight: FontWeight.w900,
-                              fontStyle: FontStyle.italic,
-                              fontFamily: 'Open Sans',
-                              fontSize: 20),
-                        ),
-                      ),
-                    ),
-                    Card(
+                      ////////////REGISTERED PEOPLE
                       color: Colors.redAccent[100],
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
