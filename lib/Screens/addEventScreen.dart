@@ -47,14 +47,79 @@ class _AddEventScreenState extends State<AddEventScreen> {
   final picker = ImagePicker();
   var _imageDataList = <Uint8List>[];
 
-  Future getImage() async {
+  void _showPicker(BuildContext context, num ratio) {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        barrierColor: Colors.black12,
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.blueGrey[50],
+                borderRadius: BorderRadius.circular(11),
+              ),
+              padding: EdgeInsets.symmetric(
+                  vertical: 10 * ratio, horizontal: 22 * ratio),
+//color: Colors.cyan,
+              margin: EdgeInsets.only(
+                top: 20 * ratio,
+                left: 15 * ratio,
+                right: 15 * ratio,
+              ),
+              child: new Wrap(
+                direction: Axis.horizontal,
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(
+                        Icons.photo_library,
+                        color: Colors.blueGrey[700],
+                      ),
+                      title: new Text(
+                        'Photos',
+                        style: TextStyle(
+                            color: Colors.blueGrey[900],
+                            fontStyle: FontStyle.normal,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      onTap: () {
+                        getImage(ImageSource.gallery);
+                        Navigator.of(context).pop();
+                      }),
+                  Divider(),
+                  new ListTile(
+                    leading: new Icon(
+                      Icons.photo_camera,
+                      color: Colors.blueGrey[700],
+                    ),
+                    title: new Text('Camera',
+                        style: TextStyle(
+                            color: Colors.blueGrey[900],
+                            fontStyle: FontStyle.normal,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400)),
+                    onTap: () {
+                      getImage(ImageSource.camera);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Future getImage(ImageSource imageSource) async {
     print('a');
     PickedFile pickedFile;
     // final pickedFile = await picker.getImage(source: ImageSource.gallery);
     try {
       print('b');
       pickedFile = await picker.getImage(
-        source: ImageSource.gallery,
+        source: imageSource,
       );
       print('${pickedFile.path}');
     } catch (e) {
@@ -82,6 +147,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
   Duration _duration = Duration(hours: 0, minutes: 0);
   @override
   Widget build(BuildContext context) {
+    double ratio = MediaQuery.of(context).size.height / 896;
+
     type = ModalRoute.of(context).settings.arguments;
     // BuildContext bc =
     //     Provider.of<TabsScreenContext>(context, listen: false).get();
@@ -171,7 +238,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   ? ListTile(
                       leading: Icon(Icons.add_a_photo),
                       title: Text('No image selected.'),
-                      onTap: getImage,
+                      onTap: () => _showPicker(context, ratio),
                     )
                   : Container(
                       child: Image.file(_image),
