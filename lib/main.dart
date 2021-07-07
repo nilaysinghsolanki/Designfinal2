@@ -98,7 +98,7 @@ class MyApp extends StatelessWidget {
           '/schedule': (context1) => ScheduleTab(),
           '/homeScreen': (context1) => HomeScreen(),
           '/loading': (context1) => LoadingScreen(),
-          '/eventdetailsdesign':(context1)=>EventDetailsDesign(),
+          '/eventdetailsdesign': (context1) => EventDetailsDesign(),
         },
         title: 'Rive Flutter Demo',
         home: LoadingScreen(),
@@ -361,35 +361,33 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     bool imgFetched =
         Provider.of<EventsImages>(context, listen: true).imgFetched;
     List<Widget> ScatteredListtiles = [
       Column(
         children: [
-
           SingleChildScrollView(
-              child: !eventsInitialized
-                  ? Expanded(
-                      child: Rive(
-                        artboard: _riveArtboard,
-                        alignment: Alignment.bottomCenter,
-                        useArtboardSize: true,
-                      ),
-                    )
-
-                  : ListTile(
-                trailing: Text("Events", style: general_text_style),
-              ),),
+            child: !eventsInitialized
+                ? Expanded(
+                    child: Rive(
+                      artboard: _riveArtboard,
+                      alignment: Alignment.bottomCenter,
+                      useArtboardSize: true,
+                    ),
+                  )
+                : ListTile(
+                    trailing: Text("Events", style: general_text_style),
+                  ),
+          ),
         ],
       ),
-      DateTime.now().hour <= 17 ? TimeTableHomeScreenListTile() : ListTile(),
+      (DateTime.now().hour >= 8 && DateTime.now().hour <= 17)
+          ? TimeTableHomeScreenListTile()
+          : ListTile(),
       imgFetched
           ? Center(
               child: Expanded(
                 child: CarouselSlider.builder(
-
-
                     itemCount: Provider.of<EventsImages>(context, listen: false)
                         .imageUrls
                         .length,
@@ -405,14 +403,13 @@ class _HomePageState extends State<HomePage> {
                                   context: context));
                         },
                         child: Image.network(
-
                           Provider.of<EventsImages>(context, listen: false)
                               .imageUrls[itemIndex]
                               .toString()
                               .replaceFirst("http", 'https'),
                           fit: BoxFit.cover,
-                          errorBuilder: (BuildContext context,
-                              Object exception, StackTrace stackTrace) {
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace stackTrace) {
                             // Appropriate logging or analytics, e.g.
                             // myAnalytics.recordError(
                             //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
@@ -423,8 +420,6 @@ class _HomePageState extends State<HomePage> {
                               child: Card(
                                 color: Colors.cyan,
                                 child: Container(
-
-
                                   child: Column(
                                     children: [
                                       Icon(
@@ -442,7 +437,6 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-
                             );
                           },
                           loadingBuilder: (BuildContext context,
@@ -461,8 +455,7 @@ class _HomePageState extends State<HomePage> {
                                               null
                                           ? loadingProgress
                                                   .cumulativeBytesLoaded /
-                                              loadingProgress
-                                                  .expectedTotalBytes
+                                              loadingProgress.expectedTotalBytes
                                           : null,
                                     ),
                                   ],
@@ -473,7 +466,11 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     },
-                    options: CarouselOptions(autoPlay: true,enlargeCenterPage: false,height: 500,viewportFraction: 1)),
+                    options: CarouselOptions(
+                        autoPlay: true,
+                        enlargeCenterPage: false,
+                        height: 500,
+                        viewportFraction: 1)),
               ),
             )
           : ListTile(
@@ -501,7 +498,6 @@ class _HomePageState extends State<HomePage> {
             child: FlipAnimation(
               flipAxis: FlipAxis.y,
               child: Container(
-
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),
                   color: Colors.white,
