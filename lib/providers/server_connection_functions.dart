@@ -117,6 +117,7 @@ class Server_Connection_Functions {
     List<dynamic> resp = json.decode(response.body);
     eves = resp.map<Event>((e) {
       return Event(
+        eventImageUri: e['image'],
         favorite: e['registered'],
         name: e['name'],
         owner: e['owner'],

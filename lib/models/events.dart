@@ -7,10 +7,12 @@ class Event with ChangeNotifier {
   String owner;
   DateTime dateime;
   String eventType;
+  String eventImageUri;
   Event(
       {this.dateime,
       this.eventType,
       this.id,
+      this.eventImageUri,
       this.name,
       this.owner,
       this.favorite});
@@ -22,6 +24,7 @@ class EventDetails with ChangeNotifier {
   String name;
   num latitude;
   num longitute;
+  String eventImageUri;
   String description;
   DateTime dateTime;
   String duration;
@@ -31,6 +34,7 @@ class EventDetails with ChangeNotifier {
   EventDetails({
     this.id,
     this.owner,
+    this.eventImageUri,
     this.name,
     this.latitude,
     this.longitute,

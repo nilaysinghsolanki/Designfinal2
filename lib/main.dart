@@ -342,10 +342,10 @@ class _HomePageState extends State<HomePage> {
         await scf.fetchListOfEvents(context);
         Provider.of<EventsData>(context, listen: false).setOnceDownloaded(true);
 
-        Provider.of<EventsImages>(context, listen: false).fetchList(
-            Provider.of<EventsData>(context, listen: false).getEvents(),
-            Provider.of<AccessTokenData>(context, listen: false)
-                .getAccessToken());
+        // Provider.of<EventsImages>(context, listen: false).fetchList(
+        //     Provider.of<EventsData>(context, listen: false).getEvents(),
+        //     Provider.of<AccessTokenData>(context, listen: false)
+        //         .getAccessToken());
       }
       sheduledToday =
           Provider.of<EventsData>(context, listen: false).getEvents();
@@ -388,23 +388,19 @@ class _HomePageState extends State<HomePage> {
           ? Center(
               child: Expanded(
                 child: CarouselSlider.builder(
-                    itemCount: Provider.of<EventsImages>(context, listen: false)
-                        .imageUrls
-                        .length,
+                    itemCount: sheduledToday.length,
                     itemBuilder: (context, itemIndex, pageViewIndex) {
                       return GestureDetector(
                         onTap: () {
                           Navigator.of(context).pushNamed('/eventdetailsdesign',
                               arguments: ScreenArguments(
-                                  id: Provider.of<EventsImages>(context,
-                                          listen: false)
-                                      .id[itemIndex],
+                                  id: sheduledToday[itemIndex].id,
                                   scf: scf,
                                   context: context));
                         },
                         child: Image.network(
-                          Provider.of<EventsImages>(context, listen: false)
-                              .imageUrls[itemIndex]
+                          sheduled[itemIndex]
+                              .eventImageUri
                               .toString()
                               .replaceFirst("http", 'https'),
                           fit: BoxFit.cover,
