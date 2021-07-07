@@ -383,7 +383,7 @@ class _HomePageState extends State<HomePage> {
               ),),
         ],
       ),
-      DateTime.now().hour <= 17 ? TimeTableHomeScreenListTile() : ListTile(),
+      DateTime.now().hour <= 17 && DateTime.now().hour>=8 ? TimeTableHomeScreenListTile() : ListTile(),
       imgFetched
           ? Center(
               child: Expanded(
