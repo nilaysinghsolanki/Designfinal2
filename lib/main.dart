@@ -33,6 +33,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
+import 'Screens/eventsdetailsDESIGN.dart';
+
 void main() => runApp(MyApp());
 var event_name;
 var event_description;
@@ -83,7 +85,7 @@ class MyApp extends StatelessWidget {
 
         routes: {
           TestingScreen.routeName: (context) => TestingScreen(),
-          '/ProfileDetailsScreem': (context) => ProfileDetailsScreem(),
+          '/ProfileDetailsScreen': (context) => ProfileDetailsScreem(),
           'patchProfileScreen': (context) => PatchProfileScreen(),
           'inviteScreen': (context) => InviteScreen(),
           'AddEventScreen': (context) => AddEventScreen(),
@@ -95,7 +97,8 @@ class MyApp extends StatelessWidget {
           '/TabsScreen': (context) => TabsScreen(),
           '/schedule': (context1) => ScheduleTab(),
           '/homeScreen': (context1) => HomeScreen(),
-          '/loading': (context1) => LoadingScreen()
+          '/loading': (context1) => LoadingScreen(),
+          '/eventdetailsdesign':(context1)=>EventDetailsDesign(),
         },
         title: 'Rive Flutter Demo',
         home: LoadingScreen(),
@@ -358,16 +361,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     bool imgFetched =
         Provider.of<EventsImages>(context, listen: true).imgFetched;
     List<Widget> ScatteredListtiles = [
       Column(
         children: [
-          Container(
-            child: ListTile(
-              leading: Text("Events", style: general_text_style),
-            ),
-          ),
+
           SingleChildScrollView(
               child: !eventsInitialized
                   ? Expanded(
@@ -377,69 +377,26 @@ class _HomePageState extends State<HomePage> {
                         useArtboardSize: true,
                       ),
                     )
-                  : Container(
-                      height: 300,
-                      child: ListView.builder(
-                          padding: EdgeInsets.all(0),
-                          physics: const BouncingScrollPhysics(
-                              parent: AlwaysScrollableScrollPhysics()),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: sheduledToday.length,
-                          itemBuilder: (context, index) {
-                            var events =
-                                Provider.of<EventsData>(context).events;
 
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 3, vertical: 5),
-                              child: ListTile(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                      '/EventsDetailScreen',
-                                      arguments: ScreenArguments(
-                                          id: events[index].id,
-                                          scf: scf,
-                                          context: context));
-                                },
-                                tileColor: events[index].favorite
-                                    ? Colors.orange[50]
-                                    : Colors.black12,
-                                subtitle: Text(
-                                  events[index].eventType,
-                                  style: TextStyle(
-                                    color: Colors.brown,
-                                  ),
-                                ),
-                                leading: Icon(
-                                  Icons.ac_unit,
-                                  color: Colors.brown,
-                                ),
-                                title: Text(
-                                  events[index].name,
-                                  style: TextStyle(
-                                      color: Colors.brown, fontSize: 19),
-                                ),
-                              ),
-                            );
-                          }),
-                    )),
+                  : ListTile(
+                trailing: Text("Events", style: general_text_style),
+              ),),
         ],
       ),
       DateTime.now().hour <= 17 ? TimeTableHomeScreenListTile() : ListTile(),
-      Container(
-        color: Colors.transparent,
-        alignment: Alignment.center,
-        child: imgFetched
-            ? Center(
+      imgFetched
+          ? Center(
+              child: Expanded(
                 child: CarouselSlider.builder(
+
+
                     itemCount: Provider.of<EventsImages>(context, listen: false)
                         .imageUrls
                         .length,
                     itemBuilder: (context, itemIndex, pageViewIndex) {
                       return GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pushNamed('/EventsDetailScreen',
+                          Navigator.of(context).pushNamed('/eventdetailsdesign',
                               arguments: ScreenArguments(
                                   id: Provider.of<EventsImages>(context,
                                           listen: false)
@@ -447,88 +404,81 @@ class _HomePageState extends State<HomePage> {
                                   scf: scf,
                                   context: context));
                         },
-                        child: Card(
-                          color: Color(0xffF2EFE4), // Colors.cyan,
-                          child: Container(
-                            margin: EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 4),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 5),
-                            child: Image.network(
-                              Provider.of<EventsImages>(context, listen: false)
-                                  .imageUrls[itemIndex]
-                                  .toString()
-                                  .replaceFirst("http", 'https'),
-                              errorBuilder: (BuildContext context,
-                                  Object exception, StackTrace stackTrace) {
-                                // Appropriate logging or analytics, e.g.
-                                // myAnalytics.recordError(
-                                //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
-                                //   exception,
-                                //   stackTrace,
-                                // );
-                                return FittedBox(
-                                  child: Card(
-                                    color: Colors.cyan,
-                                    child: Container(
-                                      margin: EdgeInsets.symmetric(
-                                          vertical: 11, horizontal: 4),
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 11, horizontal: 44),
-                                      child: Column(
-                                        children: [
-                                          Icon(
-                                            Icons.person_outline,
-                                            size: 55,
-                                          ),
-                                          Text('😢 Can\'t load image ',
-                                              style: TextStyle(
-                                                  color: Colors.grey[800],
-                                                  fontWeight: FontWeight.w900,
-                                                  fontStyle: FontStyle.normal,
-                                                  fontFamily: 'Open Sans',
-                                                  fontSize: 20)),
-                                        ],
+                        child: Image.network(
+
+                          Provider.of<EventsImages>(context, listen: false)
+                              .imageUrls[itemIndex]
+                              .toString()
+                              .replaceFirst("http", 'https'),
+                          fit: BoxFit.cover,
+                          errorBuilder: (BuildContext context,
+                              Object exception, StackTrace stackTrace) {
+                            // Appropriate logging or analytics, e.g.
+                            // myAnalytics.recordError(
+                            //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
+                            //   exception,
+                            //   stackTrace,
+                            // );
+                            return FittedBox(
+                              child: Card(
+                                color: Colors.cyan,
+                                child: Container(
+
+
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.person_outline,
+                                        size: 55,
                                       ),
-                                    ),
+                                      Text('😢 Can\'t load image ',
+                                          style: TextStyle(
+                                              color: Colors.grey[800],
+                                              fontWeight: FontWeight.w900,
+                                              fontStyle: FontStyle.normal,
+                                              fontFamily: 'Open Sans',
+                                              fontSize: 20)),
+                                    ],
                                   ),
-                                );
-                              },
-                              loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                  child: FittedBox(
-                                    child: Row(
-                                      children: [
-                                        FadingText('image loading...'),
-                                        CircularProgressIndicator(
-                                          value: loadingProgress
-                                                      .expectedTotalBytes !=
-                                                  null
-                                              ? loadingProgress
-                                                      .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes
-                                              : null,
-                                        ),
-                                      ],
+                                ),
+                              ),
+
+                            );
+                          },
+                          loadingBuilder: (BuildContext context,
+                              Widget decoration,
+                              ImageChunkEvent loadingProgress) {
+                            if (loadingProgress == null) return decoration;
+                            return Center(
+                              child: FittedBox(
+                                child: Row(
+                                  children: [
+                                    FadingText('image loading...'),
+                                    CircularProgressIndicator(
+                                      backgroundColor: Colors.brown,
+                                      value: loadingProgress
+                                                  .expectedTotalBytes !=
+                                              null
+                                          ? loadingProgress
+                                                  .cumulativeBytesLoaded /
+                                              loadingProgress
+                                                  .expectedTotalBytes
+                                          : null,
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       );
                     },
-                    options: CarouselOptions(autoPlay: true)),
-              )
-            : ListTile(
-                trailing: Text("Projects", style: general_text_style),
+                    options: CarouselOptions(autoPlay: true,enlargeCenterPage: false,height: 500,viewportFraction: 1)),
               ),
-      ),
+            )
+          : ListTile(
+              trailing: Text("Projects", style: general_text_style),
+            ),
       ListTile(
         title: Text("Internship/Job Opportunities", style: general_text_style),
         trailing: Icon(Icons.work_outline),
@@ -551,6 +501,7 @@ class _HomePageState extends State<HomePage> {
             child: FlipAnimation(
               flipAxis: FlipAxis.y,
               child: Container(
+
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),
                   color: Colors.white,

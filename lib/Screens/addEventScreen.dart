@@ -147,9 +147,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
   Duration _duration = Duration(hours: 0, minutes: 0);
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     double ratio = MediaQuery.of(context).size.height / 896;
 
     type = ModalRoute.of(context).settings.arguments;
+=======
+>>>>>>> a34cf27d7029618dc7669e1ea99a4285767da4e8
     // BuildContext bc =
     //     Provider.of<TabsScreenContext>(context, listen: false).get();
     var data = Provider.of<AddEventScreenData>(context, listen: true);
@@ -179,7 +182,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         whatsInItForYou.text +
                         '\$~' +
                         link.text,
-                    type,
+                    1,
                     dateTime,
                     timeOfDay,
                     _image);
@@ -218,11 +221,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
       ],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: type == 1
-            ? Text('add event')
-            : type == 2
-                ? Text('add projects')
-                : Text('add internships/jobs'),
+        title: Text('add event'),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -426,40 +425,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
               ),
 
-              // Container(
-              //   padding: EdgeInsets.all(20),
-              //   child: DropDownFormField(
-              //     textField: 'display',
-              //     valueField: 'value',
-              //     dataSource: [
-              //       {
-              //         "display": "type1",
-              //         "value": 1,
-              //       },
-              //       {
-              //         "display": "type2",
-              //         "value": 2,
-              //       },
-              //       {
-              //         "display": "type3",
-              //         "value": 3,
-              //       },
-              //     ],
-              //     onSaved: (value) {
-              //       setState(() {
-              //         type = value;
-              //       });
-              //     },
-              //     onChanged: (value) {
-              //       setState(() {
-              //         type = value;
-              //       });
-              //     },
-              //     titleText: 'event type',
-              //     value: type,
-              //     hintText: 'choose event type',
-              //   ),
-              // ),
+
             ],
           )),
         ),
