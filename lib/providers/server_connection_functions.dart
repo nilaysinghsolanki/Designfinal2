@@ -123,6 +123,8 @@ class Server_Connection_Functions {
         id: e['id'],
         eventType: e['type_event'],
         dateime: DateTime.parse(e['date_time']),
+        owner_image: e['owner_image'],
+        event_image: e['event_image']
       );
     }).toList();
     Provider.of<EventsData>(context, listen: false).setEvents(eves);
@@ -221,7 +223,7 @@ class Server_Connection_Functions {
     };
     Map mapjsonBody = {"email": "$email"};
     http.Response response = await http.post(
-        Uri.https('dtuotg.azurewebsites.net', 'auth/send-email/'),
+        Uri.https('dtuotg.azurewebsites.net', 'auth/send-invites/'),
         headers: headersInvite,
         body: json.encode(mapjsonBody));
     print(json.encode(mapjsonBody));

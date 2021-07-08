@@ -7,9 +7,14 @@ class Event with ChangeNotifier {
   String owner;
   DateTime dateime;
   String eventType;
+  String owner_image;
+  String event_image;
+
   Event(
       {this.dateime,
       this.eventType,
+        this.owner_image,
+        this.event_image,
       this.id,
       this.name,
       this.owner,
@@ -28,10 +33,12 @@ class EventDetails with ChangeNotifier {
   String type;
   bool registered;
   int count;
+  String event_image;
   EventDetails({
     this.id,
     this.owner,
     this.name,
+
     this.latitude,
     this.longitute,
     this.description,
@@ -40,5 +47,6 @@ class EventDetails with ChangeNotifier {
     this.type,
     this.registered,
     this.count,
+    this.event_image,
   });
 }

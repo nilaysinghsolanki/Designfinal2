@@ -390,86 +390,32 @@ class _HomePageState extends State<HomePage> {
                 child: CarouselSlider.builder(
 
 
-                    itemCount: Provider.of<EventsImages>(context, listen: false)
-                        .imageUrls
+                    itemCount: Provider.of<EventsData>(context, listen: false)
+                        .events
                         .length,
                     itemBuilder: (context, itemIndex, pageViewIndex) {
                       return GestureDetector(
                         onTap: () {
                           Navigator.of(context).pushNamed('/eventdetailsdesign',
                               arguments: ScreenArguments(
-                                  id: Provider.of<EventsImages>(context,
+                                  id: Provider.of<EventsData>(context,
                                           listen: false)
-                                      .id[itemIndex],
+                                      .events[itemIndex].id,
                                   scf: scf,
                                   context: context));
                         },
-                        child: Image.network(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                              image: NetworkImage(
+                                  Provider.of<EventsData>(context, listen: false)
+                                      .events[itemIndex].event_image
+                                      .toString()
+                              )
+                            )
+                          ),
 
-                          Provider.of<EventsImages>(context, listen: false)
-                              .imageUrls[itemIndex]
-                              .toString()
-                              .replaceFirst("http", 'https'),
-                          fit: BoxFit.cover,
-                          errorBuilder: (BuildContext context,
-                              Object exception, StackTrace stackTrace) {
-                            // Appropriate logging or analytics, e.g.
-                            // myAnalytics.recordError(
-                            //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
-                            //   exception,
-                            //   stackTrace,
-                            // );
-                            return FittedBox(
-                              child: Card(
-                                color: Colors.cyan,
-                                child: Container(
-
-
-                                  child: Column(
-                                    children: [
-                                      Icon(
-                                        Icons.person_outline,
-                                        size: 55,
-                                      ),
-                                      Text('😢 Can\'t load image ',
-                                          style: TextStyle(
-                                              color: Colors.grey[800],
-                                              fontWeight: FontWeight.w900,
-                                              fontStyle: FontStyle.normal,
-                                              fontFamily: 'Open Sans',
-                                              fontSize: 20)),
-                                    ],
-                                  ),
-                                ),
-                              ),
-
-                            );
-                          },
-                          loadingBuilder: (BuildContext context,
-                              Widget decoration,
-                              ImageChunkEvent loadingProgress) {
-                            if (loadingProgress == null) return decoration;
-                            return Center(
-                              child: FittedBox(
-                                child: Row(
-                                  children: [
-                                    FadingText('image loading...'),
-                                    CircularProgressIndicator(
-                                      backgroundColor: Colors.brown,
-                                      value: loadingProgress
-                                                  .expectedTotalBytes !=
-                                              null
-                                          ? loadingProgress
-                                                  .cumulativeBytesLoaded /
-                                              loadingProgress
-                                                  .expectedTotalBytes
-                                          : null,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
                         ),
                       );
                     },
@@ -1380,7 +1326,8 @@ class _AddingPageState extends State<AddingPage> {
     return Expanded(
       child: Container(
         alignment: Alignment.center,
-        color: Colors.transparent,
+
+
         child: ListView.builder(
           physics: BouncingScrollPhysics(),
           itemCount: 4,
@@ -1497,18 +1444,14 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
         children: [
           if (_adding_to_app_pressed == false && _events_pressed == false)
             Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("Assets/Frame 4.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
+
               height: 200,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
                     CircleAvatar(
+                      backgroundImage: NetworkImage('https://dtuotgstorage.blob.core.windows.net/media/events/1_AXF8IYKqC3Y7JxYRaUrCPQ.png'),
                       backgroundColor: newcolor,
                       radius: 5,
                     ),
@@ -1591,12 +1534,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
           else
             Container(
               height: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("Assets/Frame 4.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
+
             ),
 
           //NAVIGATION OF PAGES
@@ -1685,12 +1623,8 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                       }
                     },
                     child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("Assets/Frame 4.png"),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      color: Colors.transparent,
+
                       child: Rive(
                         artboard: _riveArtboard,
                         alignment: Alignment.bottomCenter,

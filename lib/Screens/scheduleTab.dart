@@ -1,3 +1,5 @@
+import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:nilay_dtuotg_2/providers/server_connection_functions.dart';
 
@@ -12,6 +14,7 @@ import '../providers/info_provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../models/screenArguments.dart';
 import '../providers/server_connection_functions.dart';
+import 'package:nilay_dtuotg_2/Screens/eventsdetailsDESIGN.dart';
 
 class ScheduleTab extends StatefulWidget {
   ScheduleTab({Key key}) : super(key: key);
@@ -198,49 +201,85 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   ),
             if (events0Schedule1 == 0)
               if (true) //(sheduledToday.isNotEmpty)
-                Expanded(
-                  child: ListView.builder(
-                      padding: EdgeInsets.all(0),
-                      physics: const BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics()),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: eventsedRegester.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 3, vertical: 5),
-                          child: ListTile(
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                  '/EventsDetailScreen',
-                                  arguments: ScreenArguments(
-                                      id: eventsedRegester[index].id,
-                                      scf: Server_Connection_Functions(),
-                                      context: context));
-                            },
-                            tileColor: eventsedRegester[index].favorite
-                                ? Colors.orange[50]
-                                : Colors.blue,
-                            subtitle: Text(
-                              eventsedRegester[index].eventType,
-                              style: TextStyle(
-                                color: Colors.brown,
+                ListView.builder(
+                    padding: EdgeInsets.all(0),
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: eventsedRegester.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Container(
+
+                            decoration: BoxDecoration(
+
+
+
+
+                                image: DecorationImage(
+
+
+                                    fit:BoxFit.cover,
+
+                                    image: NetworkImage('${eventsedRegester[index].event_image.toString()}')
+
+                                )
+
+                            ),
+                            child:ListTile(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                    '/eventsdetailsdesign',
+                                    arguments: ScreenArguments(
+                                        id: eventsedRegester[index].id,
+                                        scf: Server_Connection_Functions(),
+                                        context: context));
+                              },
+                              tileColor: eventsedRegester[index].favorite
+                                  ? Colors.white70
+                                  : Colors.blue,
+                              subtitle: Text(
+                                eventsedRegester[index].owner.toString(),
+                                style: TextStyle(
+                                  color: Colors.brown,
+                                ),
                               ),
-                            ),
-                            leading: Icon(
-                              Icons.ac_unit,
-                              color: Colors.brown,
-                            ),
-                            title: Text(
-                              eventsedRegester[index].name,
-                              style:
-                                  TextStyle(color: Colors.brown, fontSize: 19),
+                              leading: CircleAvatar(
+                                radius: 22,
+                                backgroundColor: Colors.black,
+                                child: CircleAvatar(
+
+
+                                    backgroundColor: Colors.transparent,
+                                    radius: 20,
+
+
+                                    child:Container(
+
+                                      decoration: BoxDecoration(image: DecorationImage(
+                                          image: NetworkImage('${eventsedRegester[index].owner_image.toString()}'),
+                                          fit: BoxFit.fill
+
+                                      ),
+                                          shape: BoxShape.circle),
+
+                                    )
+                                ),
+                              ),
+                              title: Text(
+                                eventsedRegester[index].name,
+                                style:
+                                TextStyle(color: Colors.brown, fontSize: 19),
+                              ),
+
                             ),
                           ),
-                        );
-                      }),
-                ),
+
+                        ],
+                      );
+                    }),
             if (!initialized) CircularProgressIndicator(),
             if (initialized)
               if (events0Schedule1 == 1)
@@ -268,7 +307,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                 TimeOfDay.now().hour) &&
                             ((lectures[index].time.hour +
                                     lectures[index].length) >
-                                TimeOfDay.now().hour)) {
+                                TimeOfDay.now().hour) ) {
                           happeningNow = true;
                         }
                       }
