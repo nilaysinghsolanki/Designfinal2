@@ -381,19 +381,32 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+<<<<<<< HEAD
       (DateTime.now().hour >= 8 && DateTime.now().hour <= 17)
           ? TimeTableHomeScreenListTile()
           : ListTile(),
+=======
+      DateTime.now().hour <= 17 && DateTime.now().hour>=8 ? TimeTableHomeScreenListTile() : ListTile(),
+>>>>>>> 6650853b09b3e643da96d5c3f1a27cb9d400b401
       imgFetched
           ? Center(
               child: Expanded(
                 child: CarouselSlider.builder(
+<<<<<<< HEAD
                     itemCount: sheduledToday.length,
+=======
+
+
+                    itemCount: Provider.of<EventsData>(context, listen: false)
+                        .events
+                        .length,
+>>>>>>> 6650853b09b3e643da96d5c3f1a27cb9d400b401
                     itemBuilder: (context, itemIndex, pageViewIndex) {
                       return GestureDetector(
                         onTap: () {
                           Navigator.of(context).pushNamed('/eventdetailsdesign',
                               arguments: ScreenArguments(
+<<<<<<< HEAD
                                   id: sheduledToday[itemIndex].id,
                                   scf: scf,
                                   context: context));
@@ -459,6 +472,26 @@ class _HomePageState extends State<HomePage> {
                               ),
                             );
                           },
+=======
+                                  id: Provider.of<EventsData>(context,
+                                          listen: false)
+                                      .events[itemIndex].id,
+                                  scf: scf,
+                                  context: context));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                              image: NetworkImage(
+                                  Provider.of<EventsData>(context, listen: false)
+                                      .events[itemIndex].event_image
+                                      .toString()
+                              )
+                            )
+                          ),
+
+>>>>>>> 6650853b09b3e643da96d5c3f1a27cb9d400b401
                         ),
                       );
                     },
@@ -1372,7 +1405,8 @@ class _AddingPageState extends State<AddingPage> {
     return Expanded(
       child: Container(
         alignment: Alignment.center,
-        color: Colors.transparent,
+
+
         child: ListView.builder(
           physics: BouncingScrollPhysics(),
           itemCount: 4,
@@ -1489,18 +1523,14 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
         children: [
           if (_adding_to_app_pressed == false && _events_pressed == false)
             Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("Assets/Frame 4.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
+
               height: 200,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
                     CircleAvatar(
+                      backgroundImage: NetworkImage('https://dtuotgstorage.blob.core.windows.net/media/events/1_AXF8IYKqC3Y7JxYRaUrCPQ.png'),
                       backgroundColor: newcolor,
                       radius: 5,
                     ),
@@ -1583,12 +1613,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
           else
             Container(
               height: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("Assets/Frame 4.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
+
             ),
 
           //NAVIGATION OF PAGES
@@ -1677,12 +1702,8 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                       }
                     },
                     child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("Assets/Frame 4.png"),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      color: Colors.transparent,
+
                       child: Rive(
                         artboard: _riveArtboard,
                         alignment: Alignment.bottomCenter,

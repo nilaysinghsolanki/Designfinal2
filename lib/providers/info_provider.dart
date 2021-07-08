@@ -41,7 +41,7 @@ class TabsScreenContext with ChangeNotifier {
 
 class EventsImages with ChangeNotifier {
   bool imgFetched = false;
-  List<String> imageUrls = [];
+  List<String> eventimageUrls = [];
   List<int> id = [];
   Future<void> fetchList(List<Event> events, String accessTokenValue) async {
     await events.forEach((event) async {
@@ -61,7 +61,7 @@ class EventsImages with ChangeNotifier {
       resp = json.decode(response.body);
 
       if (resp['image'] != null) {
-        imageUrls.add(resp['image']);
+        eventimageUrls.add(resp['image']);
         id.add(resp['id']);
       }
       print(resp['image']);
