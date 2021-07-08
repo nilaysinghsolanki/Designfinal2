@@ -382,9 +382,13 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
 <<<<<<< HEAD
+<<<<<<< HEAD
       (DateTime.now().hour >= 8 && DateTime.now().hour <= 17)
           ? TimeTableHomeScreenListTile()
           : ListTile(),
+=======
+      DateTime.now().hour <= 17 && DateTime.now().hour>=8 ? TimeTableHomeScreenListTile() : ListTile(),
+>>>>>>> 6650853b09b3e643da96d5c3f1a27cb9d400b401
 =======
       DateTime.now().hour <= 17 && DateTime.now().hour>=8 ? TimeTableHomeScreenListTile() : ListTile(),
 >>>>>>> 6650853b09b3e643da96d5c3f1a27cb9d400b401
@@ -406,6 +410,7 @@ class _HomePageState extends State<HomePage> {
                         onTap: () {
                           Navigator.of(context).pushNamed('/eventdetailsdesign',
                               arguments: ScreenArguments(
+<<<<<<< HEAD
 <<<<<<< HEAD
                                   id: sheduledToday[itemIndex].id,
                                   scf: scf,
@@ -479,6 +484,14 @@ class _HomePageState extends State<HomePage> {
                                   scf: scf,
                                   context: context));
                         },
+=======
+                                  id: Provider.of<EventsData>(context,
+                                          listen: false)
+                                      .events[itemIndex].id,
+                                  scf: scf,
+                                  context: context));
+                        },
+>>>>>>> 6650853b09b3e643da96d5c3f1a27cb9d400b401
                         child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
@@ -491,6 +504,9 @@ class _HomePageState extends State<HomePage> {
                             )
                           ),
 
+<<<<<<< HEAD
+>>>>>>> 6650853b09b3e643da96d5c3f1a27cb9d400b401
+=======
 >>>>>>> 6650853b09b3e643da96d5c3f1a27cb9d400b401
                         ),
                       );
