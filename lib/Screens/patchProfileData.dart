@@ -6,6 +6,7 @@ import 'dart:convert';
 import '../widgets/yearPicker.dart' as yp;
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
+import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -96,8 +97,6 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                     primary: Colors.white,
                     elevation: 0,
                   ),
-
-                  ////////TOKEN?save, BATCH,RESPONSE CHECK,IF OK THEN SAVE IN DATA BASE
                   onPressed: () async {
                     if (formGlobalKey.currentState.validate() &&
                         waiting == false) {
@@ -123,7 +122,32 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                           : rollNUmString.length == 2
                               ? '0' + rollNUmString
                               : '00' + rollNUmString;
-                      Map mapjsonnprofile = {
+                      // Map mapjsonnprofile = {
+                      //   "name": "${name.text}",
+                      //   "roll_no": "$formattedRollNum",
+                      //   "branch":
+                      //       "${Provider.of<ProfileData>(context, listen: false).getBranch()}",
+                      //   "year": Provider.of<ProfileData>(context, listen: false)
+                      //       .getYear(),
+                      //   "batch":
+                      //       "${Provider.of<ProfileData>(context, listen: false).getBatch()}",
+                      //   "image": _image
+                      // };
+                      // http.Response response = await http.patch(
+                      //     Uri.https('dtuotg.azurewebsites.net',
+                      //         'auth/profile/$username'),
+                      //     headers: headersProfile,
+                      //     body: json.encode(mapjsonnprofile));
+                      // int statusCode = response.statusCode;
+                      // var resp = json.decode(response.body);
+                      // print('/////////enter detail screen response $resp');
+                      // setState(() {
+                      //   waiting = false;
+                      // });
+                      ////
+                      Response responsee;
+                      var dio = Dio();
+                      var formdata = FormData.fromMap({
                         "name": "${name.text}",
                         "roll_no": "$formattedRollNum",
                         "branch":
@@ -132,20 +156,24 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                             .getYear(),
                         "batch":
                             "${Provider.of<ProfileData>(context, listen: false).getBatch()}",
-                        "image": _image
-                      };
-                      http.Response response = await http.patch(
-                          Uri.https('dtuotg.azurewebsites.net',
-                              'auth/profile/$username'),
-                          headers: headersProfile,
-                          body: json.encode(mapjsonnprofile));
-                      int statusCode = response.statusCode;
-                      var resp = json.decode(response.body);
-                      print('/////////enter detail screen response $resp');
-                      setState(() {
-                        waiting = false;
+                        "image": await MultipartFile.fromFile(
+                          _image.path,
+                          filename: _image.path,
+                        )
                       });
-                      if (resp["status"] != 'FAILED') {
+                      responsee = await dio.patch(
+                        'dtuotg.azurewebsites.netauth/profile/$username',
+                        data: formdata,
+                        options: Options(
+                          headers: headersProfile,
+                        ),
+                        onSendProgress: (int sent, int total) {
+                          print('$sent $total');
+                        },
+                      );
+
+                      ////
+                      if (responsee.data["status"] != 'FAILED') {
                         //   Provider.of<ProfileData>(context, listen: false)
                         //     .saveSetedChanges();
                         Provider.of<AccessTokenData>(context, listen: false)
@@ -163,13 +191,87 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                             builder: (context) {
                               return Dialog(
                                 child: Container(
-                                  child: Text(response.body),
+                                  child: Text(responsee.data),
                                 ),
                               );
                             });
                       }
                     }
-                  },
+                  }
+                  ////////TOKEN?save, BATCH,RESPONSE CHECK,IF OK THEN SAVE IN DATA BASE
+                  // onPressed: () async {
+                  //   if (formGlobalKey.currentState.validate() &&
+                  //       waiting == false) {
+                  //     Provider.of<ProfileData>(context, listen: false)
+                  //         .setName(name.text);
+                  //     var accessToken =
+                  //         Provider.of<AccessTokenData>(context, listen: false)
+                  //             .accessToken;
+                  //     var accessTokenValue = accessToken[0];
+                  //     //if status is ok  // // // //     Provider.of<ProfileData>(context, listen: false)
+                  //     // // // //         .saveSetedChanges();
+                  //     setState(() {
+                  //       waiting = true;
+                  //     });
+                  //     Map<String, String> headersProfile = {
+                  //       "Content-type": "multipart/form-data",
+                  //       "accept": "application/json",
+                  //       "Authorization": "Bearer $accessTokenValue"
+                  //     };
+                  //     var rollNUmString = rollNum.toString();
+                  //     var formattedRollNum = rollNUmString.length == 3
+                  //         ? rollNum
+                  //         : rollNUmString.length == 2
+                  //             ? '0' + rollNUmString
+                  //             : '00' + rollNUmString;
+                  //     Map mapjsonnprofile = {
+                  //       "name": "${name.text}",
+                  //       "roll_no": "$formattedRollNum",
+                  //       "branch":
+                  //           "${Provider.of<ProfileData>(context, listen: false).getBranch()}",
+                  //       "year": Provider.of<ProfileData>(context, listen: false)
+                  //           .getYear(),
+                  //       "batch":
+                  //           "${Provider.of<ProfileData>(context, listen: false).getBatch()}",
+                  //       "image": _image
+                  //     };
+                  //     http.Response response = await http.patch(
+                  //         Uri.https('dtuotg.azurewebsites.net',
+                  //             'auth/profile/$username'),
+                  //         headers: headersProfile,
+                  //         body: json.encode(mapjsonnprofile));
+                  //     int statusCode = response.statusCode;
+                  //     var resp = json.decode(response.body);
+                  //     print('/////////enter detail screen response $resp');
+                  //     setState(() {
+                  //       waiting = false;
+                  //     });
+                  //     if (resp["status"] != 'FAILED') {
+                  //       //   Provider.of<ProfileData>(context, listen: false)
+                  //       //     .saveSetedChanges();
+                  //       Provider.of<AccessTokenData>(context, listen: false)
+                  //           .addAccessToken(
+                  //               Provider.of<AccessTokenData>(context,
+                  //                       listen: false)
+                  //                   .getAccessToken(),
+                  //               Provider.of<AccessTokenData>(context,
+                  //                       listen: false)
+                  //                   .getDateTime());
+                  //       Navigator.of(context).pushNamed('/homeScreen');
+                  //     } else {
+                  //       showDialog(
+                  //           context: context,
+                  //           builder: (context) {
+                  //             return Dialog(
+                  //               child: Container(
+                  //                 child: Text(response.body),
+                  //               ),
+                  //             );
+                  //           });
+                  //     }
+                  //   }
+                  // },
+                  ,
                   child: waiting
                       ? CircularProgressIndicator()
                       : Text(
