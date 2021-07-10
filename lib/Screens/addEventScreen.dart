@@ -142,11 +142,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
   final formGlobalKey = GlobalKey<FormState>();
   bool waiting = false;
   var resp;
-  int type;
   DateTime now = DateTime.now();
   Duration _duration = Duration(hours: 0, minutes: 0);
   @override
   Widget build(BuildContext context) {
+    int type = ModalRoute.of(context).settings.arguments;
+
     double ratio = MediaQuery.of(context).size.height / 896;
 
     // BuildContext bc =
@@ -217,7 +218,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
       ],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text('add event'),
+        title: Text(type == 1
+            ? 'add event'
+            : type == 2
+                ? 'projects +'
+                : '+ jobs/internships'),
       ),
       body: Container(
         decoration: BoxDecoration(

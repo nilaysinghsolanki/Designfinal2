@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -109,7 +111,9 @@ class _ScheduleTabState extends State<ScheduleTab> {
 
     events.forEach((element) {
       if (element.favorite) {
-        if(element.dateime.day==_selectedDay.day && element.dateime.month==_selectedDay.month && element.dateime.year==_selectedDay.year) {
+        if (element.dateime.day == _selectedDay.day &&
+            element.dateime.month == _selectedDay.month &&
+            element.dateime.year == _selectedDay.year) {
           eventsedRegester.add(element);
         }
         if (element.dateime == _selectedDay) {}
@@ -129,299 +133,323 @@ class _ScheduleTabState extends State<ScheduleTab> {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
       ),
-      body: Container(
-        decoration: BoxDecoration(),
-        padding: EdgeInsets.only(top: 0),
-        child: Column(
-          children: [
-            Container(
-              color: newcolor,
-              child: TableCalendar(
-                calendarStyle: CalendarStyle(
-                    todayDecoration: BoxDecoration(
-                        color: Colors.brown[200], shape: BoxShape.circle),
-                    selectedDecoration: BoxDecoration(
-                        color: Colors.brown, shape: BoxShape.circle)),
-                daysOfWeekStyle: DaysOfWeekStyle(decoration: BoxDecoration()),
-                eventLoader: (day) {},
-                calendarFormat: _calendarFormat,
-                onFormatChanged: (format) {
-                  setState(() {
-                    _calendarFormat = format;
-                  });
-                },
-                selectedDayPredicate: (day) {
-                  return isSameDay(_selectedDay, day);
-                },
-                onDaySelected: (selectedDay, focusedDay) {
-                  setState(() {
-                    print(selectedDay.toString());
-                    print(focusedDay.toString());
-                    _selectedDay = selectedDay;
-                    lectures =
-                        Provider.of<TimeTableData>(context, listen: false)
-                            .get(selectedDay.weekday);
-                    _focusedDay =
-                        focusedDay; // update `_focusedDay` here as well
-                  });
-                },
-                firstDay: DateTime.now().subtract(Duration(days: 100)),
-                lastDay: DateTime.now().add(Duration(days: 100)),
-                focusedDay: _focusedDay,
-              ),
-            ),
-
-            ToggleSwitch(
-              cornerRadius: 22,
-              minWidth: 150,
-              initialLabelIndex: events0Schedule1,
-              onToggle: (index) {
-                setState(() {
-                  events0Schedule1 = index;
-                });
-              },
-              labels: ['events', 'schedule'],
-              activeBgColor: Colors.brown,
-              activeFgColor: Colors.white,
-              inactiveFgColor: Colors.brown,
-              inactiveBgColor: Colors.white,
-            ),
-            SizedBox(
-              height: 0,
-            ),
-            if (events0Schedule1 == 0)
-              if (initialized)
-                if (sheduledToday.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 0),
-                    child: Text(
-                      '',
-                      style: TextStyle(fontSize: 20),
+      body: !initialized
+          ? CircularProgressIndicator()
+          : Container(
+              decoration: BoxDecoration(),
+              padding: EdgeInsets.only(top: 0),
+              child: Column(
+                children: [
+                  Container(
+                    color: newcolor,
+                    child: TableCalendar(
+                      calendarStyle: CalendarStyle(
+                          todayDecoration: BoxDecoration(
+                              color: Colors.brown[200], shape: BoxShape.circle),
+                          selectedDecoration: BoxDecoration(
+                              color: Colors.brown, shape: BoxShape.circle)),
+                      daysOfWeekStyle:
+                          DaysOfWeekStyle(decoration: BoxDecoration()),
+                      eventLoader: (day) {},
+                      calendarFormat: _calendarFormat,
+                      onFormatChanged: (format) {
+                        setState(() {
+                          _calendarFormat = format;
+                        });
+                      },
+                      selectedDayPredicate: (day) {
+                        return isSameDay(_selectedDay, day);
+                      },
+                      onDaySelected: (selectedDay, focusedDay) {
+                        setState(() {
+                          print(selectedDay.toString());
+                          print(focusedDay.toString());
+                          _selectedDay = selectedDay;
+                          lectures =
+                              Provider.of<TimeTableData>(context, listen: false)
+                                  .get(selectedDay.weekday);
+                          _focusedDay =
+                              focusedDay; // update `_focusedDay` here as well
+                        });
+                      },
+                      firstDay: DateTime.now().subtract(Duration(days: 100)),
+                      lastDay: DateTime.now().add(Duration(days: 100)),
+                      focusedDay: _focusedDay,
                     ),
                   ),
-            if (events0Schedule1 == 0)
-              if (true) //(sheduledToday.isNotEmpty)
-                ListView.builder(
-                    padding: EdgeInsets.all(0),
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: eventsedRegester.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Container(
 
-                            decoration: BoxDecoration(
-
-
-
-
-                                image: DecorationImage(
-
-
-                                    fit:BoxFit.cover,
-
-                                    image: NetworkImage('${eventsedRegester[index].event_image.toString()}')
-
-                                )
-
-                            ),
-                            child:ListTile(
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
-                                    '/eventsdetailsdesign',
-                                    arguments: ScreenArguments(
-                                        id: eventsedRegester[index].id,
-                                        scf: Server_Connection_Functions(),
-                                        context: context));
-                              },
-                              tileColor: eventsedRegester[index].favorite
-                                  ? Colors.white70
-                                  : Colors.blue,
-                              subtitle: Text(
-                                eventsedRegester[index].owner.toString(),
-                                style: TextStyle(
-                                  color: Colors.brown,
-                                ),
-                              ),
-                              leading: CircleAvatar(
-                                radius: 22,
-                                backgroundColor: Colors.black,
-                                child: CircleAvatar(
-
-
-                                    backgroundColor: Colors.transparent,
-                                    radius: 20,
-
-
-                                    child:Container(
-
-                                      decoration: BoxDecoration(image: DecorationImage(
-                                          image: NetworkImage('${eventsedRegester[index].owner_image.toString()}'),
-                                          fit: BoxFit.fill
-
-                                      ),
-                                          shape: BoxShape.circle),
-
-                                    )
-                                ),
-                              ),
-                              title: Text(
-                                eventsedRegester[index].name,
-                                style:
-                                TextStyle(color: Colors.brown, fontSize: 19),
-                              ),
-
-                            ),
+                  ToggleSwitch(
+                    cornerRadius: 22,
+                    minWidth: 150,
+                    initialLabelIndex: events0Schedule1,
+                    onToggle: (index) {
+                      setState(() {
+                        events0Schedule1 = index;
+                      });
+                    },
+                    labels: ['events', 'schedule'],
+                    activeBgColor: Colors.brown,
+                    activeFgColor: Colors.white,
+                    inactiveFgColor: Colors.brown,
+                    inactiveBgColor: Colors.white,
+                  ),
+                  SizedBox(
+                    height: 0,
+                  ),
+                  if (events0Schedule1 == 0)
+                    if (initialized)
+                      if (sheduledToday.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 0),
+                          child: Text(
+                            '',
+                            style: TextStyle(fontSize: 20),
                           ),
-
-                        ],
-                      );
-                    }),
-            if (!initialized) CircularProgressIndicator(),
-            if (initialized)
-              if (events0Schedule1 == 1)
-                if (lectures.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50),
-                    child: Text(
-                      'empty lectures',
-                      style: TextStyle(fontSize: 50),
-                    ),
-                  ),
-            if (events0Schedule1 == 1)
-              if (lectures.isNotEmpty)
-                Expanded(
-                  child: new ListView.builder(
-                    itemBuilder: (context, index) {
-                      int hour = lectures[index].time.hour;
-                      int length = lectures[index].length;
-                      bool happeningNow = false;
-
-                      if (lectures[index].time.hour == TimeOfDay.now().hour) {
-                        happeningNow = true;
-                      } else {
-                        if ((lectures[index].time.hour <
-                                TimeOfDay.now().hour) &&
-                            ((lectures[index].time.hour +
-                                    lectures[index].length) >
-                                TimeOfDay.now().hour) ) {
-                          happeningNow = true;
-                        }
-                      }
-
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        child: AnimationConfiguration.staggeredList(
-                            position: index,
-                            child: SlideAnimation(
-                                child: FlipAnimation(
-                                    flipAxis: FlipAxis.y,
+                        ),
+                  if (events0Schedule1 == 0)
+                    if (true) //(sheduledToday.isNotEmpty)
+                      Expanded(
+                        child: ListView.builder(
+                            padding: EdgeInsets.all(0),
+                            physics: const BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics()),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: eventsedRegester.length,
+                            itemBuilder: (context, index) {
+                              return Stack(
+                                children: [
+                                  GestureDetector(
                                     child: Container(
-                                      decoration: lectures[index].free
-                                          ? BoxDecoration(
-                                              border: Border(
-                                              left: BorderSide(
-                                                  width: 8,
-                                                  color: Colors.lightGreen),
-                                            ))
-                                          : BoxDecoration(
-                                              border: Border(
-                                              left: BorderSide(
-                                                  width: 8,
-                                                  color: Colors.brown),
-                                              right: happeningNow
-                                                  ? BorderSide(
-                                                      width: 2,
-                                                      color: Colors.purple)
-                                                  : BorderSide(width: 0),
-                                              top: happeningNow
-                                                  ? BorderSide(
-                                                      width: 2,
-                                                      color: Colors.purple)
-                                                  : BorderSide(width: 0),
-                                              bottom: happeningNow
-                                                  ? BorderSide(
-                                                      width: 2,
-                                                      color: Colors.purple)
-                                                  : BorderSide(width: 0),
-                                            )),
-                                      child: ListTile(
-                                          leading: _focusedDay ==
-                                                      DateTime.now() &&
-                                                  happeningNow
-                                              ? Text(
-                                                  'NOW',
+                                      width: double.infinity,
+                                      height: 300,
+                                      child: Card(
+                                          color: Colors.amber,
+                                          semanticContainer: true,
+                                          clipBehavior:
+                                              Clip.antiAliasWithSaveLayer,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                          elevation: 5,
+                                          margin: EdgeInsets.all(5),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                      '${eventsedRegester[index].event_image.toString()}',
+                                                    ),
+                                                    fit: BoxFit.fill),
+                                                shape: BoxShape.rectangle),
+                                          )),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: ListTile(
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed(
+                                              '/eventsdetailsdesign',
+                                              arguments: ScreenArguments(
+                                                  id: eventsedRegester[index]
+                                                      .id,
+                                                  scf:
+                                                      Server_Connection_Functions(),
+                                                  context: context));
+                                        },
+                                        tileColor:
+                                            eventsedRegester[index].favorite
+                                                ? Colors.white
+                                                : Colors.blue,
+                                        subtitle: Text(
+                                          eventsedRegester[index]
+                                              .owner
+                                              .toString(),
+                                          style: TextStyle(
+                                            color: Colors.brown,
+                                          ),
+                                        ),
+                                        leading: CircleAvatar(
+                                          radius: 22,
+                                          backgroundColor: Colors.black,
+                                          child: CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              radius: 20,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: NetworkImage(
+                                                            '${eventsedRegester[index].owner_image.toString()}'),
+                                                        fit: BoxFit.fill),
+                                                    shape: BoxShape.circle),
+                                              )),
+                                        ),
+                                        title: Text(
+                                          eventsedRegester[index].name,
+                                          style: TextStyle(
+                                              color: Colors.brown,
+                                              fontSize: 19),
+                                        )),
+                                  )
+                                ],
+                              );
+                            }),
+                      ),
+                  if (!initialized) CircularProgressIndicator(),
+                  if (initialized)
+                    if (events0Schedule1 == 1)
+                      if (lectures.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 50),
+                          child: Text(
+                            'empty lectures',
+                            style: TextStyle(fontSize: 50),
+                          ),
+                        ),
+                  if (events0Schedule1 == 1)
+                    if (lectures.isNotEmpty)
+                      Expanded(
+                        child: new ListView.builder(
+                          itemBuilder: (context, index) {
+                            int hour = lectures[index].time.hour;
+                            int length = lectures[index].length;
+                            bool happeningNow = false;
+
+                            if (lectures[index].time.hour ==
+                                TimeOfDay.now().hour) {
+                              happeningNow = true;
+                            } else {
+                              if ((lectures[index].time.hour <
+                                      TimeOfDay.now().hour) &&
+                                  ((lectures[index].time.hour +
+                                          lectures[index].length) >
+                                      TimeOfDay.now().hour)) {
+                                happeningNow = true;
+                              }
+                            }
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              child: AnimationConfiguration.staggeredList(
+                                  position: index,
+                                  child: SlideAnimation(
+                                      child: FlipAnimation(
+                                          flipAxis: FlipAxis.y,
+                                          child: Container(
+                                            decoration: lectures[index].free
+                                                ? BoxDecoration(
+                                                    border: Border(
+                                                    left: BorderSide(
+                                                        width: 8,
+                                                        color:
+                                                            Colors.lightGreen),
+                                                  ))
+                                                : BoxDecoration(
+                                                    border: Border(
+                                                    left: BorderSide(
+                                                        width: 8,
+                                                        color: Colors.brown),
+                                                    right: happeningNow
+                                                        ? BorderSide(
+                                                            width: 2,
+                                                            color:
+                                                                Colors.purple)
+                                                        : BorderSide(width: 0),
+                                                    top: happeningNow
+                                                        ? BorderSide(
+                                                            width: 2,
+                                                            color:
+                                                                Colors.purple)
+                                                        : BorderSide(width: 0),
+                                                    bottom: happeningNow
+                                                        ? BorderSide(
+                                                            width: 2,
+                                                            color:
+                                                                Colors.purple)
+                                                        : BorderSide(width: 0),
+                                                  )),
+                                            child: ListTile(
+                                                leading: _focusedDay ==
+                                                            DateTime.now() &&
+                                                        happeningNow
+                                                    ? Text(
+                                                        'NOW',
+                                                        style: TextStyle(
+                                                            fontSize: 17,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal),
+                                                      )
+                                                    : Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        children: [
+                                                          Icon(
+                                                            Icons
+                                                                .access_time_outlined,
+                                                          ),
+                                                          Text(
+                                                              '$hour-${hour + length}')
+                                                        ],
+                                                      ),
+                                                subtitle: Text('AP102'),
+                                                tileColor: lectures[index].free
+                                                    ? Colors.white
+                                                    : happeningNow
+                                                        ? Colors.white
+                                                        : Colors.white,
+                                                title: lectures[index].free
+                                                    ? Text(
+                                                        'FREE',
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .lightGreen),
+                                                      )
+                                                    : Text(
+                                                        lectures[index].name,
+                                                        style: TextStyle(
+                                                            color:
+                                                                FreePeriodColor),
+                                                      ),
+                                                trailing: Text(
+                                                  '$length hour',
                                                   style: TextStyle(
-                                                      fontSize: 17,
+                                                      color: Colors.brown,
+                                                      fontSize: 20,
                                                       fontWeight:
                                                           FontWeight.normal),
-                                                )
-                                              : Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .access_time_outlined,
-                                                    ),
-                                                    Text(
-                                                        '$hour-${hour + length}')
-                                                  ],
-                                                ),
-                                          subtitle: Text('AP102'),
-                                          tileColor: lectures[index].free
-                                              ? Colors.white
-                                              : happeningNow
-                                                  ? Colors.white
-                                                  : Colors.white,
-                                          title: lectures[index].free
-                                              ? Text(
-                                                  'FREE',
-                                                  style: TextStyle(
-                                                      color: Colors.lightGreen),
-                                                )
-                                              : Text(
-                                                  lectures[index].name,
-                                                  style: TextStyle(
-                                                      color: FreePeriodColor),
-                                                ),
-                                          trailing: Text(
-                                            '$length hour',
-                                            style: TextStyle(
-                                                color: Colors.brown,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.normal),
-                                          )),
-                                    )))),
-                      );
-                    },
-                    itemCount: lectures.length,
-                  ),
-                ),
-            // Container(
-            //     height: 300,
-            //     padding: EdgeInsets.only(top: 70),
-            //     child: SfCalendar(
-            //       appointmentBuilder: (BuildContext context,
-            //           CalendarAppointmentDetails calendarAppointmentDetails) {},
-            //       firstDayOfWeek: 1,
-            //       showCurrentTimeIndicator: true,
-            //       maxDate: DateTime.now().add(Duration(days: 10)),
-            //       minDate: DateTime.now().subtract(Duration(days: 10)),
-            //       todayHighlightColor: Colors.amber[800],
-            //       showNavigationArrow: true,
-            //       initialDisplayDate: DateTime.now(),
-            //       view: CalendarView.month,
-            //       monthViewSettings: MonthViewSettings(numberOfWeeksInView: 1),
-            //     )),
-          ],
-        ),
-      ),
+                                                )),
+                                          )))),
+                            );
+                          },
+                          itemCount: lectures.length,
+                        ),
+                      ),
+                  // Container(
+                  //     height: 300,
+                  //     padding: EdgeInsets.only(top: 70),
+                  //     child: SfCalendar(
+                  //       appointmentBuilder: (BuildContext context,
+                  //           CalendarAppointmentDetails calendarAppointmentDetails) {},
+                  //       firstDayOfWeek: 1,
+                  //       showCurrentTimeIndicator: true,
+                  //       maxDate: DateTime.now().add(Duration(days: 10)),
+                  //       minDate: DateTime.now().subtract(Duration(days: 10)),
+                  //       todayHighlightColor: Colors.amber[800],
+                  //       showNavigationArrow: true,
+                  //       initialDisplayDate: DateTime.now(),
+                  //       view: CalendarView.month,
+                  //       monthViewSettings: MonthViewSettings(numberOfWeeksInView: 1),
+                  //     )),
+                ],
+              ),
+            ),
     );
   }
 }
@@ -614,3 +642,51 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //         ));
 //   }
 // }
+////////////////////////
+// Container(
+//                           height: 300,
+//                           decoration: BoxDecoration(
+//                               image: DecorationImage(
+//                                   fit: BoxFit.cover,
+//                                   image: NetworkImage(
+//                                       '${eventsedRegester[index].event_image.toString()}'))),
+//                           child: ListTile(
+//                             onTap: () {
+//                               Navigator.of(context).pushNamed(
+//                                   '/eventsdetailsdesign',
+//                                   arguments: ScreenArguments(
+//                                       id: eventsedRegester[index].id,
+//                                       scf: Server_Connection_Functions(),
+//                                       context: context));
+//                             },
+//                             tileColor: eventsedRegester[index].favorite
+//                                 ? Colors.white70
+//                                 : Colors.blue,
+//                             subtitle: Text(
+//                               eventsedRegester[index].owner.toString(),
+//                               style: TextStyle(
+//                                 color: Colors.brown,
+//                               ),
+//                             ),
+//                             leading: CircleAvatar(
+//                               radius: 22,
+//                               backgroundColor: Colors.black,
+//                               child: CircleAvatar(
+//                                   backgroundColor: Colors.transparent,
+//                                   radius: 20,
+//                                   child: Container(
+//                                     decoration: BoxDecoration(
+//                                         image: DecorationImage(
+//                                             image: NetworkImage(
+//                                                 '${eventsedRegester[index].owner_image.toString()}'),
+//                                             fit: BoxFit.fill),
+//                                         shape: BoxShape.circle),
+//                                   )),
+//                             ),
+//                             title: Text(
+//                               eventsedRegester[index].name,
+//                               style: TextStyle(
+//                                   color: Colors.brown, fontSize: 19),
+//                             ),
+//                           ),
+//                         ),

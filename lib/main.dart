@@ -98,7 +98,9 @@ class MyApp extends StatelessWidget {
           '/schedule': (context1) => ScheduleTab(),
           '/homeScreen': (context1) => HomeScreen(),
           '/loading': (context1) => LoadingScreen(),
-          '/eventdetailsdesign': (context1) => EventDetailsDesign(),
+          '/eventdetailsdesign': (context) => EventDetailsDesign(
+                key: _scaffoldKey,
+              ),
         },
         title: 'Rive Flutter Demo',
         home: LoadingScreen(),
@@ -342,10 +344,10 @@ class _HomePageState extends State<HomePage> {
         await scf.fetchListOfEvents(context);
         Provider.of<EventsData>(context, listen: false).setOnceDownloaded(true);
 
-        // Provider.of<EventsImages>(context, listen: false).fetchList(
-        //     Provider.of<EventsData>(context, listen: false).getEvents(),
-        //     Provider.of<AccessTokenData>(context, listen: false)
-        //         .getAccessToken());
+        Provider.of<EventsImages>(context, listen: false).fetchList(
+            Provider.of<EventsData>(context, listen: false).getEvents(),
+            Provider.of<AccessTokenData>(context, listen: false)
+                .getAccessToken());
       }
       sheduledToday =
           Provider.of<EventsData>(context, listen: false).getEvents();
@@ -381,83 +383,38 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      DateTime.now().hour <= 17 ? TimeTableHomeScreenListTile() : ListTile(),
+      DateTime.now().hour <= 17 && DateTime.now().hour >= 8
+          ? TimeTableHomeScreenListTile()
+          : ListTile(),
       imgFetched
           ? Center(
               child: Expanded(
                 child: CarouselSlider.builder(
-                    itemCount: sheduledToday.length,
+                    itemCount: Provider.of<EventsData>(context, listen: false)
+                        .events
+                        .length,
                     itemBuilder: (context, itemIndex, pageViewIndex) {
                       return GestureDetector(
                         onTap: () {
                           Navigator.of(context).pushNamed('/eventdetailsdesign',
                               arguments: ScreenArguments(
-                                  id: Provider.of<EventsImages>(context,
+                                  id: Provider.of<EventsData>(context,
                                           listen: false)
-                                      .id[itemIndex],
+                                      .events[itemIndex]
+                                      .id,
                                   scf: scf,
                                   context: context));
                         },
-                        child: Image.network(
-                          sheduledToday[itemIndex]
-                              .toString()
-                              .replaceFirst("http", 'https'),
-                          fit: BoxFit.cover,
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace stackTrace) {
-                            // Appropriate logging or analytics, e.g.
-                            // myAnalytics.recordError(
-                            //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
-                            //   exception,
-                            //   stackTrace,
-                            // );
-                            return FittedBox(
-                              child: Card(
-                                color: Colors.cyan,
-                                child: Container(
-                                  child: Column(
-                                    children: [
-                                      Icon(
-                                        Icons.person_outline,
-                                        size: 55,
-                                      ),
-                                      Text('😢 Can\'t load image ',
-                                          style: TextStyle(
-                                              color: Colors.grey[800],
-                                              fontWeight: FontWeight.w900,
-                                              fontStyle: FontStyle.normal,
-                                              fontFamily: 'Open Sans',
-                                              fontSize: 20)),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          loadingBuilder: (BuildContext context,
-                              Widget decoration,
-                              ImageChunkEvent loadingProgress) {
-                            if (loadingProgress == null) return decoration;
-                            return Center(
-                              child: FittedBox(
-                                child: Row(
-                                  children: [
-                                    FadingText('image loading...'),
-                                    CircularProgressIndicator(
-                                      backgroundColor: Colors.brown,
-                                      value: loadingProgress
-                                                  .expectedTotalBytes !=
-                                              null
-                                          ? loadingProgress
-                                                  .cumulativeBytesLoaded /
-                                              loadingProgress.expectedTotalBytes
-                                          : null,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(Provider.of<EventsData>(
+                                          context,
+                                          listen: false)
+                                      .events[itemIndex]
+                                      .event_image
+                                      .toString()))),
                         ),
                       );
                     },
@@ -1371,7 +1328,6 @@ class _AddingPageState extends State<AddingPage> {
     return Expanded(
       child: Container(
         alignment: Alignment.center,
-        color: Colors.transparent,
         child: ListView.builder(
           physics: BouncingScrollPhysics(),
           itemCount: 4,
@@ -1402,8 +1358,36 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   static const double width = 500;
   static const double height = 200;
   Color newcolor = Colors.transparent;
-
+  bool initialized = false;
   Artboard _riveArtboard;
+  var scf;
+  List<Event> sheduledToday = [];
+  bool eventsInitialized = false;
+
+  @override
+  void didChangeDependencies() async {
+    if (!initialized) {
+      if (!Provider.of<EventsData>(context, listen: false)
+          .getOnceDownloaded()) {
+        scf = Provider.of<SCF>(context, listen: false).get();
+        await scf.fetchListOfEvents(context);
+        Provider.of<EventsData>(context, listen: false).setOnceDownloaded(true);
+
+        Provider.of<EventsImages>(context, listen: false).fetchList(
+            Provider.of<EventsData>(context, listen: false).getEvents(),
+            Provider.of<AccessTokenData>(context, listen: false)
+                .getAccessToken());
+      }
+      sheduledToday =
+          Provider.of<EventsData>(context, listen: false).getEvents();
+
+      setState(() {
+        initialized = true;
+      });
+    }
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
 
   @override
   void initState() {
@@ -1482,217 +1466,216 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
         ),
       ),
       alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (_adding_to_app_pressed == false && _events_pressed == false)
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("Assets/Frame 4.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              height: 200,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: newcolor,
-                      radius: 5,
-                    ),
-                    CircleAvatar(
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AddEventsPage()));
-                        },
-                      ),
-                      backgroundColor: Colors.white,
-                      radius: 30,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: newcolor,
-                      radius: 5,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 30,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: newcolor,
-                      radius: 5,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 30,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: newcolor,
-                      radius: 5,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 30,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: newcolor,
-                      radius: 5,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 30,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: newcolor,
-                      radius: 5,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 30,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: newcolor,
-                      radius: 5,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 30,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: newcolor,
-                      radius: 5,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 30,
-                    ),
-                    CircleAvatar(
-                      backgroundColor: newcolor,
-                      radius: 5,
-                    ),
-                  ],
-                ),
-              ),
-            )
-          else
-            Container(
-              height: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("Assets/Frame 4.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-
-          //NAVIGATION OF PAGES
-          if (_adding_to_app_pressed == true)
-            AddingPage()
-          else if (_events_pressed == true)
-            EventsPage()
-          else
-            HomePage(),
-
-          Container(
-            padding: EdgeInsets.all(0),
-            width: width,
-            color: Colors.transparent,
-            child: _riveArtboard == null
-                ? const SizedBox()
-                : GestureDetector(
-                    onTapUp: (tapinfo) {
-                      var localtouchposition =
-                          (context.findRenderObject() as RenderBox)
-                              .globalToLocal(tapinfo.globalPosition);
-
-                      var tophalftouched = localtouchposition.dy < height / 2;
-                      var hometouched = localtouchposition.dx < width / 6;
-                      var internshiptouched =
-                          localtouchposition.dx < 2 * (width / 6);
-                      var profiletouched = localtouchposition.dx < width;
-                      var lowerblanktouched =
-                          localtouchposition.dx < 3 * (width / 6);
-                      var eventstouched =
-                          localtouchposition.dx < 5 * (width / 8);
-
-                      if (!tophalftouched) {
-                        if (hometouched) {
-                          if (!_adding_to_app_pressed) {
-                            setState(() {
-                              if (_events_pressed == true) {
-                                _events_pressed = !_events_pressed;
-
-                                _plusAnimation.isActive = false;
-                                _riveArtboard.addController(
-                                    _plusAnimation = PlusAnimation('home'));
-                              }
-                            });
-                          }
-                        } else if (internshiptouched) {
-                          if (!_adding_to_app_pressed) {
-                            setState(() {
-                              _plusAnimation.isActive = false;
-                              _riveArtboard.addController(
-                                  _plusAnimation = PlusAnimation('internship'));
-                            });
-                          }
-                        } else if (lowerblanktouched) {
-                          setState(() {
-                            _adding_to_app_pressed = !_adding_to_app_pressed;
-                            _adding_page_open_function(_adding_to_app_pressed);
-                          });
-                        } else if (eventstouched) {
-                          if (!_adding_to_app_pressed) {
-                            setState(() {
-                              _events_pressed = !_events_pressed;
-                              _events_page_function(_events_pressed);
-                              _plusAnimation.isActive = false;
-                              _riveArtboard.addController(
-                                  _plusAnimation = PlusAnimation('events'));
-                            });
-                          }
-                        } else if (profiletouched) {
-                          if (!_adding_to_app_pressed) {
-                            setState(() {
-                              _plusAnimation.isActive = false;
-                              _riveArtboard.addController(
-                                  _plusAnimation = PlusAnimation('profile'));
-                              print("Profile Touched");
-                            });
-                            Navigator.of(context)
-                                .pushNamed('/ProfileDetailsScreem');
-                          }
-                        }
-                      } else {
-                        setState(() {
-                          _adding_to_app_pressed = !_adding_to_app_pressed;
-                          _adding_page_open_function(_adding_to_app_pressed);
-                        });
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("Assets/Frame 4.png"),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Rive(
-                        artboard: _riveArtboard,
-                        alignment: Alignment.bottomCenter,
-                        useArtboardSize: true,
-                        fit: BoxFit.fitWidth,
+      child: !initialized
+          ? Center(
+              child: JumpingText(
+              'loading.....',
+              style: TextStyle(
+                  color: Colors.blueGrey[900],
+                  fontStyle: FontStyle.italic,
+                  fontSize: 50,
+                  fontWeight: FontWeight.w900),
+            ))
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (_adding_to_app_pressed == false && _events_pressed == false)
+                  Container(
+                    height: 200,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: newcolor,
+                            radius: 5,
+                          ),
+                          CircleAvatar(
+                            child: ListTile(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddEventsPage()));
+                              },
+                            ),
+                            backgroundColor: Colors.white,
+                            radius: 30,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: newcolor,
+                            radius: 5,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 30,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: newcolor,
+                            radius: 5,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 30,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: newcolor,
+                            radius: 5,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 30,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: newcolor,
+                            radius: 5,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 30,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: newcolor,
+                            radius: 5,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 30,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: newcolor,
+                            radius: 5,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 30,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: newcolor,
+                            radius: 5,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 30,
+                          ),
+                          CircleAvatar(
+                            backgroundColor: newcolor,
+                            radius: 5,
+                          ),
+                        ],
                       ),
                     ),
+                  )
+                else
+                  Container(
+                    height: 200,
                   ),
-          ),
-        ],
-      ),
+
+                //NAVIGATION OF PAGES
+                if (_adding_to_app_pressed == true)
+                  AddingPage()
+                else if (_events_pressed == true)
+                  EventsPage()
+                else
+                  HomePage(),
+
+                Container(
+                  padding: EdgeInsets.all(0),
+                  width: width,
+                  color: Colors.transparent,
+                  child: _riveArtboard == null
+                      ? const SizedBox()
+                      : GestureDetector(
+                          onTapUp: (tapinfo) {
+                            var localtouchposition =
+                                (context.findRenderObject() as RenderBox)
+                                    .globalToLocal(tapinfo.globalPosition);
+
+                            var tophalftouched =
+                                localtouchposition.dy < height / 2;
+                            var hometouched = localtouchposition.dx < width / 6;
+                            var internshiptouched =
+                                localtouchposition.dx < 2 * (width / 6);
+                            var profiletouched = localtouchposition.dx < width;
+                            var lowerblanktouched =
+                                localtouchposition.dx < 3 * (width / 6);
+                            var eventstouched =
+                                localtouchposition.dx < 5 * (width / 8);
+
+                            if (!tophalftouched) {
+                              if (hometouched) {
+                                if (!_adding_to_app_pressed) {
+                                  setState(() {
+                                    if (_events_pressed == true) {
+                                      _events_pressed = !_events_pressed;
+
+                                      _plusAnimation.isActive = false;
+                                      _riveArtboard.addController(
+                                          _plusAnimation =
+                                              PlusAnimation('home'));
+                                    }
+                                  });
+                                }
+                              } else if (internshiptouched) {
+                                if (!_adding_to_app_pressed) {
+                                  setState(() {
+                                    _plusAnimation.isActive = false;
+                                    _riveArtboard.addController(_plusAnimation =
+                                        PlusAnimation('internship'));
+                                  });
+                                }
+                              } else if (lowerblanktouched) {
+                                setState(() {
+                                  _adding_to_app_pressed =
+                                      !_adding_to_app_pressed;
+                                  _adding_page_open_function(
+                                      _adding_to_app_pressed);
+                                });
+                              } else if (eventstouched) {
+                                if (!_adding_to_app_pressed) {
+                                  setState(() {
+                                    _events_pressed = !_events_pressed;
+                                    _events_page_function(_events_pressed);
+                                    _plusAnimation.isActive = false;
+                                    _riveArtboard.addController(_plusAnimation =
+                                        PlusAnimation('events'));
+                                  });
+                                }
+                              } else if (profiletouched) {
+                                if (!_adding_to_app_pressed) {
+                                  setState(() {
+                                    _plusAnimation.isActive = false;
+                                    _riveArtboard.addController(_plusAnimation =
+                                        PlusAnimation('profile'));
+                                    print("Profile Touched");
+                                  });
+                                  Navigator.of(context)
+                                      .pushNamed('/ProfileDetailsScreem');
+                                }
+                              }
+                            } else {
+                              setState(() {
+                                _adding_to_app_pressed =
+                                    !_adding_to_app_pressed;
+                                _adding_page_open_function(
+                                    _adding_to_app_pressed);
+                              });
+                            }
+                          },
+                          child: Container(
+                            color: Colors.transparent,
+                            child: Rive(
+                              artboard: _riveArtboard,
+                              alignment: Alignment.bottomCenter,
+                              useArtboardSize: true,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        ),
+                ),
+              ],
+            ),
     );
   }
 }
