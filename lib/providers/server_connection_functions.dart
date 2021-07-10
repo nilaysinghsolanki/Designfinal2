@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'dart:io';
+import 'package:network_to_file_image/network_to_file_image.dart';
 import '../providers/info_provider.dart';
 //import 'package:path/path.dart' as path; //otherwise context error
 
@@ -117,17 +118,17 @@ class Server_Connection_Functions {
     List<dynamic> resp = json.decode(response.body);
     eves = resp.map<Event>((e) {
       return Event(
-        eventImageUri: e['image'],
-        favorite: e['registered'],
-        name: e['name'],
-        owner: e['owner'],
-        id: e['id'],
-        eventType: e['type_event'],
-        dateime: DateTime.parse(e['date_time']),
-        owner_image: e['owner_image'],
-        event_image: e['event_image']
-      );
+          eventImageUri: e['image'],
+          favorite: e['registered'],
+          name: e['name'],
+          owner: e['owner'],
+          id: e['id'],
+          eventType: e['type_event'],
+          dateime: DateTime.parse(e['date_time']),
+          owner_image: e['owner_image'],
+          event_image: e['event_image']);
     }).toList();
+
     Provider.of<EventsData>(context, listen: false).setEvents(eves);
     print(resp);
     return true;

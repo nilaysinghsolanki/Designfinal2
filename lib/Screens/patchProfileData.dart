@@ -3,6 +3,7 @@ import 'package:nilay_dtuotg_2/providers/info_provider.dart';
 import 'package:nilay_dtuotg_2/widgets/rollNumberPicker.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:network_to_file_image/network_to_file_image.dart';
 import '../widgets/yearPicker.dart' as yp;
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
@@ -67,6 +68,24 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
     if (!initialized) {
       await Provider.of<UsernameData>(context, listen: false).fetchAndSetData();
       username = Provider.of<UsernameData>(context, listen: false).username[0];
+      var accessToken =
+          Provider.of<AccessTokenData>(context, listen: false).accessToken;
+      Map<String, String> headersEvents = {
+        "Content-type": "application/json",
+        "accept": "application/json",
+        "Authorization": "Bearer $accessToken"
+      };
+      http.Response response = await http.get(
+        Uri.https('dtuotg.azurewebsites.net', '/auth/profile/view/$username'),
+        headers: headersEvents,
+      );
+      int statusCode = response.statusCode;
+      Map<String, dynamic> resp = json.decode(response.body);
+      _myBatch = resp['batch'];
+      _myBranch = resp['branch'];
+      year = resp['year'];
+      rollNum = resp['roll_no'];
+
       setState(() {
         initialized = true;
       });
@@ -145,6 +164,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                       //   waiting = false;
                       // });
                       ////
+
                       Response responsee;
                       var dio = Dio();
                       var formdata = FormData.fromMap({

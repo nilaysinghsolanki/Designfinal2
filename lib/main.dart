@@ -1,4 +1,5 @@
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:nilay_dtuotg_2/Screens/galleryView.dart';
 import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
 import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
 import 'package:nilay_dtuotg_2/Screens/testingScreen.dart';
@@ -84,6 +85,7 @@ class MyApp extends StatelessWidget {
         navigatorKey: materialNavigatorKey, // GlobalKey()
 
         routes: {
+          GalleryView.routeName: (context) => GalleryView(),
           TestingScreen.routeName: (context) => TestingScreen(),
           '/ProfileDetailsScreen': (context) => ProfileDetailsScreem(),
           'patchProfileScreen': (context) => PatchProfileScreen(),
@@ -1373,10 +1375,10 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
         await scf.fetchListOfEvents(context);
         Provider.of<EventsData>(context, listen: false).setOnceDownloaded(true);
 
-        Provider.of<EventsImages>(context, listen: false).fetchList(
-            Provider.of<EventsData>(context, listen: false).getEvents(),
-            Provider.of<AccessTokenData>(context, listen: false)
-                .getAccessToken());
+        // Provider.of<EventsImages>(context, listen: false).fetchList(
+        //     Provider.of<EventsData>(context, listen: false).getEvents(),
+        //     Provider.of<AccessTokenData>(context, listen: false)
+        //         .getAccessToken());
       }
       sheduledToday =
           Provider.of<EventsData>(context, listen: false).getEvents();
@@ -1478,92 +1480,38 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
             ))
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (_adding_to_app_pressed == false && _events_pressed == false)
                   Container(
                     height: 200,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: newcolor,
-                            radius: 5,
-                          ),
-                          CircleAvatar(
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => AddEventsPage()));
-                              },
+                      child: Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: sheduledToday.length,
+                          itemBuilder: (BuildContext context, int index) =>
+                              GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                GalleryView.routeName,
+                                arguments: sheduledToday[index].event_image,
+                              );
+                            },
+                            child: Container(
+                              margin: EdgeInsets.all(5),
+                              child: CircleAvatar(
+                                maxRadius: 25,
+                                minRadius: 20,
+                                backgroundImage: NetworkImage(
+                                    sheduledToday[index].owner_image,
+                                    scale: 0.5),
+                              ),
                             ),
-                            backgroundColor: Colors.white,
-                            radius: 30,
                           ),
-                          CircleAvatar(
-                            backgroundColor: newcolor,
-                            radius: 5,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 30,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: newcolor,
-                            radius: 5,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 30,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: newcolor,
-                            radius: 5,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 30,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: newcolor,
-                            radius: 5,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 30,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: newcolor,
-                            radius: 5,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 30,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: newcolor,
-                            radius: 5,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 30,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: newcolor,
-                            radius: 5,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 30,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: newcolor,
-                            radius: 5,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   )
