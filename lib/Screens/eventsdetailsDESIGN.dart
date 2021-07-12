@@ -92,6 +92,7 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
       initialized = true;
       setState(() {
         waiting = false;
+        initialized = true;
       });
 
     }
@@ -186,7 +187,9 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
         backgroundColor: eventdetailsbgcolor,
         elevation: 0,
       ),
-      body: Container(
+      body:!initialized
+          ? CircularProgressIndicator()
+          : Container(
 
         child: Column(
           children: [

@@ -130,7 +130,12 @@ class EventsData with ChangeNotifier {
         id: events[index].id,
         eventType: events[index].eventType,
         dateime: events[index].dateime,
-        favorite: !events[index].favorite);
+        favorite: !events[index].favorite,
+      eventImageUri: events[index].eventImageUri,
+      event_image: events[index].event_image,
+      owner_image: events[index].owner_image,
+    );
+
     events[index] = e;
     notifyListeners();
   }

@@ -23,6 +23,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Artboard _riveArtboard;
   String accessTokenValue;
 
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +45,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
         setState(() => _riveArtboard = artboard);
         _riveArtboard
             .addController(_plusAnimation = PlusAnimation('Animation 1'));
-        _plusAnimation.instance.animation.loop = Loop.loop;
+
+
       },
     );
   }
