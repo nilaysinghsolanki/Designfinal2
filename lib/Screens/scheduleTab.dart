@@ -224,7 +224,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                       width: double.infinity,
                                       height: 300,
                                       child: Card(
-                                          color: Colors.amber,
+                                          color: Colors.white,
                                           semanticContainer: true,
                                           clipBehavior:
                                               Clip.antiAliasWithSaveLayer,

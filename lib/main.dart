@@ -934,24 +934,114 @@ class EventsPage extends StatefulWidget {
   @override
   _EventsPageState createState() => _EventsPageState();
 }
-
+var scf;
 class _EventsPageState extends State<EventsPage> {
   @override
   Widget build(BuildContext context) {
+    scf = Provider.of<SCF>(context, listen: false).get();
+
+    var eventsedRegester = Provider.of<EventsData>(context).events;
     return Expanded(
       child: Container(
         alignment: Alignment.center,
         color: newcolor,
         child: ListView.builder(
-          physics: BouncingScrollPhysics(),
-          itemCount: Events.length,
+
+          itemCount: 1,
           itemBuilder: (BuildContext context, int index) {
-            return AnimationConfiguration.staggeredList(
-              position: index,
-              duration: const Duration(milliseconds: 350),
-              child: SlideAnimation(
-                verticalOffset: 100.0,
-                child: FlipAnimation(child: Events[index]),
+            return SingleChildScrollView(
+              child: AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 350),
+                child: SlideAnimation(
+                  verticalOffset: 100.0,
+                  child: FlipAnimation(child: ListView.builder(
+                      padding: EdgeInsets.all(0),
+                      physics:ClampingScrollPhysics(),
+
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: eventsedRegester.length,
+                      itemBuilder: (context, index) {
+                        return Stack(
+                          children: [
+                            GestureDetector(
+                              child: Container(
+                                width: double.infinity,
+                                height: 300,
+                                child: Card(
+                                    color: Colors.white,
+                                    semanticContainer: true,
+
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(10.0),
+                                    ),
+                                    elevation: 5,
+                                    margin: EdgeInsets.all(5),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                '${eventsedRegester[index].event_image.toString()}',
+                                              ),
+                                              fit: BoxFit.contain),
+                                          shape: BoxShape.rectangle),
+                                    )),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: ListTile(
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed('/eventdetailsdesign',
+                                        arguments: ScreenArguments(
+                                            id: eventsedRegester[index]
+                                                .id,
+                                            scf: scf,
+                                            context: context));
+                                  },
+                                  tileColor:
+                                  eventsedRegester[index].favorite
+                                      ? Colors.white
+                                      : Colors.blue,
+                                  subtitle: Text(
+                                    eventsedRegester[index]
+                                        .owner
+                                        .toString(),
+                                    style: TextStyle(
+                                      color: Colors.brown,
+                                    ),
+                                  ),
+                                  leading: CircleAvatar(
+                                    radius: 22,
+                                    backgroundColor: Colors.black,
+                                    child: CircleAvatar(
+                                        backgroundColor:
+                                        Colors.transparent,
+                                        radius: 20,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      '${eventsedRegester[index].owner_image.toString()}'),
+                                                  fit: BoxFit.fill),
+                                              shape: BoxShape.circle),
+                                        )),
+                                  ),
+                                  title: Text(
+                                    eventsedRegester[index].name,
+                                    style: TextStyle(
+                                        color: Colors.brown,
+                                        fontSize: 19),
+                                  )),
+                            )
+                          ],
+                        );
+                      }),),
+                ),
               ),
             );
           },
@@ -1299,26 +1389,7 @@ class _AddingPageState extends State<AddingPage> {
       //     ),
       //   ),
       // ),
-      Card(
-        elevation: 0,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListTile(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddProjectPage()));
-            },
-            leading: Icon(
-              FontAwesomeIcons.tasks,
-              color: Colors.greenAccent,
-            ),
-            title:
-                Text("Share details about Projects", style: general_text_style),
-            subtitle: Text(
-                "Update via this feature to let people know the details of any projects in DTU, looking for Volunteers"),
-          ),
-        ),
-      ),
+
     ];
 
     return Expanded(
@@ -1326,7 +1397,7 @@ class _AddingPageState extends State<AddingPage> {
         alignment: Alignment.center,
         child: ListView.builder(
           physics: BouncingScrollPhysics(),
-          itemCount: 4,
+          itemCount: 3,
           itemBuilder: (BuildContext context, int index) {
             return AnimationConfiguration.staggeredList(
               position: index,
@@ -1397,7 +1468,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
         final file = RiveFile.import(data);
 
         // The artboard is the root of the animation and gets drawn in the
-        // Rive widget.
+        // Riv widget.
         final artboard = file.mainArtboard;
 
         // Add a controller to play back a known animation on the main/default
@@ -1497,13 +1568,22 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                               );
                             },
                             child: Container(
-                              margin: EdgeInsets.all(5),
+
                               child: CircleAvatar(
-                                maxRadius: 25,
-                                minRadius: 20,
-                                backgroundImage: NetworkImage(
-                                    sheduledToday[index].owner_image,
-                                    scale: 0.5),
+                                backgroundColor: Colors.black,
+                                radius: 27,
+                                child: CircleAvatar(
+
+
+                                  backgroundColor: Colors.white,
+                                  maxRadius: 25,
+                                  minRadius: 20,
+                                  backgroundImage: NetworkImage(
+                                      sheduledToday[index].owner_image,
+
+                                      scale: 0.5),
+
+                                ),
                               ),
                             ),
                           ),
@@ -1511,7 +1591,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                       ),
                     ),
                   )
-                else
+                else if(_adding_to_app_pressed == true)
                   Container(
                     height: 200,
                   ),

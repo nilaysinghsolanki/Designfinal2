@@ -21,10 +21,13 @@ class StoryViewScreen extends StatelessWidget {
             ),
             url: e.event_image,
             controller: controller,
-            duration: Duration(seconds: 5)))
+            duration: Duration(seconds: 5))
+    )
         .toList();
     return Scaffold(
       body: Container(
+
+
         child: StoryView(
           onComplete: () => Navigator.of(context).pop(),
           controller: controller,
