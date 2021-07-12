@@ -2,6 +2,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:nilay_dtuotg_2/Screens/galleryView.dart';
 import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
 import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
+import 'package:nilay_dtuotg_2/Screens/storyViewScreen.dart';
 import 'package:nilay_dtuotg_2/Screens/testingScreen.dart';
 import 'package:nilay_dtuotg_2/models/lecture.dart';
 import './Screens/tabsScreen.dart';
@@ -85,6 +86,7 @@ class MyApp extends StatelessWidget {
         navigatorKey: materialNavigatorKey, // GlobalKey()
 
         routes: {
+          StoryViewScreen.routeName: (context) => StoryViewScreen(),
           GalleryView.routeName: (context) => GalleryView(),
           TestingScreen.routeName: (context) => TestingScreen(),
           '/ProfileDetailsScreen': (context) => ProfileDetailsScreem(),
@@ -346,10 +348,10 @@ class _HomePageState extends State<HomePage> {
         await scf.fetchListOfEvents(context);
         Provider.of<EventsData>(context, listen: false).setOnceDownloaded(true);
 
-        Provider.of<EventsImages>(context, listen: false).fetchList(
-            Provider.of<EventsData>(context, listen: false).getEvents(),
-            Provider.of<AccessTokenData>(context, listen: false)
-                .getAccessToken());
+        // Provider.of<EventsImages>(context, listen: false).fetchList(
+        //     Provider.of<EventsData>(context, listen: false).getEvents(),
+        //     Provider.of<AccessTokenData>(context, listen: false)
+        //         .getAccessToken());
       }
       sheduledToday =
           Provider.of<EventsData>(context, listen: false).getEvents();
@@ -388,22 +390,17 @@ class _HomePageState extends State<HomePage> {
       DateTime.now().hour <= 17 && DateTime.now().hour >= 8
           ? TimeTableHomeScreenListTile()
           : ListTile(),
-      imgFetched
+      !imgFetched
           ? Center(
               child: Expanded(
                 child: CarouselSlider.builder(
-                    itemCount: Provider.of<EventsData>(context, listen: false)
-                        .events
-                        .length,
+                    itemCount: sheduledToday.length,
                     itemBuilder: (context, itemIndex, pageViewIndex) {
                       return GestureDetector(
                         onTap: () {
                           Navigator.of(context).pushNamed('/eventdetailsdesign',
                               arguments: ScreenArguments(
-                                  id: Provider.of<EventsData>(context,
-                                          listen: false)
-                                      .events[itemIndex]
-                                      .id,
+                                  id: sheduledToday[itemIndex].id,
                                   scf: scf,
                                   context: context));
                         },
@@ -411,10 +408,7 @@ class _HomePageState extends State<HomePage> {
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(Provider.of<EventsData>(
-                                          context,
-                                          listen: false)
-                                      .events[itemIndex]
+                                  image: NetworkImage(sheduledToday[itemIndex]
                                       .event_image
                                       .toString()))),
                         ),
@@ -1496,8 +1490,10 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                               GestureDetector(
                             onTap: () {
                               Navigator.of(context).pushNamed(
-                                GalleryView.routeName,
-                                arguments: sheduledToday[index].event_image,
+                                StoryViewScreen.routeName,
+                                arguments: ScreenArguments(
+                                    eves: sheduledToday.sublist(
+                                        index)), // sheduledToday[index].event_image,
                               );
                             },
                             child: Container(

@@ -54,7 +54,6 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
   EventDetails _eventDetails;
   ScreenArguments args;
   @override
-
   void didChangeDependencies() async {
     args = ModalRoute.of(context).settings.arguments;
     int eventID = args.id;
@@ -89,45 +88,41 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
           event_image: resp['image'],
           latitude: num.parse(resp['latitude']));
       print('//////$resp');
-      initialized = true;
       setState(() {
         waiting = false;
+        initialized = true;
       });
-
     }
-
 
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
+
   void initState() {
     super.initState();
 
     // Load the animation file from the bundle, note that you could also
     // download this. The RiveFile just expects a list of bytes.
     rootBundle.load('Assets/Registration_animation.riv').then(
-          (data) async {
-            // Load the RiveFile from the binary data.
-            final file = RiveFile.import(data);
+      (data) async {
+        // Load the RiveFile from the binary data.
+        final file = RiveFile.import(data);
 
-            // The artboard is the root of the animation and gets drawn in the
-            // Rive widget.
-            final artboard = file.mainArtboard;
+        // The artboard is the root of the animation and gets drawn in the
+        // Rive widget.
+        final artboard = file.mainArtboard;
 
-            // Add a controller to play back a known animation on the main/default
-            // artboard. We store a reference to it so we can toggle playback.
+        // Add a controller to play back a known animation on the main/default
+        // artboard. We store a reference to it so we can toggle playback.
 
-            setState(() => _riveArtboard = artboard);
-
-
-          },
+        setState(() => _riveArtboard = artboard);
+      },
     );
   }
+
   void registrationAnimation1() {
     if (_plusAnimation == null) {
-      _riveArtboard
-          .addController(_plusAnimation = PlusAnimation('Animation'));
-
+      _riveArtboard.addController(_plusAnimation = PlusAnimation('Animation'));
 
       if (_eventDetails.registered) {
         setState(() {
@@ -135,15 +130,12 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
               .addController(_plusAnimation = PlusAnimation('idle_registered'));
           _plusAnimation.start();
 
-
           print("////////////started1");
         });
-      }
-      else {
+      } else {
         setState(() {
-          _riveArtboard
-              .addController(_plusAnimation = PlusAnimation('idle_unregistered'));
-
+          _riveArtboard.addController(
+              _plusAnimation = PlusAnimation('idle_unregistered'));
 
           print("////////////reversed1");
         });
@@ -155,271 +147,243 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
         _riveArtboard
             .addController(_plusAnimation = PlusAnimation('idle_registered'));
 
-
-
         print("////////////started2");
       });
-    }
-    else {
+    } else {
       setState(() {
         _riveArtboard
             .addController(_plusAnimation = PlusAnimation('idle_unregistered'));
-
 
         print("////////////reversed2");
       });
     }
   }
+
   Widget build(BuildContext context) {
     registrationAnimation1();
-    bool registration_animation_start=false;
-    registration_animation_start=_eventDetails.registered;
+    bool registration_animation_start = false;
+    registration_animation_start = _eventDetails.registered;
 
     return Scaffold(
-
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black
-
+        iconTheme: IconThemeData(color: Colors.black),
+        title: Text(
+          '${_eventDetails.name}',
+          style: TextStyle(color: Colors.black),
         ),
-        title: Text('${_eventDetails.name}',style: TextStyle(color: Colors.black),),
         backgroundColor: eventdetailsbgcolor,
         elevation: 0,
       ),
-      body: Container(
-
-        child: Column(
-          children: [
-            Expanded(
-              child: Row(
-
+      body: !initialized
+          ? CircularProgressIndicator()
+          : Container(
+              child: Column(
                 children: [
                   Expanded(
-                    child: Container(
-
-                      decoration: BoxDecoration(
-
-                          image: DecorationImage(
-                              fit: BoxFit.contain,
-                              image: NetworkImage('${_eventDetails.event_image.toString()}'
-
-                              )
-                          )
-                      ),
-
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: NetworkImage(
+                                        '${_eventDetails.event_image.toString()}'))),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: eventdetailsbgcolor,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(0),
+                              topRight: Radius.circular(0))),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              alignment: Alignment.center,
+                              color: Colors.transparent,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Description",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                  ),
+                                  Text(_eventDetails.description
+                                      .toString()
+                                      .substring(
+                                          0,
+                                          _eventDetails.description
+                                                      .toString()
+                                                      .indexOf('~\$') ==
+                                                  -1
+                                              ? _eventDetails.description
+                                                  .toString()
+                                                  .length
+                                              : _eventDetails.description
+                                                  .toString()
+                                                  .indexOf('~\$')))
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              alignment: Alignment.center,
+                              color: Colors.transparent,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Incentives",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                  ),
+                                  Text(
+                                    _eventDetails.description
+                                        .toString()
+                                        .substring(
+                                            _eventDetails.description
+                                                        .toString()
+                                                        .indexOf('~\$') ==
+                                                    -1
+                                                ? 0
+                                                : _eventDetails.description
+                                                        .toString()
+                                                        .indexOf('~\$') +
+                                                    2,
+                                            _eventDetails.description
+                                                        .toString()
+                                                        .indexOf('\$~') ==
+                                                    -1
+                                                ? 0
+                                                : _eventDetails.description
+                                                    .toString()
+                                                    .indexOf('\$~')),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              alignment: Alignment.center,
+                              color: Colors.transparent,
+                              child: Link(
+                                uri: Uri.parse(_eventDetails.description
+                                    .toString()
+                                    .substring(
+                                      _eventDetails.description
+                                                  .toString()
+                                                  .indexOf('\$~') ==
+                                              -1
+                                          ? 0
+                                          : _eventDetails.description
+                                                  .toString()
+                                                  .indexOf('\$~') +
+                                              2,
+                                    )),
+                                target: LinkTarget.blank,
+                                builder: (ctx, openLink) {
+                                  return TextButton.icon(
+                                    onPressed: openLink,
+                                    label: Text('${_eventDetails.type}'),
+                                    icon: Icon(Icons.read_more),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              alignment: Alignment.center,
+                              color: Colors.transparent,
+                              child: Text(
+                                "Other links",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  backgroundColor: Colors.transparent,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: FloatingActionButton(
+                              splashColor: Colors.transparent,
+                              focusElevation: 0,
+                              disabledElevation: 0,
+                              highlightElevation: 0,
+                              hoverElevation: 0,
+                              elevation: 0,
+                              backgroundColor: Colors.transparent,
+                              onPressed: () async {
+                                if (!registration_animation_start) {
+                                  _riveArtboard.addController(_plusAnimation =
+                                      PlusAnimation('Animation'));
+                                  print("lol");
+                                } else if (registration_animation_start) {
+                                  _riveArtboard.addController(_plusAnimation =
+                                      PlusAnimation('idle_unregistered'));
+                                  print('lilil');
+                                }
 
+                                BuildContext bc =
+                                    Provider.of<MaterialNavigatorKey>(context,
+                                            listen: false)
+                                        .get()
+                                        .currentContext;
+                                var scf = Provider.of<SCF>(args.context,
+                                        listen: false)
+                                    .get();
+                                bool registered = _eventDetails.registered
+                                    ? await scf.unregisterForEvent(
+                                        _eventDetails.id, bc)
+                                    : await scf.registerForEvent(
+                                        _eventDetails.id, bc);
+                                // if (_eventDetails.registered != registered) {
+                                //   //still not being added or removed from schedule
+                                //  Provider.of<EventsData>(bc, listen: false)
+                                //    .changeFavoriteStatus(_eventDetails.id);
+                                // }
 
-
-
-
-
-
-
-
-
-
-
+                                setState(() {
+                                  _eventDetails.registered = registered;
+                                });
+                              },
+                              child: Rive(
+                                artboard: _riveArtboard,
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-            Expanded(
-              child: Container(
-
-                decoration: BoxDecoration(
-                  color: eventdetailsbgcolor,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(0),topRight: Radius.circular(0))
-
-                ),
-
-                child: Column(
-
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-
-                        alignment: Alignment.center,
-                        color: Colors.transparent,
-                        child: Column(
-                          children: [
-                            Text("Description",style: TextStyle(
-                                color: Colors.black,backgroundColor: Colors.transparent,
-                            ),),
-                            Text(_eventDetails.description.toString().substring(
-                                0,
-                                _eventDetails.description
-                                    .toString()
-                                    .indexOf('~\$') ==
-                                    -1
-                                    ? _eventDetails.description.toString().length
-                                    : _eventDetails.description
-                                    .toString()
-                                    .indexOf('~\$'))
-                            )],
-                        ),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-
-                        alignment: Alignment.center,
-                        color: Colors.transparent,
-                        child: Column(
-                          children: [
-                            Text("Incentives",style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,backgroundColor: Colors.transparent,
-                            ),),
-                            Text(_eventDetails.description.toString().substring(
-                                _eventDetails.description
-                                .toString()
-                                .indexOf('~\$') ==
-                                -1
-                                ? 0
-                                : _eventDetails.description
-                                .toString()
-                                .indexOf('~\$') +
-                                2,
-                          _eventDetails.description
-                              .toString()
-                              .indexOf('\$~') ==
-                              -1
-                              ? 0
-                              : _eventDetails.description
-                              .toString()
-                              .indexOf('\$~')),style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,backgroundColor: Colors.transparent,
-                            ),),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-
-                        alignment: Alignment.center,
-                        color: Colors.transparent,
-                        child: Link(
-                          uri: Uri.parse(
-                              _eventDetails.description.toString().substring(
-                                _eventDetails.description
-                                    .toString()
-                                    .indexOf('\$~') ==
-                                    -1
-                                    ? 0
-                                    : _eventDetails.description
-                                    .toString()
-                                    .indexOf('\$~') +
-                                    2,
-                              )),
-                          target: LinkTarget.blank,
-                          builder: (ctx, openLink) {
-                            return TextButton.icon(
-                              onPressed: openLink,
-                              label: Text('${_eventDetails.type}'),
-                              icon: Icon(Icons.read_more),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-
-                        alignment: Alignment.center,
-                        color: Colors.transparent,
-                        child: Text("Other links",style: TextStyle(
-                          color: Colors.black,backgroundColor: Colors.transparent,
-                        ),),
-                      ),
-                    ),
-                    SizedBox(
-                      width:100,
-                      height: 100,
-                      child: FloatingActionButton(
-                        splashColor: Colors.transparent,
-                        focusElevation: 0,
-                        disabledElevation: 0,
-                        highlightElevation: 0
-                        ,
-                        hoverElevation: 0,
-                        elevation: 0,
-                        backgroundColor: Colors.transparent,
-
-
-
-
-                        onPressed: () async {
-
-                          if(!registration_animation_start) {
-                            _riveArtboard.addController(
-                                _plusAnimation = PlusAnimation('Animation'));
-                            print("lol");
-                          }
-                          else if(registration_animation_start) {
-                            _riveArtboard.addController(
-                                _plusAnimation =
-                                    PlusAnimation('idle_unregistered'));
-                            print('lilil');
-                          }
-
-
-
-                          BuildContext bc =
-                              Provider.of<MaterialNavigatorKey>(context, listen: false)
-                                  .get()
-                                  .currentContext;
-                          var scf = Provider.of<SCF>(args.context, listen: false).get(
-
-                          );
-                          bool registered = _eventDetails.registered
-                              ? await scf.unregisterForEvent(_eventDetails.id, bc)
-                              : await scf.registerForEvent(_eventDetails.id, bc);
-                          // if (_eventDetails.registered != registered) {
-                          //   //still not being added or removed from schedule
-                          //  Provider.of<EventsData>(bc, listen: false)
-                          //    .changeFavoriteStatus(_eventDetails.id);
-                          // }
-
-                          setState(() {
-
-
-                          _eventDetails.registered = registered;
-
-                          });
-
-                        },
-                        child: Rive(
-
-                          artboard: _riveArtboard,
-                          fit: BoxFit.fitHeight,
-
-
-                        ),
-
-                      ),
-                    ),
-
-
-
-                  ],
-                ),
-              ),
-            ),
-
-
-          ],
-        ),
-      ),
     );
   }
 }

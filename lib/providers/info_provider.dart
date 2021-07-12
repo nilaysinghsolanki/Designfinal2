@@ -125,6 +125,9 @@ class EventsData with ChangeNotifier {
     );
 
     Event e = Event(
+        eventImageUri: events[index].eventImageUri,
+        event_image: events[index].event_image,
+        owner_image: events[index].owner_image,
         name: events[index].name,
         owner: events[index].owner,
         id: events[index].id,
