@@ -54,57 +54,20 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
   EventDetails _eventDetails;
   ScreenArguments args;
   @override
-  void didChangeDependencies() async {
-    args = ModalRoute.of(context).settings.arguments;
-    int eventID = args.id;
-    if (!initialized) {
-      var accessToken =
-          Provider.of<AccessTokenData>(context, listen: false).accessToken;
-      var accessTokenValue = accessToken[0];
-      Map<String, String> headersEventDetails = {
-        "Content-type": "application/json",
-        "accept": "application/json",
-        "Authorization": "Bearer $accessTokenValue"
-      };
-      http.Response response = await http.get(
-        Uri.https('dtuotg.azurewebsites.net', 'events/details/$eventID'),
-        headers: headersEventDetails,
-      );
-      print('/////////$eventID');
-      int statusCode = response.statusCode;
-      resp = json.decode(response.body);
-      print('//////$resp');
-      _eventDetails = EventDetails(
-          id: resp['id'],
-          owner: resp['owner'] == null ? ' ' : ' ',
-          name: resp['name'],
-          longitute: num.parse(resp['longitude']),
-          description: resp['description'],
-          duration: resp['duration'],
-          registered: resp['registered'],
-          type: resp['type_event'],
-          count: resp['count'],
-          dateTime: DateTime.parse(resp['date_time']),
-          event_image: resp['image'],
-          latitude: num.parse(resp['latitude']));
-      print('//////$resp');
-      setState(() {
-        waiting = false;
-        initialized = true;
-      });
-    }
 
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-  }
+
 
   void initState() {
+
+
+
     super.initState();
+
 
     // Load the animation file from the bundle, note that you could also
     // download this. The RiveFile just expects a list of bytes.
     rootBundle.load('Assets/Registration_animation.riv').then(
-      (data) async {
+          (data) async {
         // Load the RiveFile from the binary data.
         final file = RiveFile.import(data);
 
@@ -119,7 +82,6 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
       },
     );
   }
-
   void registrationAnimation1() {
     if (_plusAnimation == null) {
       _riveArtboard.addController(_plusAnimation = PlusAnimation('Animation'));
@@ -142,6 +104,7 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
       }
       print("//////////////////////Registration_animation1_worked");
     }
+
     if (_eventDetails.registered) {
       setState(() {
         _riveArtboard
@@ -159,11 +122,65 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
     }
   }
 
+  void didChangeDependencies() async {
+
+
+
+    args = ModalRoute.of(context).settings.arguments;
+    int eventID = args.id;
+    if (!initialized) {
+
+      var accessToken =
+          Provider.of<AccessTokenData>(context, listen: false).accessToken;
+      var accessTokenValue = accessToken[0];
+      Map<String, String> headersEventDetails = {
+        "Content-type": "application/json",
+        "accept": "application/json",
+        "Authorization": "Bearer $accessTokenValue"
+      };
+      http.Response response = await http.get(
+        Uri.https('dtuotg.azurewebsites.net', 'events/details/$eventID'),
+        headers: headersEventDetails,
+      );
+      print('/////////$eventID');
+      int statusCode = response.statusCode;
+      resp = json.decode(response.body);
+      print('//////$resp');
+       _eventDetails = EventDetails(
+          id: resp['id'],
+          owner: resp['owner'] == null ? ' ' : ' ',
+          name: resp['name'],
+          longitute: num.parse(resp['longitude']),
+          description: resp['description'],
+          duration: resp['duration'],
+          registered: resp['registered'],
+          type: resp['type_event'],
+          count: resp['count'],
+          dateTime: DateTime.parse(resp['date_time']),
+          event_image: resp['image'],
+          latitude: num.parse(resp['latitude']));
+      print('//////$resp');
+      setState(() {
+        waiting = false;
+        initialized = true;
+
+      });
+    }
+
+
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+
+
   Widget build(BuildContext context) {
     registrationAnimation1();
-    bool registration_animation_start = false;
-    registration_animation_start = _eventDetails.registered;
 
+    bool registration_animation_start = false;
+    if(_eventDetails.registered!=null) {
+      registration_animation_start = _eventDetails.registered;
+    }
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),

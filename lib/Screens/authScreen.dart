@@ -451,13 +451,13 @@ class _AuthScreenState extends State<AuthScreen> {
                           //     path: 'https://dtu-otg.herokuapp.com/auth/register/');
 
                           String url =
-                              'https://dtu-otg.herokuapp.com/auth/register/';
+                              'https://dtuotg.azurewebsites.net/auth/register/';
                           setState(() {
                             waiting = true;
                           });
                           http.Response response = await http.post(
                               Uri.https(
-                                  'dtu-otg.herokuapp.com', 'auth/register/'),
+                                  'dtuotg.azurewebsites.net', 'auth/register/'),
                               headers: headers,
                               body: json.encode(mapjsonn));
                           int statusCode = response.statusCode;

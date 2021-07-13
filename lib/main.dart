@@ -1519,10 +1519,11 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   }
 
   String owner = '';
-  List<List<Event>> ownersEvents = [];
+
 
   @override
   Widget build(BuildContext context) {
+    List<List<Event>> ownersEvents = [];
     for (int i = 0; i < sheduledToday.length; i++) {
       if (ownersEvents.indexWhere(
               (element) => element[0].owner == sheduledToday[i].owner) !=
@@ -1535,11 +1536,11 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
       }
     }
     print(ownersEvents.length);
-    print(ownersEvents[0].length);
+
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("Assets/Frame 4.png"),
+          image: AssetImage("Assets/newframe.png"),
           fit: BoxFit.cover,
         ),
       ),
@@ -1570,7 +1571,9 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                           itemCount: ownersEvents.length,
                           itemBuilder: (BuildContext context, int index) =>
                               GestureDetector(
+
                             onTap: () {
+
                               Navigator.of(context).pushNamed(
                                 StoryViewScreen.routeName,
                                 arguments: ScreenArguments(

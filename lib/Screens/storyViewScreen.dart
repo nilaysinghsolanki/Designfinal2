@@ -8,27 +8,43 @@ class StoryViewScreen extends StatelessWidget {
   static const routeName = '/StoryViewScreen';
   StoryViewScreen({Key key}) : super(key: key);
   final StoryController controller = StoryController();
+  bool initialised=false;
+  List<StoryItem> storyItems;
 
   @override
+
   Widget build(BuildContext context) {
-    ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    List<StoryItem> storyItems = args.eves
-        .map((e) => StoryItem.inlineImage(
-            imageFit: BoxFit.contain,
-            caption: Text(
-              e.name,
-              style: TextStyle(color: Colors.white),
-            ),
-            url: e.event_image,
-            controller: controller,
-            duration: Duration(seconds: 5))
-    )
-        .toList();
+    if(!initialised) {
+      ScreenArguments args = ModalRoute
+          .of(context)
+          .settings
+          .arguments;
+      storyItems = args.eves
+          .map((e) =>
+          StoryItem.inlineImage(
+              imageFit: BoxFit.fitWidth,
+              caption: Text(
+                e.name,
+                style: TextStyle(color: Colors.white),
+              ),
+              url: e.event_image,
+              controller: controller,
+              imageBackground: e.event_image,
+              duration: Duration(seconds: 5))
+      )
+          .toList();
+
+      initialised=true;
+    }
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Container(
+
+        color: Colors.white,
 
 
         child: StoryView(
+
           onComplete: () => Navigator.of(context).pop(),
           controller: controller,
           storyItems: storyItems,
