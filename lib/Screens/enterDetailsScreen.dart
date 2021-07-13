@@ -3,8 +3,11 @@ import 'package:nilay_dtuotg_2/providers/info_provider.dart';
 import 'package:nilay_dtuotg_2/widgets/rollNumberPicker.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import '../widgets/yearPicker.dart' as yp;
 import 'package:path/path.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -29,11 +32,106 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
     super.initState();
   }
 
+  File _image;
+  final picker = ImagePicker();
+  void _showPicker(BuildContext context, num ratio) {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        barrierColor: Colors.black12,
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.blueGrey[50],
+                borderRadius: BorderRadius.circular(11),
+              ),
+              padding: EdgeInsets.symmetric(
+                  vertical: 10 * ratio, horizontal: 22 * ratio),
+//color: Colors.cyan,
+              margin: EdgeInsets.only(
+                top: 20 * ratio,
+                left: 15 * ratio,
+                right: 15 * ratio,
+              ),
+              child: new Wrap(
+                direction: Axis.horizontal,
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(
+                        Icons.photo_library,
+                        color: Colors.blueGrey[700],
+                      ),
+                      title: new Text(
+                        'Photos',
+                        style: TextStyle(
+                            color: Colors.blueGrey[900],
+                            fontStyle: FontStyle.normal,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      onTap: () {
+                        getImage(ImageSource.gallery);
+                        Navigator.of(context).pop();
+                      }),
+                  Divider(),
+                  new ListTile(
+                    leading: new Icon(
+                      Icons.photo_camera,
+                      color: Colors.blueGrey[700],
+                    ),
+                    title: new Text('Camera',
+                        style: TextStyle(
+                            color: Colors.blueGrey[900],
+                            fontStyle: FontStyle.normal,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400)),
+                    onTap: () {
+                      getImage(ImageSource.camera);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Future getImage(ImageSource imageSource) async {
+    print('a');
+    PickedFile pickedFile;
+    // final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    try {
+      print('b');
+      pickedFile = await picker.getImage(
+        source: imageSource,
+      );
+      print('${pickedFile.path}');
+    } catch (e) {
+      print('c');
+      print(e.code);
+    }
+    setState(() {
+      print('d');
+      if (pickedFile != null) {
+        print('e');
+        _image = File(pickedFile.path);
+      } else {
+        print('f');
+        print('No image selected.');
+      }
+    });
+  }
+
   final formGlobalKey = GlobalKey<FormState>();
   final name = TextEditingController();
   bool waiting = false;
   @override
   Widget build(BuildContext context) {
+    double ratio = MediaQuery.of(context).size.height / 896;
+
     ScreenArguments args = ModalRoute.of(context).settings.arguments;
     String username = args.username;
     ///////////////////  Provider.of<EmailAndUsernameData>(context, listen: false).fetchAndSetData();
@@ -71,7 +169,9 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                     : rollNUmString.length == 2
                         ? '0' + rollNUmString
                         : '00' + rollNUmString;
-                Map mapjsonnprofile = {
+                Response responsee;
+                var dio = Dio();
+                var formdata = FormData.fromMap({
                   "name": "${name.text}",
                   "roll_no": "$formattedRollNum",
                   "branch":
@@ -79,20 +179,44 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                   "year": Provider.of<ProfileData>(context, listen: false)
                       .getYear(),
                   "batch":
-                      "${Provider.of<ProfileData>(context, listen: false).getBatch()}"
-                };
-                http.Response response = await http.put(
-                    Uri.https(
-                        'dtuotg.azurewebsites.net', 'auth/profile/$username'),
-                    headers: headersProfile,
-                    body: json.encode(mapjsonnprofile));
-                int statusCode = response.statusCode;
-                var resp = json.decode(response.body);
-                print('/////////enter detail screen response $resp');
-                setState(() {
-                  waiting = false;
+                      "${Provider.of<ProfileData>(context, listen: false).getBatch()}",
+                  "image": await MultipartFile.fromFile(
+                    _image.path,
+                    filename: _image.path,
+                  )
                 });
-                if (resp["status"] != 'FAILED') {
+                responsee = await dio.put(
+                  'dtuotg.azurewebsites.netauth/profile/$username',
+                  data: formdata,
+                  options: Options(
+                    headers: headersProfile,
+                  ),
+                  onSendProgress: (int sent, int total) {
+                    print('$sent $total');
+                  },
+                );
+                // Map mapjsonnprofile = {
+                //   "name": "${name.text}",
+                //   "roll_no": "$formattedRollNum",
+                //   "branch":
+                //       "${Provider.of<ProfileData>(context, listen: false).getBranch()}",
+                //   "year": Provider.of<ProfileData>(context, listen: false)
+                //       .getYear(),
+                //   "batch":
+                //       "${Provider.of<ProfileData>(context, listen: false).getBatch()}"
+                // };
+                // http.Response response = await http.put(
+                //     Uri.https(
+                //         'dtuotg.azurewebsites.net', 'auth/profile/$username'),
+                //     headers: headersProfile,
+                //     body: json.encode(mapjsonnprofile));
+                // int statusCode = response.statusCode;
+                // var resp = json.decode(response.body);
+                // print('/////////enter detail screen response $resp');
+                // setState(() {
+                //   waiting = false;
+                // });
+                if (responsee.data["status"] != 'FAILED') {
                   //   Provider.of<ProfileData>(context, listen: false)
                   //     .saveSetedChanges();
                   Provider.of<AccessTokenData>(context, listen: false)
@@ -108,7 +232,7 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                       builder: (context) {
                         return Dialog(
                           child: Container(
-                            child: Text(response.body),
+                            child: Text(responsee.data),
                           ),
                         );
                       });
@@ -127,6 +251,16 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
+              _image == null
+                  ? ListTile(
+                      leading: Icon(Icons.add_a_photo),
+                      title: Text('No image selected.'),
+                      onTap: () => _showPicker(context, ratio),
+                    )
+                  : Container(
+                      child: Image.file(_image),
+                      height: 100,
+                    ),
               Padding(
                 child: CupertinoTextFormFieldRow(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
