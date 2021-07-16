@@ -6,6 +6,8 @@ import 'package:nilay_dtuotg_2/Screens/storyViewScreen.dart';
 import 'package:nilay_dtuotg_2/Screens/testingScreen.dart';
 import 'package:nilay_dtuotg_2/models/lecture.dart';
 import './Screens/tabsScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +59,7 @@ class MyApp extends StatelessWidget {
   static const double width = 500;
   static const double height = 200;
 
+
   Artboard _riveArtboard;
   bool _events_pressed = false;
   bool _adding_to_app_pressed = false;
@@ -64,6 +67,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context1) {
+
     return MultiProvider(
       providers: [
         Provider.value(
@@ -122,6 +126,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   List<Widget> ScatteredListtiles = [
     Container(
       decoration: BoxDecoration(
@@ -132,6 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () async {
             var result = await Provider.of<AccessTokenData>(_, listen: false)
                 .deleteAccessToken();
+
             print('./////logout result $result');
             if (result) Navigator.of(_).pushNamed('/AuthScreen');
           },
@@ -267,6 +273,8 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+    
+
     return Container(
       child: Scaffold(
         drawer: Drawer(
@@ -391,9 +399,9 @@ class _HomePageState extends State<HomePage> {
           ? TimeTableHomeScreenListTile()
           : ListTile(),
       !imgFetched
-          ? Center(
-              child: Expanded(
-                child: CarouselSlider.builder(
+          ? Expanded(
+            child: Center(
+              child: CarouselSlider.builder(
                     itemCount: sheduledToday.length,
                     itemBuilder: (context, itemIndex, pageViewIndex) {
                       return GestureDetector(
@@ -419,8 +427,8 @@ class _HomePageState extends State<HomePage> {
                         enlargeCenterPage: false,
                         height: 500,
                         viewportFraction: 1)),
-              ),
-            )
+            ),
+          )
           : ListTile(
               trailing: Text("Projects", style: general_text_style),
             ),
@@ -938,11 +946,18 @@ class EventsPage extends StatefulWidget {
 var scf;
 
 class _EventsPageState extends State<EventsPage> {
+  var eventsedRegester;
+  List <String> imagesstring=[];
+
+  @override
+
   @override
   Widget build(BuildContext context) {
     scf = Provider.of<SCF>(context, listen: false).get();
+    eventsedRegester=Provider.of<EventsData>(context,listen:false).getEvents();
 
-    var eventsedRegester = Provider.of<EventsData>(context).events;
+
+
     return Expanded(
       child: Container(
         alignment: Alignment.center,
@@ -969,7 +984,8 @@ class _EventsPageState extends State<EventsPage> {
                               GestureDetector(
                                 child: Container(
                                   width: double.infinity,
-                                  height: 300,
+                                  height: 400,
+
                                   child: Card(
                                       color: Colors.white,
                                       semanticContainer: true,
@@ -985,16 +1001,19 @@ class _EventsPageState extends State<EventsPage> {
                                                 image: NetworkImage(
                                                   '${eventsedRegester[index].event_image.toString()}',
                                                 ),
-                                                fit: BoxFit.contain),
+                                                fit: BoxFit.fitWidth),
                                             shape: BoxShape.rectangle),
                                       )),
                                 ),
                               ),
                               Positioned(
                                 bottom: 0,
-                                left: 0,
-                                right: 0,
+                                left: 5,
+                                right: 5,
                                 child: ListTile(
+                                  contentPadding:EdgeInsets.fromLTRB(5, 0, 5, 0),
+
+
                                     onTap: () {
                                       Navigator.of(context).pushNamed(
                                           '/eventdetailsdesign',
@@ -1005,13 +1024,16 @@ class _EventsPageState extends State<EventsPage> {
                                     },
                                     tileColor: eventsedRegester[index].favorite
                                         ? Colors.white
-                                        : Colors.blue,
+                                        : Colors.white,
                                     subtitle: Text(
                                       eventsedRegester[index].owner.toString(),
                                       style: TextStyle(
-                                        color: Colors.brown,
-                                      ),
+                                        fontFamily: 'DancingScript'
+                                      )
+
                                     ),
+                                    trailing: eventsedRegester[index].favorite
+                                    ?Icon(Icons.star,color: Colors.red,):Icon(Icons.star_border,color: Colors.red,),
                                     leading: CircleAvatar(
                                       radius: 22,
                                       backgroundColor: Colors.black,
@@ -1028,9 +1050,9 @@ class _EventsPageState extends State<EventsPage> {
                                           )),
                                     ),
                                     title: Text(
-                                      eventsedRegester[index].name,
+                                      eventsedRegester[index].name.toString(),
                                       style: TextStyle(
-                                          color: Colors.brown, fontSize: 19),
+                                          color: Colors.brown, fontSize: 19,fontFamily: 'DancingScript'),
                                     )),
                               )
                             ],
@@ -1591,6 +1613,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                                   maxRadius: 25,
                                   minRadius: 20,
                                   backgroundImage: NetworkImage(
+
                                       ownersEvents[index][0].owner_image,
                                       scale: 0.5),
                                 ),

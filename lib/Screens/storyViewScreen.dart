@@ -10,15 +10,21 @@ class StoryViewScreen extends StatelessWidget {
   final StoryController controller = StoryController();
   bool initialised=false;
   List<StoryItem> storyItems;
+  List<Image> storyImages;
+
 
   @override
 
+
   Widget build(BuildContext context) {
+
     if(!initialised) {
       ScreenArguments args = ModalRoute
           .of(context)
           .settings
           .arguments;
+
+
       storyItems = args.eves
           .map((e) =>
           StoryItem.inlineImage(
@@ -33,9 +39,16 @@ class StoryViewScreen extends StatelessWidget {
               duration: Duration(seconds: 5))
       )
           .toList();
+      int i=1;
+      while(i<=storyItems.length) {
+        precacheImage(NetworkImage(args.eves[i-1].event_image), context);
+        i++;
+      }
+
 
       initialised=true;
     }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
