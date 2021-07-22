@@ -100,18 +100,16 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
-              child: Rive(
-                artboard: _riveArtboard,
-                alignment: Alignment.center,
-                useArtboardSize: true,
-              ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Rive(
+              artboard: _riveArtboard,
+              alignment: Alignment.center,
+              useArtboardSize: true,
             ),
-          ],
-        ),
+          ),
+        ],
       )
     );
   }

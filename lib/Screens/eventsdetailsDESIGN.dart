@@ -53,11 +53,16 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
   Map<String, dynamic> resp;
   EventDetails _eventDetails;
   ScreenArguments args;
+
+  bool registration_animation_start = false;
+
+
   @override
 
 
 
-  void initState() {
+  void initState()  {
+
 
 
 
@@ -83,36 +88,16 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
     );
   }
   void registrationAnimation1() {
-    if (_plusAnimation == null) {
-      _riveArtboard.addController(_plusAnimation = PlusAnimation('Animation'));
 
-      if (_eventDetails.registered) {
-        setState(() {
-          _riveArtboard
-              .addController(_plusAnimation = PlusAnimation('idle_registered'));
-          _plusAnimation.start();
 
-          print("////////////started1");
-        });
-      } else {
-        setState(() {
-          _riveArtboard.addController(
-              _plusAnimation = PlusAnimation('idle_unregistered'));
-
-          print("////////////reversed1");
-        });
-      }
-      print("//////////////////////Registration_animation1_worked");
-    }
-
-    if (_eventDetails.registered) {
+    if (_eventDetails.registered==true) {
       setState(() {
         _riveArtboard
             .addController(_plusAnimation = PlusAnimation('idle_registered'));
 
         print("////////////started2");
       });
-    } else {
+    } else  {
       setState(() {
         _riveArtboard
             .addController(_plusAnimation = PlusAnimation('idle_unregistered'));
@@ -120,6 +105,7 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
         print("////////////reversed2");
       });
     }
+    registration_animation_start = _eventDetails.registered;
   }
 
   void didChangeDependencies() async {
@@ -170,18 +156,18 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
 
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    registrationAnimation1();
   }
 
 
 
   Widget build(BuildContext context) {
-    registrationAnimation1();
 
-    bool registration_animation_start = false;
-    if(_eventDetails.registered!=null) {
-      registration_animation_start = _eventDetails.registered;
-    }
-    return Scaffold(
+    bool registered;
+
+
+
+    return initialized ?Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(
@@ -194,213 +180,230 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
       body: !initialized
           ? CircularProgressIndicator()
           : Container(
-              child: Column(
+        child: Column(
+          children: [
+            Expanded(
+              child: Row(
                 children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.contain,
-                                    image: NetworkImage(
-                                        '${_eventDetails.event_image.toString()}'))),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                          color: eventdetailsbgcolor,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(0),
-                              topRight: Radius.circular(0))),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              alignment: Alignment.center,
-                              color: Colors.transparent,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Description",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      backgroundColor: Colors.transparent,
-                                    ),
-                                  ),
-                                  Text(_eventDetails.description
-                                      .toString()
-                                      .substring(
-                                          0,
-                                          _eventDetails.description
-                                                      .toString()
-                                                      .indexOf('~\$') ==
-                                                  -1
-                                              ? _eventDetails.description
-                                                  .toString()
-                                                  .length
-                                              : _eventDetails.description
-                                                  .toString()
-                                                  .indexOf('~\$')))
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              alignment: Alignment.center,
-                              color: Colors.transparent,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Incentives",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      backgroundColor: Colors.transparent,
-                                    ),
-                                  ),
-                                  Text(
-                                    _eventDetails.description
-                                        .toString()
-                                        .substring(
-                                            _eventDetails.description
-                                                        .toString()
-                                                        .indexOf('~\$') ==
-                                                    -1
-                                                ? 0
-                                                : _eventDetails.description
-                                                        .toString()
-                                                        .indexOf('~\$') +
-                                                    2,
-                                            _eventDetails.description
-                                                        .toString()
-                                                        .indexOf('\$~') ==
-                                                    -1
-                                                ? 0
-                                                : _eventDetails.description
-                                                    .toString()
-                                                    .indexOf('\$~')),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      backgroundColor: Colors.transparent,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              alignment: Alignment.center,
-                              color: Colors.transparent,
-                              child: Link(
-                                uri: Uri.parse(_eventDetails.description
-                                    .toString()
-                                    .substring(
-                                      _eventDetails.description
-                                                  .toString()
-                                                  .indexOf('\$~') ==
-                                              -1
-                                          ? 0
-                                          : _eventDetails.description
-                                                  .toString()
-                                                  .indexOf('\$~') +
-                                              2,
-                                    )),
-                                target: LinkTarget.blank,
-                                builder: (ctx, openLink) {
-                                  return TextButton.icon(
-                                    onPressed: openLink,
-                                    label: Text('${_eventDetails.type}'),
-                                    icon: Icon(Icons.read_more),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              alignment: Alignment.center,
-                              color: Colors.transparent,
-                              child: Text(
-                                "Other links",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  backgroundColor: Colors.transparent,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 100,
-                            height: 100,
-                            child: FloatingActionButton(
-                              splashColor: Colors.transparent,
-                              focusElevation: 0,
-                              disabledElevation: 0,
-                              highlightElevation: 0,
-                              hoverElevation: 0,
-                              elevation: 0,
-                              backgroundColor: Colors.transparent,
-                              onPressed: () async {
-                                if (!registration_animation_start) {
-                                  _riveArtboard.addController(_plusAnimation =
-                                      PlusAnimation('Animation'));
-                                  print("lol");
-                                } else if (registration_animation_start) {
-                                  _riveArtboard.addController(_plusAnimation =
-                                      PlusAnimation('idle_unregistered'));
-                                  print('lilil');
-                                }
-
-                                BuildContext bc =
-                                    Provider.of<MaterialNavigatorKey>(context,
-                                            listen: false)
-                                        .get()
-                                        .currentContext;
-                                var scf = Provider.of<SCF>(args.context,
-                                        listen: false)
-                                    .get();
-                                bool registered = _eventDetails.registered
-                                    ? await scf.unregisterForEvent(
-                                        _eventDetails.id, bc)
-                                    : await scf.registerForEvent(
-                                        _eventDetails.id, bc);
-                                // if (_eventDetails.registered != registered) {
-                                //   //still not being added or removed from schedule
-                                //  Provider.of<EventsData>(bc, listen: false)
-                                //    .changeFavoriteStatus(_eventDetails.id);
-                                // }
-
-                                setState(() {
-                                  _eventDetails.registered = registered;
-                                });
-                              },
-                              child: Rive(
-                                artboard: _riveArtboard,
-                                fit: BoxFit.fitHeight,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                          image: DecorationImage(
+                              fit: BoxFit.contain,
+                              image: NetworkImage(
+                                  '${_eventDetails.event_image.toString()}'))),
                     ),
                   ),
                 ],
               ),
             ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: eventdetailsbgcolor,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(0))),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        color: Colors.transparent,
+                        child: Column(
+                          children: [
+                            Text(
+                              "Description",
+                              style: TextStyle(
+                                color: Colors.black,
+                                backgroundColor: Colors.transparent,
+                              ),
+                            ),
+                            Text(_eventDetails.description
+                                .toString()
+                                .substring(
+                                0,
+                                _eventDetails.description
+                                    .toString()
+                                    .indexOf('~\$') ==
+                                    -1
+                                    ? _eventDetails.description
+                                    .toString()
+                                    .length
+                                    : _eventDetails.description
+                                    .toString()
+                                    .indexOf('~\$')))
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        color: Colors.transparent,
+                        child: Column(
+                          children: [
+                            Text(
+                              "Incentives",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                backgroundColor: Colors.transparent,
+                              ),
+                            ),
+                            Text(
+                              _eventDetails.description
+                                  .toString()
+                                  .substring(
+                                  _eventDetails.description
+                                      .toString()
+                                      .indexOf('~\$') ==
+                                      -1
+                                      ? 0
+                                      : _eventDetails.description
+                                      .toString()
+                                      .indexOf('~\$') +
+                                      2,
+                                  _eventDetails.description
+                                      .toString()
+                                      .indexOf('\$~') ==
+                                      -1
+                                      ? 0
+                                      : _eventDetails.description
+                                      .toString()
+                                      .indexOf('\$~')),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                backgroundColor: Colors.transparent,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        color: Colors.transparent,
+                        child: Link(
+                          uri: Uri.parse(_eventDetails.description
+                              .toString()
+                              .substring(
+                            _eventDetails.description
+                                .toString()
+                                .indexOf('\$~') ==
+                                -1
+                                ? 0
+                                : _eventDetails.description
+                                .toString()
+                                .indexOf('\$~') +
+                                2,
+                          )),
+                          target: LinkTarget.blank,
+                          builder: (ctx, openLink) {
+                            return TextButton.icon(
+                              onPressed: openLink,
+                              label: Text('${_eventDetails.type}'),
+                              icon: Icon(Icons.read_more),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        color: Colors.transparent,
+                        child: Text(
+                          "Other links",
+                          style: TextStyle(
+                            color: Colors.black,
+                            backgroundColor: Colors.transparent,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: FloatingActionButton(
+                        splashColor: Colors.transparent,
+                        focusElevation: 0,
+                        disabledElevation: 0,
+                        highlightElevation: 0,
+                        hoverElevation: 0,
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        onPressed: () async {
+                          if (_plusAnimation.isActive == false) {
+                            if (!_eventDetails.registered) {
+                              _riveArtboard.addController(_plusAnimation =
+                                  PlusAnimation('Animation'));
+                              print("lol");
+                            } else if (_eventDetails.registered) {
+                              _riveArtboard.addController(_plusAnimation =
+                                  PlusAnimation('idle_unregistered'));
+                              print('lilil');
+                            }
+
+
+                            BuildContext bc =
+                                Provider
+                                    .of<MaterialNavigatorKey>(context,
+                                    listen: false)
+                                    .get()
+                                    .currentContext;
+                            var scf = Provider.of<SCF>(args.context,
+                                listen: false)
+                                .get();
+                            registered = _eventDetails.registered
+                                ? await scf.unregisterForEvent(
+                                _eventDetails.id, bc)
+                                : await scf.registerForEvent(
+                                _eventDetails.id, bc);
+                            // if (_eventDetails.registered != registered) {
+                            //   //still not being added or removed from schedule
+                            //  Provider.of<EventsData>(bc, listen: false)
+                            //    .changeFavoriteStatus(_eventDetails.id);
+                            // }
+
+                            setState(() {
+                              _eventDetails.registered = registered;
+                            });
+                          }
+                        },
+                        child: Rive(
+                          artboard: _riveArtboard,
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ):Container(
+      color: Colors.white,
+      child: Center(
+          child: JumpingText(
+            'loading.....',
+            style: TextStyle(
+                color: Colors.blueGrey[900],
+                fontStyle: FontStyle.italic,
+                fontSize: 50,
+                fontWeight: FontWeight.w900),
+          )),
     );
+
+  if(_eventDetails.registered==null)return Container(color:Colors.purple);
   }
 }

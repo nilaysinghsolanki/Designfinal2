@@ -52,6 +52,8 @@ Color tilecolor = Colors.white;
 TextStyle general_text_style = TextStyle(color: Colors.brown);
 ////////////////////////////PAGESNAVIGATION
 bool _events_pressed = false;
+bool _internship_pressed=false;
+bool _project_pressed=false;
 bool _adding_to_app_pressed = false;
 
 class MyApp extends StatelessWidget {
@@ -382,15 +384,13 @@ class _HomePageState extends State<HomePage> {
         children: [
           SingleChildScrollView(
             child: !eventsInitialized
-                ? Expanded(
-                    child: Rive(
-                      artboard: _riveArtboard,
-                      alignment: Alignment.bottomCenter,
-                      useArtboardSize: true,
-                    ),
-                  )
+                ? Rive(
+                  artboard: _riveArtboard,
+                  alignment: Alignment.bottomCenter,
+                  useArtboardSize: true,
+                )
                 : ListTile(
-                    trailing: Text("Events", style: general_text_style),
+                    trailing: Text("Projects", style: general_text_style),
                   ),
           ),
         ],
@@ -429,9 +429,13 @@ class _HomePageState extends State<HomePage> {
                         viewportFraction: 1)),
             ),
           )
-          : ListTile(
-              trailing: Text("Projects", style: general_text_style),
-            ),
+          : Expanded(
+        child: Rive(
+          artboard: _riveArtboard,
+          alignment: Alignment.bottomCenter,
+          useArtboardSize: true,
+        ),
+      ),
       ListTile(
         title: Text("Internship/Job Opportunities", style: general_text_style),
         trailing: Icon(Icons.work_outline),
@@ -490,6 +494,9 @@ class _TimeTableHomeScreenListTileState
   List<Lecture> lectures = [];
   Lecture _lecture;
   DateTime _selectedDay = DateTime.now();
+  int lectureStart;
+  int lectureEnd;
+
   @override
   void didChangeDependencies() async {
     if (!initialized) {
@@ -520,6 +527,10 @@ class _TimeTableHomeScreenListTileState
       setState(() {
         initialized = true;
       });
+       lectureStart =
+      _lecture.time.hour > 12 ? _lecture.time.hour - 12 : _lecture.time.hour;
+       lectureEnd =
+      lectureStart == 12 ? _lecture.length : lectureStart + _lecture.length;
     }
 
     // TODO: implement didChangeDependencies
@@ -535,10 +546,7 @@ class _TimeTableHomeScreenListTileState
 
   @override
   Widget build(BuildContext context) {
-    int lectureStart =
-        _lecture.time.hour > 12 ? _lecture.time.hour - 12 : _lecture.time.hour;
-    int lectureEnd =
-        lectureStart == 12 ? _lecture.length : lectureStart + _lecture.length;
+
     return initialized
         ? lectures.isNotEmpty
             ? _lecture.free
@@ -575,6 +583,7 @@ class _AddEventsPageState extends State<AddEventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: Text(
           'new Event',
@@ -933,6 +942,290 @@ class _AddProjectPageState extends State<AddProjectPage> {
     );
   }
 }
+/////////////////////////////////////////PROJECTPAGE
+class ProjectsPage extends StatefulWidget {
+  const ProjectsPage({Key key}) : super(key: key);
+
+  @override
+  _ProjectsPageState createState() => _ProjectsPageState();
+}
+
+class _ProjectsPageState extends State<ProjectsPage> {
+  var eventsedRegester;
+  List <String> imagesstring=[];
+
+  @override
+  void initState() {
+
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+
+  @override
+  Widget build(BuildContext context) {
+    scf = Provider.of<SCF>(context, listen: false).get();
+    eventsedRegester=Provider.of<EventsData>(context,listen:false).getEvents();
+
+
+
+
+
+    return Expanded(
+      child:Container(
+        alignment: Alignment.center,
+        color: newcolor,
+        child: ListView.builder(
+          itemCount: 1,
+          itemBuilder: (BuildContext context, int index) {
+            return eventsedRegester[index].eventType==2? SingleChildScrollView(
+              child: AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 350),
+                child: SlideAnimation(
+                  verticalOffset: 100.0,
+                  child: FlipAnimation(
+                    child: ListView.builder(
+                        padding: EdgeInsets.all(0),
+                        physics: ClampingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: eventsedRegester.length,
+                        itemBuilder: (context, index) {
+                          return Stack(
+                            children: [
+                              GestureDetector(
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 400,
+
+                                  child: Card(
+                                      color: Colors.white,
+                                      semanticContainer: true,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      margin: EdgeInsets.all(5),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                  '${eventsedRegester[index].event_image.toString()}',
+                                                ),
+                                                fit: BoxFit.fitWidth),
+                                            shape: BoxShape.rectangle),
+                                      )),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                left: 5,
+                                right: 5,
+                                child: ListTile(
+                                    contentPadding:EdgeInsets.fromLTRB(5, 0, 5, 0),
+
+
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(
+                                          '/eventdetailsdesign',
+                                          arguments: ScreenArguments(
+                                              id: eventsedRegester[index].id,
+                                              scf: scf,
+                                              context: context));
+                                    },
+                                    tileColor: eventsedRegester[index].favorite
+                                        ? Colors.white
+                                        : Colors.white,
+                                    subtitle: Text(
+                                        eventsedRegester[index].owner.toString(),
+                                        style: TextStyle(
+                                            fontFamily: 'DancingScript'
+                                        )
+
+                                    ),
+                                    trailing: eventsedRegester[index].favorite
+                                        ?Icon(Icons.star,color: Colors.red,):Icon(Icons.star_border,color: Colors.red,),
+                                    leading: CircleAvatar(
+                                      radius: 22,
+                                      backgroundColor: Colors.black,
+                                      child: CircleAvatar(
+
+                                          backgroundColor: Colors.white,
+                                          radius: 20,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        '${eventsedRegester[index].owner_image.toString()}'),
+                                                    fit: BoxFit.fill),
+                                                shape: BoxShape.circle),
+                                          )),
+                                    ),
+                                    title: Text(
+                                      eventsedRegester[index].name.toString(),
+                                      style: TextStyle(
+                                          color: Colors.brown, fontSize: 19,fontFamily: 'DancingScript'),
+                                    )),
+                              )
+                            ],
+                          );
+                        }),
+                  ),
+                ),
+              ),
+            ):Divider();
+          },
+        ),
+      ),
+    );
+  }
+}
+
+/////////////////////////////////////////////////INTERNSHIPPAGE
+class InternshipsPage extends StatefulWidget {
+  const InternshipsPage({Key key}) : super(key: key);
+
+  @override
+  _InternshipsPageState createState() => _InternshipsPageState();
+}
+
+class _InternshipsPageState extends State<InternshipsPage> {
+  var eventsedRegester;
+  List <String> imagesstring=[];
+
+  @override
+  void initState() {
+
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+
+  @override
+  Widget build(BuildContext context) {
+    scf = Provider.of<SCF>(context, listen: false).get();
+    eventsedRegester=Provider.of<EventsData>(context,listen:false).getEvents();
+
+
+
+
+
+    return Expanded(
+      child:Container(
+        alignment: Alignment.center,
+        color: newcolor,
+        child: ListView.builder(
+          itemCount: 1,
+          itemBuilder: (BuildContext context, int index) {
+            return eventsedRegester[index].eventType==3? SingleChildScrollView(
+              child: AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 350),
+                child: SlideAnimation(
+                  verticalOffset: 100.0,
+                  child: FlipAnimation(
+                    child: ListView.builder(
+                        padding: EdgeInsets.all(0),
+                        physics: ClampingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: eventsedRegester.length,
+                        itemBuilder: (context, index) {
+                          return Stack(
+                            children: [
+                              GestureDetector(
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 400,
+
+                                  child: Card(
+                                      color: Colors.white,
+                                      semanticContainer: true,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      margin: EdgeInsets.all(5),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                  '${eventsedRegester[index].event_image.toString()}',
+                                                ),
+                                                fit: BoxFit.fitWidth),
+                                            shape: BoxShape.rectangle),
+                                      )),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                left: 5,
+                                right: 5,
+                                child: ListTile(
+                                    contentPadding:EdgeInsets.fromLTRB(5, 0, 5, 0),
+
+
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(
+                                          '/eventdetailsdesign',
+                                          arguments: ScreenArguments(
+                                              id: eventsedRegester[index].id,
+                                              scf: scf,
+                                              context: context));
+                                    },
+                                    tileColor: eventsedRegester[index].favorite
+                                        ? Colors.white
+                                        : Colors.white,
+                                    subtitle: Text(
+                                        eventsedRegester[index].owner.toString(),
+                                        style: TextStyle(
+                                            fontFamily: 'DancingScript'
+                                        )
+
+                                    ),
+                                    trailing: eventsedRegester[index].favorite
+                                        ?Icon(Icons.star,color: Colors.red,):Icon(Icons.star_border,color: Colors.red,),
+                                    leading: CircleAvatar(
+                                      radius: 22,
+                                      backgroundColor: Colors.black,
+                                      child: CircleAvatar(
+
+                                          backgroundColor: Colors.white,
+                                          radius: 20,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        '${eventsedRegester[index].owner_image.toString()}'),
+                                                    fit: BoxFit.fill),
+                                                shape: BoxShape.circle),
+                                          )),
+                                    ),
+                                    title: Text(
+                                      eventsedRegester[index].name.toString(),
+                                      style: TextStyle(
+                                          color: Colors.brown, fontSize: 19,fontFamily: 'DancingScript'),
+                                    )),
+                              )
+                            ],
+                          );
+                        }),
+                  ),
+                ),
+              ),
+            ):Divider();
+          },
+        ),
+      ),
+    );
+  }
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////EVENTSPAGE
 
@@ -946,8 +1239,16 @@ class EventsPage extends StatefulWidget {
 var scf;
 
 class _EventsPageState extends State<EventsPage> {
-  var eventsedRegester;
+  List <Event> eventsedRegester;
   List <String> imagesstring=[];
+  List eventfiltered;
+
+  @override
+  void initState() {
+
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
 
@@ -955,11 +1256,16 @@ class _EventsPageState extends State<EventsPage> {
   Widget build(BuildContext context) {
     scf = Provider.of<SCF>(context, listen: false).get();
     eventsedRegester=Provider.of<EventsData>(context,listen:false).getEvents();
+    eventsedRegester.forEach((element) {
+
+
+    });
+
 
 
 
     return Expanded(
-      child: Container(
+      child:Container(
         alignment: Alignment.center,
         color: newcolor,
         child: ListView.builder(
@@ -1038,7 +1344,8 @@ class _EventsPageState extends State<EventsPage> {
                                       radius: 22,
                                       backgroundColor: Colors.black,
                                       child: CircleAvatar(
-                                          backgroundColor: Colors.transparent,
+
+                                          backgroundColor: Colors.white,
                                           radius: 20,
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -1509,6 +1816,30 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
         newcolor = Color(0xfff2efe4);
     }
   }
+  void _Project_page_function(bool _projectpressed) {
+    if (_adding_to_app_pressed == false) {
+      if (_project_pressed == true) {
+        newcolor = Color(0xfff2efe4);
+
+        setState(() {
+          _project_pressed = _projectpressed;
+        });
+      } else
+        newcolor = Color(0xfff2efe4);
+    }
+  }
+  void _Internship_page_function(bool _internshippressed) {
+    if (_adding_to_app_pressed == false) {
+      if (_project_pressed == true) {
+        newcolor = Color(0xfff2efe4);
+
+        setState(() {
+          _internship_pressed= _internshippressed;
+        });
+      } else
+        newcolor = Color(0xfff2efe4);
+    }
+  }
 
   void _adding_page_open_function(bool _adding_page_active) {
     if (_plusAnimation == null) {
@@ -1606,12 +1937,11 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                             child: Container(
                               margin: EdgeInsets.all(3),
                               child: CircleAvatar(
-                                backgroundColor: Colors.black,
-                                radius: 27,
+                                backgroundColor: Colors.green,
+                                radius: 30,
                                 child: CircleAvatar(
                                   backgroundColor: Colors.white,
-                                  maxRadius: 25,
-                                  minRadius: 20,
+                                  radius: 27,
                                   backgroundImage: NetworkImage(
 
                                       ownersEvents[index][0].owner_image,
@@ -1634,6 +1964,10 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                   AddingPage()
                 else if (_events_pressed == true)
                   EventsPage()
+                  else if(_internship_pressed==true)
+                    InternshipsPage()
+                    else if(_project_pressed==true)
+                      ProjectsPage()
                 else
                   HomePage(),
 
@@ -1677,6 +2011,8 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                               } else if (internshiptouched) {
                                 if (!_adding_to_app_pressed) {
                                   setState(() {
+                                    _internship_pressed = !_internship_pressed;
+                                    _Internship_page_function(_internship_pressed);
                                     _plusAnimation.isActive = false;
                                     _riveArtboard.addController(_plusAnimation =
                                         PlusAnimation('internship'));
@@ -1684,6 +2020,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                                 }
                               } else if (lowerblanktouched) {
                                 setState(() {
+
                                   _adding_to_app_pressed =
                                       !_adding_to_app_pressed;
                                   _adding_page_open_function(
@@ -1702,6 +2039,8 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                               } else if (profiletouched) {
                                 if (!_adding_to_app_pressed) {
                                   setState(() {
+                                    _project_pressed =!_project_pressed;
+                                    _Project_page_function(_project_pressed);
                                     _plusAnimation.isActive = false;
                                     _riveArtboard.addController(_plusAnimation =
                                         PlusAnimation('profile'));
