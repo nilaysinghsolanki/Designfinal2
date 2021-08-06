@@ -49,6 +49,7 @@ void main() => runApp(MyApp());
 var event_name;
 var event_description;
 bool hostorprofile=false;
+Color bgcolor=Color(0xffF2EFE4);
 
 List<Widget> Events = [];
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -98,6 +99,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: EmailAndUsernameData())
       ],
       child: MaterialApp(
+        theme: ThemeData.dark(
+        ) ,
         debugShowCheckedModeBanner: false,
         navigatorKey: materialNavigatorKey, // GlobalKey()
 
