@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nilay_dtuotg_2/Screens/testingScreen.dart';
@@ -22,6 +23,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   Artboard _riveArtboard;
   String accessTokenValue;
+
+
 
   @override
   void initState() {
@@ -48,10 +51,45 @@ class _LoadingScreenState extends State<LoadingScreen> {
       },
     );
   }
+  @override
+
 
   void didChangeDependencies() async {
+
+
     // TODO: implement didChangeDependencies
     if (!initialized) {
+      rootBundle.load('Assets/BT_animation.riv').then(
+            (data) async {
+          // Load the RiveFile from the binary data.
+          final file = RiveFile.import(data);
+
+          // The artboard is the root of the animation and gets drawn in the
+          // Rive widget.
+          final artboard = file.mainArtboard;
+
+          // Add a controller to play back a known animation on the main/default
+          // artboard. We store a reference to it so we can toggle playback.
+          setState(() {
+            _riveArtboard = artboard;
+            _riveArtboard
+                .addController(_plusAnimation = PlusAnimation('Animation 1'));
+            _plusAnimation.instance.animation.loop = Loop.loop;
+
+
+          });
+
+
+
+
+
+
+
+        },
+
+
+      );
+
       Provider.of<UsernameData>(context, listen: false).fetchAndSetData();
 
       await Provider.of<OwnerIdData>(context, listen: false).fetchAndSetData();
@@ -92,25 +130,30 @@ class _LoadingScreenState extends State<LoadingScreen> {
         }
       }
       initialized = true;
+
       print(initialized);
     }
     super.didChangeDependencies();
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: Rive(
-              artboard: _riveArtboard,
-              alignment: Alignment.center,
-              useArtboardSize: true,
-            ),
+
+
+
+
+
+    return  Scaffold(
+      backgroundColor: Colors.white,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("Assets/LogoOTG.png"),
+            fit: BoxFit.cover,
           ),
-        ],
-      )
+        ),
+      ),
     );
   }
 }

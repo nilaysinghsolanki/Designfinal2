@@ -75,7 +75,7 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                         getImage(ImageSource.gallery);
                         Navigator.of(context).pop();
                       }),
-                  Divider(),
+
                   new ListTile(
                     leading: new Icon(
                       Icons.photo_camera,

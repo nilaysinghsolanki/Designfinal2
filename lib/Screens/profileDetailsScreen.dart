@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nilay_dtuotg_2/models/screenArguments.dart';
 import 'package:nilay_dtuotg_2/providers/info_provider.dart';
 import 'package:nilay_dtuotg_2/providers/server_connection_functions.dart';
 import 'package:provider/provider.dart';
@@ -13,14 +14,24 @@ class ProfileDetailsScreem extends StatefulWidget {
 class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
   bool initialized = false;
   Map<String, dynamic> data;
+  ScreenArguments args;
+  bool host_pressed=false;
+
   @override
   void didChangeDependencies() async {
+
+    args = ModalRoute.of(context).settings.arguments;
+    if (args.hostpressed!=null ){
+
+      host_pressed=args.hostpressed;
+    }
+    else args.hostpressed=false;
     if (!initialized) {
       BuildContext ctx =
           Provider.of<MaterialNavigatorKey>(context, listen: false)
               .materialNavigatorKey
               .currentContext;
-      data = await Server_Connection_Functions().getProfileData(ctx);
+      data =host_pressed==true? await Server_Connection_Functions().getHostData(context, args.username): await Server_Connection_Functions().getProfileData(ctx);
       print(data['image']);
       setState(() {
         initialized = true;
@@ -35,14 +46,17 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
         title: Text('Your profile',
             style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                fontStyle: FontStyle.italic,
-                fontFamily: 'Open Sans',
+                color: Colors.black,
+                fontStyle: FontStyle.normal,
+
+
+                fontFamily: 'DancingScript',
                 fontSize: 20)),
-        backgroundColor: Colors.cyan,
+        backgroundColor: Color(0xffF2EFE4),
       ),
       body: !initialized
           ? Center(
@@ -87,10 +101,11 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                                 ),
                                 Text('😢 Can\'t load image',
                                     style: TextStyle(
-                                        color: Colors.grey[800],
-                                        fontWeight: FontWeight.w900,
+                                        color: Colors.black,
                                         fontStyle: FontStyle.normal,
-                                        fontFamily: 'Open Sans',
+
+
+                                        fontFamily: 'DancingScript',
                                         fontSize: 20)),
                               ],
                             ),
@@ -107,10 +122,11 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                           EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                       child: Text('name - ' + data['name'].toString(),
                           style: TextStyle(
-                              color: Colors.grey[800],
-                              fontWeight: FontWeight.w900,
-                              fontStyle: FontStyle.italic,
-                              fontFamily: 'Open Sans',
+                              color: Colors.black,
+                              fontStyle: FontStyle.normal,
+
+
+                              fontFamily: 'DancingScript',
                               fontSize: 20)),
                     ),
                   ),
@@ -122,10 +138,11 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                           EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                       child: Text('roll no. ' + data['roll_no'].toString(),
                           style: TextStyle(
-                              color: Colors.grey[800],
-                              fontWeight: FontWeight.w900,
-                              fontStyle: FontStyle.italic,
-                              fontFamily: 'Open Sans',
+                              color: Colors.black,
+                              fontStyle: FontStyle.normal,
+
+
+                              fontFamily: 'DancingScript',
                               fontSize: 20)),
                     ),
                   ),
@@ -137,10 +154,11 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                           EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                       child: Text('Branch ' + data['branch'].toString(),
                           style: TextStyle(
-                              color: Colors.grey[800],
-                              fontWeight: FontWeight.w900,
-                              fontStyle: FontStyle.italic,
-                              fontFamily: 'Open Sans',
+                              color: Colors.black,
+                              fontStyle: FontStyle.normal,
+
+
+                              fontFamily: 'DancingScript',
                               fontSize: 20)),
                     ),
                   ),
@@ -153,10 +171,11 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                           EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                       child: Text('Batch ' + data['batch'].toString(),
                           style: TextStyle(
-                              color: Colors.grey[800],
-                              fontWeight: FontWeight.w900,
-                              fontStyle: FontStyle.italic,
-                              fontFamily: 'Open Sans',
+                              color: Colors.black,
+                              fontStyle: FontStyle.normal,
+
+
+                              fontFamily: 'DancingScript',
                               fontSize: 20)),
                     ),
                   ),
@@ -169,10 +188,27 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                           EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                       child: Text('year ' + data['year'].toString(),
                           style: TextStyle(
-                              color: Colors.grey[800],
-                              fontWeight: FontWeight.w900,
-                              fontStyle: FontStyle.italic,
-                              fontFamily: 'Open Sans',
+                              color: Colors.black,
+                              fontStyle: FontStyle.normal,
+
+
+                              fontFamily: 'DancingScript',
+                              fontSize: 20)),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.redAccent[100],
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      padding:
+                      EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                      child: Text('invited by ' + data['who_sent'].toString(),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontStyle: FontStyle.normal,
+
+
+                              fontFamily: 'DancingScript',
                               fontSize: 20)),
                     ),
                   ),

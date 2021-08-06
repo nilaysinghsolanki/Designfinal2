@@ -3,6 +3,18 @@ import 'package:path/path.dart' as path;
 import 'package:sqflite/sqlite_api.dart';
 
 class DbHelper {
+  static Future<Database> dataBaseForEvents() async {
+    //......................................Getting access to DB
+    final dbPath = await sql.getDatabasesPath();
+    return sql.openDatabase(
+      // searches for db ,if not found,it creats db
+        path.join(dbPath, 'events.db'), onCreate: (db, version) {
+      return db
+          .execute('CREATE TABLE events(id TEXT PRIMARY KEY,owner TEXT,name TEXT,ownerimage TEXT,eventimage TEXT, eventtype TEXT,dateTime DATETIME,favorite BOOL)');
+    }, version: 1);
+
+    //......................................Getting access to DB
+  }
   static Future<Database> dataBaseForUsername() async {
     //......................................Getting access to DB
     final dbPath = await sql.getDatabasesPath();
@@ -105,6 +117,14 @@ class DbHelper {
     dbForTimeTable.insert(table, timeTable,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
+  static Future<void> insertEvents(
+      String table,
+      Map<String, Object> timeTable,
+      ) async {
+    final dbForTimeTable = await DbHelper.dataBaseForEvents();
+    dbForTimeTable.insert(table, timeTable,
+        conflictAlgorithm: sql.ConflictAlgorithm.replace);
+  }
 
   static Future<void> insertProfile(
     String table,
@@ -132,6 +152,7 @@ class DbHelper {
     String path = db.path;
     await sql.deleteDatabase(path);
   }
+
 
   ///
   static Future<int> deleteAccessTokenData(String id) async {

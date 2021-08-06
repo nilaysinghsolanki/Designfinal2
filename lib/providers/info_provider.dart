@@ -53,18 +53,18 @@ class EventsImages with ChangeNotifier {
         "Authorization": "Bearer $accessTokenValue"
       };
       http.Response response = await http.get(
-        Uri.https('dtuotg.azurewebsites.net', 'events/details/${event.id}'),
+        Uri.https('dtuotg.azurewebsites.net', 'events'),
         headers: headersEventDetails,
       );
-      print('/////////${event.id}');
+
       int statusCode = response.statusCode;
       resp = json.decode(response.body);
 
-      if (resp['image'] != null) {
-        eventimageUrls.add(resp['image']);
+      if (resp['event_image'] != null) {
+        eventimageUrls.add(resp['event_image']);
         id.add(resp['id']);
       }
-      print(resp['image']);
+      print(resp['event_image']);
       imgFetched = true;
       notifyListeners();
     });

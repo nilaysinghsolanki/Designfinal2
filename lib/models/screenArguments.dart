@@ -9,5 +9,7 @@ class ScreenArguments {
   Server_Connection_Functions scf;
   List<Event> eves;
   BuildContext context;
-  ScreenArguments({this.username, this.id, this.scf, this.eves, this.context});
+  bool hostpressed;
+  List<List<Event>> ownerlist;
+  ScreenArguments({this.username, this.id, this.scf, this.eves, this.context,this.hostpressed,this.ownerlist});
 }

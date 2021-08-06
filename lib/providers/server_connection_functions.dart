@@ -33,6 +33,28 @@ class Server_Connection_Functions {
     Map<String, dynamic> resp = json.decode(response.body);
     return resp;
   }
+  Future<Map<String, dynamic>> getHostData(BuildContext context,String Username) async {
+    String username =Username;
+    print("HOST NAME////////////////////////////${username}");
+
+    String accessToken =
+    Provider.of<AccessTokenData>(context, listen: false).getAccessToken();
+
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      "accept": "application/json",
+      "Authorization": "Bearer $accessToken"
+    };
+
+    http.Response response = await http.get(
+      Uri.https('dtuotg.azurewebsites.net', '/auth/profile/view/$username'),
+      headers: headers,
+    );
+    int statusCode = response.statusCode;
+    print('$statusCode');
+    Map<String, dynamic> resp = json.decode(response.body);
+    return resp;
+  }
 
   Future<bool> registerForEvent(
     int eventId,
@@ -103,7 +125,7 @@ class Server_Connection_Functions {
     List<Event> eves = [];
     var accessToken =
         Provider.of<AccessTokenData>(context, listen: false).accessToken;
-    print('///////access token event fetch');
+    print('///////access token event fetch 🙂');
     var accessTokenValue = accessToken[0];
     Map<String, String> headersEvents = {
       "Content-type": "application/json",
@@ -115,6 +137,7 @@ class Server_Connection_Functions {
       headers: headersEvents,
     );
     int statusCode = response.statusCode;
+
     List<dynamic> resp = json.decode(response.body);
     eves = resp.map<Event>((e) {
       return Event(

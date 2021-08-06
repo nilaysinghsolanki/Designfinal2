@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -190,7 +191,7 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.contain,
-                              image: NetworkImage(
+                              image: CachedNetworkImageProvider(
                                   '${_eventDetails.event_image.toString()}'))),
                     ),
                   ),

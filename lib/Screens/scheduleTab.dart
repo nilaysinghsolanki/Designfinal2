@@ -1,5 +1,7 @@
+
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -237,7 +239,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                           child: Container(
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
-                                                    image: NetworkImage(
+                                                    image: CachedNetworkImageProvider(
                                                       '${eventsedRegester[index].event_image.toString()}',
                                                     ),
                                                     fit: BoxFit.fill),
@@ -282,7 +284,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                     image: DecorationImage(
-                                                        image: NetworkImage(
+                                                        image: CachedNetworkImageProvider(
                                                             '${eventsedRegester[index].owner_image.toString()}'),
                                                         fit: BoxFit.fill),
                                                     shape: BoxShape.circle),
@@ -299,7 +301,8 @@ class _ScheduleTabState extends State<ScheduleTab> {
                               );
                             }),
                       ),
-                  if (!initialized) CircularProgressIndicator(),
+                  if (!initialized) Center(child
+                      : CircularProgressIndicator(backgroundColor: Colors.white,)),
                   if (initialized)
                     if (events0Schedule1 == 1)
                       if (lectures.isEmpty)
@@ -648,7 +651,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                           decoration: BoxDecoration(
 //                               image: DecorationImage(
 //                                   fit: BoxFit.cover,
-//                                   image: NetworkImage(
+//                                   image: CachedNetworkImageProvider(
 //                                       '${eventsedRegester[index].event_image.toString()}'))),
 //                           child: ListTile(
 //                             onTap: () {
@@ -677,7 +680,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                                   child: Container(
 //                                     decoration: BoxDecoration(
 //                                         image: DecorationImage(
-//                                             image: NetworkImage(
+//                                             image: CachedNetworkImageProvider(
 //                                                 '${eventsedRegester[index].owner_image.toString()}'),
 //                                             fit: BoxFit.fill),
 //                                         shape: BoxShape.circle),

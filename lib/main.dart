@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:nilay_dtuotg_2/Screens/galleryView.dart';
 import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
@@ -5,8 +6,12 @@ import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
 import 'package:nilay_dtuotg_2/Screens/storyViewScreen.dart';
 import 'package:nilay_dtuotg_2/Screens/testingScreen.dart';
 import 'package:nilay_dtuotg_2/models/lecture.dart';
+import 'package:nilay_dtuotg_2/widgets/skeleton_container.dart';
+import 'package:nilay_dtuotg_2/widgets/utils.dart';
 import './Screens/tabsScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
+
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,8 +45,11 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'Screens/eventsdetailsDESIGN.dart';
 
 void main() => runApp(MyApp());
+
 var event_name;
 var event_description;
+bool hostorprofile=false;
+
 List<Widget> Events = [];
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 /////////////////////COLORS
@@ -57,6 +65,7 @@ bool _project_pressed=false;
 bool _adding_to_app_pressed = false;
 
 class MyApp extends StatelessWidget {
+
   PlusAnimation _plusAnimation;
   static const double width = 500;
   static const double height = 200;
@@ -89,6 +98,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: EmailAndUsernameData())
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         navigatorKey: materialNavigatorKey, // GlobalKey()
 
         routes: {
@@ -108,7 +118,7 @@ class MyApp extends StatelessWidget {
           '/schedule': (context1) => ScheduleTab(),
           '/homeScreen': (context1) => HomeScreen(),
           '/loading': (context1) => LoadingScreen(),
-          '/eventdetailsdesign': (context) => EventDetailsDesign(
+          '/eventdetailsdesign': (context) =>EventDetailsDesign(
                 key: _scaffoldKey,
               ),
         },
@@ -163,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (_) => ListTile(
           onTap: () async {
             print('.patch profile..');
-            Navigator.of(_).pushNamed('patchProfileScreen');
+            Navigator.of(_).pushNamed('/patchProfileScreen');
           },
           leading: CircleAvatar(
             backgroundColor: Colors.brown,
@@ -316,13 +326,30 @@ class _HomePageState extends State<HomePage> {
   List<Event> sheduled = [];
   double width = 500;
   int weekDayIndex = 1;
+  bool loading=true;
 
   double height = 200;
   List<Event> sheduledToday = [];
+  List<Event> eventsedRegester =[];
+  List<Event> eventfiltered =[];
+  List<NetworkImage> CachedImages=[];
 
   @override
   void initState() {
+
     super.initState();
+    scf = Provider.of<SCF>(context, listen: false).get();
+    eventsedRegester=Provider.of<EventsData>(context,listen:false).getEvents();
+    eventsedRegester.forEach((element) {
+      if(element.eventType=="University"){
+        print("/////////////////////EVENT TYPE IS HERE ${element.eventType}");
+        eventfiltered.add(element);
+      }
+    });
+
+    // TODO: implement initState
+    super.initState();
+    LoadData();
 
     // Load the animation file from the bundle, note that you could also
     // download this. The RiveFile just expects a list of bytes.
@@ -345,11 +372,23 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+  Future LoadData() async {
+
+
+
+    setState(() {
+      loading=false;
+    });
+
+
+
+  }
 
   var scf;
   bool eventsInitialized = false;
 
   void didChangeDependencies() async {
+
     print('home init');
     if (!eventsInitialized) {
       if (!Provider.of<EventsData>(context, listen: false)
@@ -363,8 +402,7 @@ class _HomePageState extends State<HomePage> {
         //     Provider.of<AccessTokenData>(context, listen: false)
         //         .getAccessToken());
       }
-      sheduledToday =
-          Provider.of<EventsData>(context, listen: false).getEvents();
+
 
       setState(() {
         eventsInitialized = true;
@@ -377,8 +415,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool imgFetched =
-        Provider.of<EventsImages>(context, listen: true).imgFetched;
+
+
     List<Widget> ScatteredListtiles = [
       Column(
         children: [
@@ -398,44 +436,41 @@ class _HomePageState extends State<HomePage> {
       DateTime.now().hour <= 17 && DateTime.now().hour >= 8
           ? TimeTableHomeScreenListTile()
           : ListTile(),
-      !imgFetched
-          ? Expanded(
-            child: Center(
-              child: CarouselSlider.builder(
-                    itemCount: sheduledToday.length,
-                    itemBuilder: (context, itemIndex, pageViewIndex) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pushNamed('/eventdetailsdesign',
-                              arguments: ScreenArguments(
-                                  id: sheduledToday[itemIndex].id,
-                                  scf: scf,
-                                  context: context));
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(sheduledToday[itemIndex]
-                                      .event_image
-                                      .toString()))),
-                        ),
-                      );
-                    },
-                    options: CarouselOptions(
-                        autoPlay: true,
-                        enlargeCenterPage: false,
-                        height: 500,
-                        viewportFraction: 1)),
-            ),
+       loading ==false?Center(
+            child: CarouselSlider.builder(
+                  itemCount: eventfiltered.length,
+                  itemBuilder: (context, itemIndex, pageViewIndex) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/eventdetailsdesign',
+                            arguments: ScreenArguments(
+                                id: eventfiltered[itemIndex].id,
+                                scf: scf,
+                                context: context));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.fitHeight,
+                                image: eventfiltered.length!=0?CachedNetworkImageProvider(eventfiltered[itemIndex]
+                                    .event_image
+                                    .toString()): AssetImage("Assets/newframe.png"))),
+                        child: eventfiltered.length==0?Container(child: Text("No Upcoming events")):Container(color: Colors.transparent,),
+                      ),
+                    );
+                  },
+                  options: CarouselOptions(
+                      autoPlay: eventfiltered.length!=0?true:false,
+                      enlargeCenterPage: false,
+                      autoPlayInterval: Duration(seconds: 5),
+                      height: 500,
+                      viewportFraction: 1)),
           )
-          : Expanded(
-        child: Rive(
-          artboard: _riveArtboard,
-          alignment: Alignment.bottomCenter,
-          useArtboardSize: true,
-        ),
-      ),
+          : Rive(
+            artboard: _riveArtboard,
+            alignment: Alignment.bottomCenter,
+            useArtboardSize: true,
+          ),
       ListTile(
         title: Text("Internship/Job Opportunities", style: general_text_style),
         trailing: Icon(Icons.work_outline),
@@ -444,7 +479,7 @@ class _HomePageState extends State<HomePage> {
 
     return Flexible(
       child: StaggeredGridView.countBuilder(
-        physics: BouncingScrollPhysics(),
+        physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
         crossAxisCount: 4,
         itemCount: 4,
@@ -586,6 +621,7 @@ class _AddEventsPageState extends State<AddEventsPage> {
 
       appBar: AppBar(
         title: Text(
+
           'new Event',
           style: TextStyle(color: Colors.brown, fontSize: 30),
         ),
@@ -721,98 +757,96 @@ class _AddToSchedulePageState extends State<AddToSchedulePage> {
               image: AssetImage("Assets/newframe.png"), fit: BoxFit.cover),
         ),
         child: SingleChildScrollView(
-          child: Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    elevation: 0,
-                    color: Colors.transparent,
-                    child: TextField(
-                        style: TextStyle(color: Colors.brown, fontSize: 30),
-                        cursorColor: Colors.brown,
-                        cursorHeight: 35,
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black26, width: 4),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black26, width: 3),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
-                            labelText: "Name of the event",
-                            helperText: 'Keep it short, this is just a beta.',
-                            hintStyle: TextStyle(color: Colors.black26),
-                            labelStyle:
-                                TextStyle(color: Colors.brown, fontSize: 30),
-                            hoverColor: Colors.brown,
-                            fillColor: newcolor,
-                            focusColor: Colors.white),
-                        onChanged: (NameOfEvent) {
-                          print("The value entered is : $NameOfEvent");
-                          event_name_changed = "$NameOfEvent";
-                        }),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    elevation: 0,
-                    color: newcolor,
-                    child: TextField(
-                        style: TextStyle(color: Colors.brown, fontSize: 30),
-                        cursorColor: Colors.brown,
-                        cursorHeight: 35,
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black26, width: 4),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black26, width: 3),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
-                            labelText: "Description",
-                            helperText: 'Keep it short, this is just a beta.',
-                            hintStyle: TextStyle(color: Colors.black26),
-                            labelStyle:
-                                TextStyle(color: Colors.brown, fontSize: 30),
-                            hoverColor: Colors.brown,
-                            fillColor: newcolor,
-                            focusColor: Colors.white),
-                        onChanged: (DescriptionOfEvent) {
-                          print("The value entered is : $DescriptionOfEvent");
-                          event_description_channged = "$DescriptionOfEvent";
-                        }),
-                  ),
-                ),
-                FloatingActionButton(
-                    backgroundColor: Colors.brown,
-                    onPressed: () {
-                      event_description = event_description_channged;
-                      event_name = event_name_changed;
-
-                      Events.add(Card(
-                        child: ListTile(
-                          leading: Icon(
-                            FontAwesomeIcons.star,
-                            color: Colors.purple,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  elevation: 0,
+                  color: Colors.transparent,
+                  child: TextField(
+                      style: TextStyle(color: Colors.brown, fontSize: 30),
+                      cursorColor: Colors.brown,
+                      cursorHeight: 35,
+                      decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black26, width: 4),
+                            borderRadius: BorderRadius.circular(25.0),
                           ),
-                          title: Text(event_name),
-                          subtitle: Text(event_description),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black26, width: 3),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          labelText: "Name of the event",
+                          helperText: 'Keep it short, this is just a beta.',
+                          hintStyle: TextStyle(color: Colors.black26),
+                          labelStyle:
+                              TextStyle(color: Colors.brown, fontSize: 30),
+                          hoverColor: Colors.brown,
+                          fillColor: newcolor,
+                          focusColor: Colors.white),
+                      onChanged: (NameOfEvent) {
+                        print("The value entered is : $NameOfEvent");
+                        event_name_changed = "$NameOfEvent";
+                      }),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  elevation: 0,
+                  color: newcolor,
+                  child: TextField(
+                      style: TextStyle(color: Colors.brown, fontSize: 30),
+                      cursorColor: Colors.brown,
+                      cursorHeight: 35,
+                      decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black26, width: 4),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black26, width: 3),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          labelText: "Description",
+                          helperText: 'Keep it short, this is just a beta.',
+                          hintStyle: TextStyle(color: Colors.black26),
+                          labelStyle:
+                              TextStyle(color: Colors.brown, fontSize: 30),
+                          hoverColor: Colors.brown,
+                          fillColor: newcolor,
+                          focusColor: Colors.white),
+                      onChanged: (DescriptionOfEvent) {
+                        print("The value entered is : $DescriptionOfEvent");
+                        event_description_channged = "$DescriptionOfEvent";
+                      }),
+                ),
+              ),
+              FloatingActionButton(
+                  backgroundColor: Colors.brown,
+                  onPressed: () {
+                    event_description = event_description_channged;
+                    event_name = event_name_changed;
+
+                    Events.add(Card(
+                      child: ListTile(
+                        leading: Icon(
+                          FontAwesomeIcons.star,
+                          color: Colors.purple,
                         ),
-                      ));
-                    }),
-              ],
-            ),
+                        title: Text(event_name),
+                        subtitle: Text(event_description),
+                      ),
+                    ));
+                  }),
+            ],
           ),
         ),
       ),
@@ -832,6 +866,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
   var event_description_channged;
   var event_name_changed;
   @override
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -951,134 +986,214 @@ class ProjectsPage extends StatefulWidget {
 }
 
 class _ProjectsPageState extends State<ProjectsPage> {
-  var eventsedRegester;
+  List <Event> eventsedRegester;
   List <String> imagesstring=[];
+  List <Event> eventfiltered=[];
+  bool initialized = false;
+  Map<String, dynamic> data;
+  ScreenArguments args;
+  bool host_pressed=false;
 
   @override
-  void initState() {
+  void didChangeDependencies() async {
 
-    // TODO: implement initState
-    super.initState();
+
+    if (!initialized) {
+      BuildContext ctx =
+          Provider.of<MaterialNavigatorKey>(context, listen: false)
+              .materialNavigatorKey
+              .currentContext;
+      data =host_pressed==true? await Server_Connection_Functions().getHostData(context, args.username): await Server_Connection_Functions().getProfileData(ctx);
+      print(data['image']);
+      setState(() {
+        initialized = true;
+      });
+    }
+
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
-
-  @override
   Widget build(BuildContext context) {
-    scf = Provider.of<SCF>(context, listen: false).get();
-    eventsedRegester=Provider.of<EventsData>(context,listen:false).getEvents();
+    return  Expanded(
+      child: Container(
+        child: !initialized
+              ? Center(
+            child: Container(child: FadingText('Loading...')),
+          )
+              : Container(
 
-
-
-
-
-    return Expanded(
-      child:Container(
-        alignment: Alignment.center,
-        color: newcolor,
-        child: ListView.builder(
-          itemCount: 1,
-          itemBuilder: (BuildContext context, int index) {
-            return eventsedRegester[index].eventType==2? SingleChildScrollView(
-              child: AnimationConfiguration.staggeredList(
-                position: index,
-                duration: const Duration(milliseconds: 350),
-                child: SlideAnimation(
-                  verticalOffset: 100.0,
-                  child: FlipAnimation(
-                    child: ListView.builder(
-                        padding: EdgeInsets.all(0),
-                        physics: ClampingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: eventsedRegester.length,
-                        itemBuilder: (context, index) {
-                          return Stack(
-                            children: [
-                              GestureDetector(
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 400,
-
-                                  child: Card(
-                                      color: Colors.white,
-                                      semanticContainer: true,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(10.0),
-                                      ),
-                                      elevation: 5,
-                                      margin: EdgeInsets.all(5),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: NetworkImage(
-                                                  '${eventsedRegester[index].event_image.toString()}',
-                                                ),
-                                                fit: BoxFit.fitWidth),
-                                            shape: BoxShape.rectangle),
-                                      )),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                left: 5,
-                                right: 5,
-                                child: ListTile(
-                                    contentPadding:EdgeInsets.fromLTRB(5, 0, 5, 0),
-
-
-                                    onTap: () {
-                                      Navigator.of(context).pushNamed(
-                                          '/eventdetailsdesign',
-                                          arguments: ScreenArguments(
-                                              id: eventsedRegester[index].id,
-                                              scf: scf,
-                                              context: context));
-                                    },
-                                    tileColor: eventsedRegester[index].favorite
-                                        ? Colors.white
-                                        : Colors.white,
-                                    subtitle: Text(
-                                        eventsedRegester[index].owner.toString(),
-                                        style: TextStyle(
-                                            fontFamily: 'DancingScript'
-                                        )
-
-                                    ),
-                                    trailing: eventsedRegester[index].favorite
-                                        ?Icon(Icons.star,color: Colors.red,):Icon(Icons.star_border,color: Colors.red,),
-                                    leading: CircleAvatar(
-                                      radius: 22,
-                                      backgroundColor: Colors.black,
-                                      child: CircleAvatar(
-
-                                          backgroundColor: Colors.white,
-                                          radius: 20,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        '${eventsedRegester[index].owner_image.toString()}'),
-                                                    fit: BoxFit.fill),
-                                                shape: BoxShape.circle),
-                                          )),
-                                    ),
-                                    title: Text(
-                                      eventsedRegester[index].name.toString(),
-                                      style: TextStyle(
-                                          color: Colors.brown, fontSize: 19,fontFamily: 'DancingScript'),
-                                    )),
-                              )
-                            ],
-                          );
-                        }),
-                  ),
-                ),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("Assets/newframe.png"),
+                fit: BoxFit.cover,
               ),
-            ):Divider();
-          },
-        ),
+            ),
+            child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      child: Image.network(
+                        data['image'],
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace stackTrace) {
+                          // Appropriate logging or analytics, e.g.
+                          // myAnalytics.recordError(
+                          //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
+                          //   exception,
+                          //   stackTrace,
+                          // );
+                          return Card(
+                            color: Colors.cyan,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 11, horizontal: 4),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 11, horizontal: 44),
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.person_outline,
+                                    size: 55,
+                                  ),
+                                  Text('😢 Can\'t load image',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontStyle: FontStyle.normal,
+
+
+                                          fontFamily: 'DancingScript',
+                                          fontSize: 20)),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Card(
+                      color: Colors.redAccent[100],
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                        EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                        child: Text('name - ' + data['name'].toString(),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontStyle: FontStyle.normal,
+
+
+                                fontFamily: 'DancingScript',
+                                fontSize: 20)),
+                      ),
+                    ),
+                    Card(
+                      color: Colors.amber[100],
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                        EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                        child: Text('roll no. ' + data['roll_no'].toString(),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontStyle: FontStyle.normal,
+
+
+                                fontFamily: 'DancingScript',
+                                fontSize: 20)),
+                      ),
+                    ),
+                    Card(
+                      color: Colors.redAccent[100],
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                        EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                        child: Text('Branch ' + data['branch'].toString(),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontStyle: FontStyle.normal,
+
+
+                                fontFamily: 'DancingScript',
+                                fontSize: 20)),
+                      ),
+                    ),
+
+                    Card(
+                      color: Colors.amber[100],
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                        EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                        child: Text('Batch ' + data['batch'].toString(),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontStyle: FontStyle.normal,
+
+
+                                fontFamily: 'DancingScript',
+                                fontSize: 20)),
+                      ),
+                    ),
+
+                    Card(
+                      color: Colors.redAccent[100],
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                        EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                        child: Text('year ' + data['year'].toString(),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontStyle: FontStyle.normal,
+
+
+                                fontFamily: 'DancingScript',
+                                fontSize: 20)),
+                      ),
+                    ),
+                    Card(
+                      color: Colors.redAccent[100],
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                        EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                        child: Text('invited by ' + data['who_sent'].toString(),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontStyle: FontStyle.normal,
+
+
+                                fontFamily: 'DancingScript',
+                                fontSize: 20)),
+                      ),
+                    ),
+
+                    // Card(
+                    //   color: Colors.amber[100],
+                    //   child: Container(
+                    //     margin:
+                    //         EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                    //     padding:
+                    //         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                    //     child: Text('roll no. ' + data['roll_no'].toString(),
+                    //         style: TextStyle(
+                    //             color: Colors.grey[800],
+                    //             fontWeight: FontWeight.w900,
+                    //             fontStyle: FontStyle.italic,
+                    //             fontFamily: 'Open Sans',
+                    //             fontSize: 20)),
+                    //   ),
+                    // ),
+                    // ListTile(
+                    //   title: Text(data['who_sent'].toString()),
+                    // ),
+                  ],
+                )),
+          ),
       ),
     );
   }
@@ -1093,155 +1208,9 @@ class InternshipsPage extends StatefulWidget {
 }
 
 class _InternshipsPageState extends State<InternshipsPage> {
-  var eventsedRegester;
-  List <String> imagesstring=[];
-
-  @override
-  void initState() {
-
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-
-  @override
-  Widget build(BuildContext context) {
-    scf = Provider.of<SCF>(context, listen: false).get();
-    eventsedRegester=Provider.of<EventsData>(context,listen:false).getEvents();
-
-
-
-
-
-    return Expanded(
-      child:Container(
-        alignment: Alignment.center,
-        color: newcolor,
-        child: ListView.builder(
-          itemCount: 1,
-          itemBuilder: (BuildContext context, int index) {
-            return eventsedRegester[index].eventType==3? SingleChildScrollView(
-              child: AnimationConfiguration.staggeredList(
-                position: index,
-                duration: const Duration(milliseconds: 350),
-                child: SlideAnimation(
-                  verticalOffset: 100.0,
-                  child: FlipAnimation(
-                    child: ListView.builder(
-                        padding: EdgeInsets.all(0),
-                        physics: ClampingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: eventsedRegester.length,
-                        itemBuilder: (context, index) {
-                          return Stack(
-                            children: [
-                              GestureDetector(
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 400,
-
-                                  child: Card(
-                                      color: Colors.white,
-                                      semanticContainer: true,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(10.0),
-                                      ),
-                                      elevation: 5,
-                                      margin: EdgeInsets.all(5),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: NetworkImage(
-                                                  '${eventsedRegester[index].event_image.toString()}',
-                                                ),
-                                                fit: BoxFit.fitWidth),
-                                            shape: BoxShape.rectangle),
-                                      )),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                left: 5,
-                                right: 5,
-                                child: ListTile(
-                                    contentPadding:EdgeInsets.fromLTRB(5, 0, 5, 0),
-
-
-                                    onTap: () {
-                                      Navigator.of(context).pushNamed(
-                                          '/eventdetailsdesign',
-                                          arguments: ScreenArguments(
-                                              id: eventsedRegester[index].id,
-                                              scf: scf,
-                                              context: context));
-                                    },
-                                    tileColor: eventsedRegester[index].favorite
-                                        ? Colors.white
-                                        : Colors.white,
-                                    subtitle: Text(
-                                        eventsedRegester[index].owner.toString(),
-                                        style: TextStyle(
-                                            fontFamily: 'DancingScript'
-                                        )
-
-                                    ),
-                                    trailing: eventsedRegester[index].favorite
-                                        ?Icon(Icons.star,color: Colors.red,):Icon(Icons.star_border,color: Colors.red,),
-                                    leading: CircleAvatar(
-                                      radius: 22,
-                                      backgroundColor: Colors.black,
-                                      child: CircleAvatar(
-
-                                          backgroundColor: Colors.white,
-                                          radius: 20,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        '${eventsedRegester[index].owner_image.toString()}'),
-                                                    fit: BoxFit.fill),
-                                                shape: BoxShape.circle),
-                                          )),
-                                    ),
-                                    title: Text(
-                                      eventsedRegester[index].name.toString(),
-                                      style: TextStyle(
-                                          color: Colors.brown, fontSize: 19,fontFamily: 'DancingScript'),
-                                    )),
-                              )
-                            ],
-                          );
-                        }),
-                  ),
-                ),
-              ),
-            ):Divider();
-          },
-        ),
-      ),
-    );
-  }
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////EVENTSPAGE
-
-class EventsPage extends StatefulWidget {
-  const EventsPage({Key key}) : super(key: key);
-
-  @override
-  _EventsPageState createState() => _EventsPageState();
-}
-
-var scf;
-
-class _EventsPageState extends State<EventsPage> {
   List <Event> eventsedRegester;
   List <String> imagesstring=[];
-  List eventfiltered;
+  List <Event> eventfiltered=[];
 
   @override
   void initState() {
@@ -1257,12 +1226,11 @@ class _EventsPageState extends State<EventsPage> {
     scf = Provider.of<SCF>(context, listen: false).get();
     eventsedRegester=Provider.of<EventsData>(context,listen:false).getEvents();
     eventsedRegester.forEach((element) {
-
-
+      if(element.eventType=="Social"){
+        print("/////////////////////EVENT TYPE IS HERE ${element.eventType}");
+        eventfiltered.add(element);
+      }
     });
-
-
-
 
     return Expanded(
       child:Container(
@@ -1283,64 +1251,59 @@ class _EventsPageState extends State<EventsPage> {
                         physics: ClampingScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
-                        itemCount: eventsedRegester.length,
+                        itemCount: eventfiltered.length,
                         itemBuilder: (context, index) {
-                          return Stack(
+                          return Column(
                             children: [
                               GestureDetector(
                                 child: Container(
                                   width: double.infinity,
                                   height: 400,
 
-                                  child: Card(
-                                      color: Colors.white,
-                                      semanticContainer: true,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      elevation: 5,
-                                      margin: EdgeInsets.all(5),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: NetworkImage(
-                                                  '${eventsedRegester[index].event_image.toString()}',
-                                                ),
-                                                fit: BoxFit.fitWidth),
-                                            shape: BoxShape.rectangle),
-                                      )),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: CachedNetworkImageProvider(
+                                              '${eventfiltered[index].event_image.toString()}',
+                                            ),
+                                            fit: BoxFit.fitHeight),
+                                        shape: BoxShape.rectangle),
+                                  ),
                                 ),
                               ),
-                              Positioned(
-                                bottom: 0,
-                                left: 5,
-                                right: 5,
-                                child: ListTile(
-                                  contentPadding:EdgeInsets.fromLTRB(5, 0, 5, 0),
+                              ListTile(
 
 
-                                    onTap: () {
-                                      Navigator.of(context).pushNamed(
-                                          '/eventdetailsdesign',
-                                          arguments: ScreenArguments(
-                                              id: eventsedRegester[index].id,
-                                              scf: scf,
-                                              context: context));
-                                    },
-                                    tileColor: eventsedRegester[index].favorite
-                                        ? Colors.white
-                                        : Colors.white,
-                                    subtitle: Text(
-                                      eventsedRegester[index].owner.toString(),
+
+
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(
+                                        '/eventdetailsdesign',
+                                        arguments: ScreenArguments(
+                                            id: eventfiltered[index].id,
+                                            scf: scf,
+                                            context: context));
+                                  },
+                                  tileColor: eventfiltered[index].favorite
+                                      ? Colors.white
+                                      : Colors.white,
+                                  subtitle: Text(
+                                      eventfiltered[index].owner.toString(),
                                       style: TextStyle(
-                                        fontFamily: 'DancingScript'
+                                          fontFamily: 'DancingScript'
                                       )
 
-                                    ),
-                                    trailing: eventsedRegester[index].favorite
-                                    ?Icon(Icons.star,color: Colors.red,):Icon(Icons.star_border,color: Colors.red,),
-                                    leading: CircleAvatar(
+                                  ),
+                                  trailing: eventfiltered[index].favorite
+                                      ?Icon(Icons.star,color: Colors.red,):Icon(Icons.star_border,color: Colors.red,),
+                                  leading: TextButton(
+                                    onPressed:(){ setState(() {
+                                      hostorprofile=true;
+                                    });Navigator.of(context).pushNamed('/ProfileDetailsScreen',arguments: ScreenArguments(
+                                        username: eventfiltered[index].owner,hostpressed: hostorprofile
+
+                                    ) );},
+                                    child: CircleAvatar(
                                       radius: 22,
                                       backgroundColor: Colors.black,
                                       child: CircleAvatar(
@@ -1350,18 +1313,229 @@ class _EventsPageState extends State<EventsPage> {
                                           child: Container(
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        '${eventsedRegester[index].owner_image.toString()}'),
+                                                    image: CachedNetworkImageProvider(
+                                                        '${eventfiltered[index].owner_image.toString()}'),
                                                     fit: BoxFit.fill),
                                                 shape: BoxShape.circle),
                                           )),
                                     ),
-                                    title: Text(
-                                      eventsedRegester[index].name.toString(),
+                                  ),
+                                  title: Text(
+                                    eventfiltered[index].name,
+                                    style: TextStyle(
+                                        color: Colors.brown, fontSize: 19,fontFamily: 'DancingScript'),
+                                  )),
+                              Divider(height: 20,thickness: 2,color: Colors.brown,),
+                            ],
+                          );
+                        }),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////EVENTSPAGE
+
+class EventsPage extends StatefulWidget {
+  const EventsPage({Key key}) : super(key: key);
+
+  @override
+  _EventsPageState createState() => _EventsPageState();
+}
+
+var scf;
+
+class _EventsPageState extends State<EventsPage> {
+  bool loading =true;
+  List <Event> eventsedRegester;
+  List <String> imagesstring=[];
+  List <Event> eventfiltered=[];
+Color Shimmy=Color(0xfff2efe4);
+
+
+  @override
+  void initState() {
+
+    scf = Provider.of<SCF>(context, listen: false).get();
+    eventsedRegester=Provider.of<EventsData>(context,listen:false).getEvents();
+    eventsedRegester.forEach((element) {
+      if(element.eventType=="University"){
+        print("/////////////////////EVENT TYPE IS HERE ${element.eventType}");
+        eventfiltered.add(element);
+      }
+    });
+
+    // TODO: implement initState
+    super.initState();
+    LoadData();
+    print("///////////////////////////INITIATED");
+
+  }
+  Future LoadData() async {
+
+
+
+    if (!mounted) return;
+    setState(() {
+      loading=false;
+    });
+
+
+print("//////////////////////////////LOADED");
+  }
+
+  @override
+void dispose() {
+
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print("//////////////////////////////BUILDING");
+
+
+
+    return Expanded(
+      child:Container(
+        alignment: Alignment.center,
+        color: newcolor,
+        child: ListView.builder(
+          itemCount: 1,
+          itemBuilder: (BuildContext context, int index) {
+            return SingleChildScrollView(
+              child: AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 350),
+                child: SlideAnimation(
+                  verticalOffset: 100.0,
+                  child: FlipAnimation(
+                    child: ListView.builder(
+
+                        physics: ClampingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: eventfiltered.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              Center(
+                                child: loading?SkeletonContainer.square(
+                                  width: 22,
+                                  height: 22,
+                                  FinalColor: Shimmy,
+                                ):TextButton(
+                                  onPressed:(){ setState(() {
+                                    hostorprofile=true;
+                                  });Navigator.of(context).pushNamed('/ProfileDetailsScreen',arguments: ScreenArguments(
+                                      username: eventfiltered[index].owner,hostpressed: hostorprofile
+
+                                  ) );},
+                                  child: CircleAvatar(
+                                    radius: 22,
+                                    backgroundColor: Colors.black,
+                                    child: CircleAvatar(
+
+                                        backgroundColor: Colors.white,
+                                        radius: 20,
+                                        child: !loading?Container(
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: CachedNetworkImageProvider(
+                                                      '${eventfiltered[index].owner_image.toString()}'),
+                                                  fit: BoxFit.fill),
+                                              shape: BoxShape.circle),
+                                        ):SkeletonContainer.square(
+                                          width: 100,
+                                          height: 20,
+                                          FinalColor: Shimmy,
+                                        )),
+                                  ),
+                                ),
+                              ),
+
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.of(context).pushNamed(
+                                  '/eventdetailsdesign',
+                                  arguments: ScreenArguments(
+                                      id: eventfiltered[index].id,
+                                      scf: scf,
+                                      context: context));
+                            },
+                            child: Container(
+                            width: double.infinity,
+                            height: 400,
+
+                            child: loading?SkeletonContainer.square(
+                            width: 400,
+                            height: 400,
+                              FinalColor: Shimmy,
+                            ):Container(
+                               decoration: BoxDecoration(
+                            image: DecorationImage(
+                            image: CachedNetworkImageProvider( '${eventfiltered[index].event_image.toString()}',errorListener: (){
+
+                            }
+
+                            ),
+                            fit: BoxFit.fitHeight),
+                            ),
+                            ),
+                            ),
+                          ),
+                              ListTile(
+
+
+
+
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(
+                                        '/eventdetailsdesign',
+                                        arguments: ScreenArguments(
+                                            id: eventfiltered[index].id,
+                                            scf: scf,
+                                            context: context));
+                                  },
+                                  tileColor: eventfiltered[index].favorite
+                                      ? Colors.white
+                                      : Colors.white,
+                                  subtitle: loading?SkeletonContainer.square(
+                                    width: 10,
+                                    height: 10,
+                                    FinalColor: Shimmy,
+                                  ):Text(
+                                      "${eventfiltered[index].dateime.day.toString()} .${eventfiltered[index].dateime.month.toString()  }",
                                       style: TextStyle(
-                                          color: Colors.brown, fontSize: 19,fontFamily: 'DancingScript'),
-                                    )),
-                              )
+                                          fontFamily: 'DancingScript'
+                                      )
+
+                                  ),
+                                  trailing: loading?SkeletonContainer.square(
+                                    width: 10,
+                                    height: 10,
+                                    FinalColor: Shimmy,
+                                  ):eventfiltered[index].favorite
+                                      ?Icon(FontAwesomeIcons.solidStar,color: Colors.red,):Icon(FontAwesomeIcons.star,color: Colors.red,),
+
+                                  title: loading?SkeletonContainer.square(
+                                    width: 10,
+                                    height: 10,
+                                    FinalColor: Shimmy,
+                                  ):Text(
+                                    eventfiltered[index].name,
+                                    style: TextStyle(
+                                        color: Colors.brown, fontSize: 19,fontFamily: 'DancingScript'),
+                                  )),
+
                             ],
                           );
                         }),
@@ -1392,7 +1566,13 @@ class _CustomPageState extends State<CustomPage> {
       appBar: AppBar(
         title: Text(
           'Add Event',
-          style: TextStyle(color: Colors.brown, fontSize: 30),
+          style: TextStyle(
+              color: Colors.black,
+              fontStyle: FontStyle.normal,
+
+
+              fontFamily: 'DancingScript',
+              fontSize: 20),
         ),
         backgroundColor: newcolor,
         iconTheme: IconThemeData(color: Colors.black),
@@ -1666,12 +1846,12 @@ class _AddingPageState extends State<AddingPage> {
               Navigator.of(context).pushNamed('AddEventScreen', arguments: 2);
             },
             leading: Icon(
-              FontAwesomeIcons.star,
-              color: Colors.purple,
+              Icons.update,
+              color: Colors.red,
             ),
-            title: Text("Add to projects", style: general_text_style),
+            title: Text("Add to Stories", style: general_text_style),
             subtitle: Text(
-                "Update via this feature to let people know the details of any event"),
+                "Update about various public events and achievements your society "),
           ),
         ),
       ),
@@ -1686,12 +1866,12 @@ class _AddingPageState extends State<AddingPage> {
               Navigator.of(context).pushNamed('AddEventScreen', arguments: 3);
             },
             leading: Icon(
-              FontAwesomeIcons.star,
-              color: Colors.purple,
+            Icons.work_outline,
+              color: Colors.blue,
             ),
             title: Text("Add to internships/jobs", style: general_text_style),
             subtitle: Text(
-                "Update via this feature to let people know the details of any event"),
+                "Update via this feature to let people know the details about various internships/Jobs/Projects related opportunities for students"),
           ),
         ),
       ),
@@ -1753,7 +1933,10 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   Artboard _riveArtboard;
   var scf;
   List<Event> sheduledToday = [];
+
   bool eventsInitialized = false;
+  bool storycontinues=false;
+  int j=1;
 
   @override
   void didChangeDependencies() async {
@@ -1782,7 +1965,9 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
 
   @override
   void initState() {
+
     super.initState();
+
 
     // Load the animation file from the bundle, note that you could also
     // download this. The RiveFile just expects a list of bytes.
@@ -1842,6 +2027,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   }
 
   void _adding_page_open_function(bool _adding_page_active) {
+
     if (_plusAnimation == null) {
       _riveArtboard.addController(
         _plusAnimation = PlusAnimation('Plus'),
@@ -1877,15 +2063,33 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   @override
   Widget build(BuildContext context) {
     List<List<Event>> ownersEvents = [];
-    for (int i = 0; i < sheduledToday.length; i++) {
+
+    List <Event>storiesFiltered=[];
+    ScreenArguments args = ModalRoute
+        .of(context)
+        .settings
+        .arguments;
+    if(j!=1){
+storycontinues=true;
+
+    }
+    sheduledToday.forEach((element) {
+      if(element.eventType=="Society" )
+        storiesFiltered.add(element);
+
+    });
+
+
+    for (int i = 0; i < storiesFiltered.length; i++) {
+
       if (ownersEvents.indexWhere(
-              (element) => element[0].owner == sheduledToday[i].owner) !=
+              (element) => element[0].owner == storiesFiltered[i].owner) !=
           -1) {
         ownersEvents[ownersEvents.indexWhere(
-                (element) => element[0].owner == sheduledToday[i].owner)]
-            .add(sheduledToday[i]);
+                (element) => element[0].owner == storiesFiltered[i].owner)]
+            .add(storiesFiltered[i]);
       } else {
-        ownersEvents.add([sheduledToday[i]]);
+        ownersEvents.add([storiesFiltered[i]]);
       }
     }
     print(ownersEvents.length);
@@ -1900,53 +2104,57 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
       alignment: Alignment.center,
       child: !initialized
           ? Center(
-              child: JumpingText(
-              'loading.....',
-              style: TextStyle(
-                  color: Colors.blueGrey[900],
-                  fontStyle: FontStyle.italic,
-                  fontSize: 50,
-                  fontWeight: FontWeight.w900),
-            ))
+          child:Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("Assets/LogoOTG.png"),
+                  fit: BoxFit.cover,
+                ),
+
+
+              )
+          ))
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (_adding_to_app_pressed == false && _events_pressed == false)
+                if (_adding_to_app_pressed == false && _events_pressed == false && _project_pressed==false && _internship_pressed==false)
                   Container(
                     height: 200,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Expanded(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: ownersEvents.length,
-                          itemBuilder: (BuildContext context, int index) =>
-                              GestureDetector(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: ownersEvents.length,
+                        itemBuilder: (BuildContext context, int index) =>
+                            GestureDetector(
 
-                            onTap: () {
+                          onTap: () {
+                            j=0;
+                            j++;
 
-                              Navigator.of(context).pushNamed(
-                                StoryViewScreen.routeName,
-                                arguments: ScreenArguments(
-                                    eves: ownersEvents[
-                                        index]), // sheduledToday[index].event_image,
-                              );
-                            },
-                            child: Container(
-                              margin: EdgeInsets.all(3),
+                            Navigator.of(context).pushNamed(
+                              StoryViewScreen.routeName,
+                              arguments: ScreenArguments(
+                                id: !storycontinues?index:args.id,
+                                  eves: !storycontinues?ownersEvents[
+                                      index]:ownersEvents[
+                                  args.id],ownerlist:  ownersEvents), // sheduledToday[index].event_image,
+                            );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.all(3),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.green,
+                              radius: 30,
                               child: CircleAvatar(
-                                backgroundColor: Colors.green,
-                                radius: 30,
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 27,
-                                  backgroundImage: NetworkImage(
+                                backgroundColor: Colors.white,
+                                radius: 27,
+                                backgroundImage: storiesFiltered.isNotEmpty?CachedNetworkImageProvider(
 
-                                      ownersEvents[index][0].owner_image,
-                                      scale: 0.5),
-                                ),
+                                    ownersEvents[index][0].owner_image,
+                                    scale: 0.5): AssetImage("Assets/newframe.png"),
                               ),
                             ),
                           ),
@@ -2001,17 +2209,27 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                                     if (_events_pressed == true) {
                                       _events_pressed = !_events_pressed;
 
-                                      _plusAnimation.isActive = false;
-                                      _riveArtboard.addController(
-                                          _plusAnimation =
-                                              PlusAnimation('home'));
+
+
                                     }
+                                    if(_internship_pressed==true){
+                                      _internship_pressed=!_internship_pressed;
+                                    }
+                                    if(_project_pressed==true){
+                                      _project_pressed=!_project_pressed;
+                                    }
+                                    _plusAnimation.isActive = false;
+                                    _riveArtboard.addController(
+                                        _plusAnimation =
+                                            PlusAnimation('home'));
                                   });
                                 }
                               } else if (internshiptouched) {
                                 if (!_adding_to_app_pressed) {
                                   setState(() {
                                     _internship_pressed = !_internship_pressed;
+                                    _events_pressed=false;
+                                    _project_pressed=false;
                                     _Internship_page_function(_internship_pressed);
                                     _plusAnimation.isActive = false;
                                     _riveArtboard.addController(_plusAnimation =
@@ -2030,6 +2248,8 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                                 if (!_adding_to_app_pressed) {
                                   setState(() {
                                     _events_pressed = !_events_pressed;
+                                    _internship_pressed=false;
+                                    _project_pressed=false;
                                     _events_page_function(_events_pressed);
                                     _plusAnimation.isActive = false;
                                     _riveArtboard.addController(_plusAnimation =
@@ -2040,14 +2260,16 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                                 if (!_adding_to_app_pressed) {
                                   setState(() {
                                     _project_pressed =!_project_pressed;
+                                    _events_pressed=false;
+                                    _internship_pressed=false;
                                     _Project_page_function(_project_pressed);
                                     _plusAnimation.isActive = false;
                                     _riveArtboard.addController(_plusAnimation =
                                         PlusAnimation('profile'));
                                     print("Profile Touched");
                                   });
-                                  Navigator.of(context)
-                                      .pushNamed('/ProfileDetailsScreem');
+
+
                                 }
                               }
                             } else {
@@ -2065,7 +2287,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                               artboard: _riveArtboard,
                               alignment: Alignment.bottomCenter,
                               useArtboardSize: true,
-                              fit: BoxFit.fitWidth,
+                              fit: BoxFit.fitHeight,
                             ),
                           ),
                         ),
