@@ -107,7 +107,7 @@ class _HomeTabState extends State<HomeTab> {
           children: [
             Container(
               width: double.infinity,
-              color: Colors.amber,
+
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -129,10 +129,7 @@ class _HomeTabState extends State<HomeTab> {
                       });
                     },
                     labels: ['events', 'schedule'],
-                    activeBgColor: Colors.black,
-                    activeFgColor: Colors.amber,
-                    inactiveFgColor: Colors.white,
-                    inactiveBgColor: Colors.grey[900],
+
                   )
                 ],
               ),
@@ -176,9 +173,7 @@ class _HomeTabState extends State<HomeTab> {
                                                 Provider.of<EventsData>(context)
                                                     .events;
                                             return ListTile(
-                                              tileColor: events[index].favorite
-                                                  ? Colors.redAccent
-                                                  : Colors.blueGrey[900],
+
                                               onTap: () {
                                                 Navigator.of(context).pushNamed(
                                                     '/EventsDetailScreen',
@@ -189,18 +184,19 @@ class _HomeTabState extends State<HomeTab> {
                                               },
                                               subtitle: Text(
                                                 events[index].eventType,
-                                                style: TextStyle(
-                                                    color: Colors.white),
+
+
                                               ),
                                               leading: Icon(
                                                 Icons.ac_unit,
-                                                color: Colors.blue,
+
                                               ),
                                               title: Text(
                                                 events[index].name,
                                                 style: TextStyle(
-                                                    color: Colors.white),
+
                                               ),
+                                              )
                                             );
                                           }),
                                     )
@@ -210,9 +206,7 @@ class _HomeTabState extends State<HomeTab> {
                                         Flexible(
                                           child: Text(
                                             'loading events  ',
-                                            style: TextStyle(
-                                              color: Colors.amber,
-                                            ),
+
                                           ),
                                         ),
                                         CircularProgressIndicator(),
@@ -244,17 +238,12 @@ class _HomeTabState extends State<HomeTab> {
                                                       .access_time_outlined),
                                               subtitle: Text(
                                                   '${lectures[index].time.hour}-${lectures[index].time.hour + 1}'),
-                                              tileColor: lectures[index].free
-                                                  ? Colors.red
-                                                  : lectures[index].time.hour ==
-                                                          TimeOfDay.now().hour
-                                                      ? Colors.tealAccent[400]
-                                                      : Colors.amberAccent[100],
+
                                               title: lectures[index].free
                                                   ? Text(
                                                       'FREE',
                                                       style: TextStyle(
-                                                          color: Colors.yellow),
+                                                          ),
                                                     )
                                                   : Text(lectures[index].name),
                                               trailing: Text(
@@ -263,9 +252,7 @@ class _HomeTabState extends State<HomeTab> {
                                                     ? 'now'
                                                     : '',
                                                 style: TextStyle(
-                                                    backgroundColor:
-                                                        Colors.white,
-                                                    color: Colors.black),
+                                                    ),
                                               )),
                                         );
                                       },
@@ -277,11 +264,11 @@ class _HomeTabState extends State<HomeTab> {
                           //     return ListTile(
                           //       subtitle: Text(
                           //         '${sheduled[index].dateime.toString()}',
-                          //         style: TextStyle(color: Colors.white),
+                          //
                           //       ),
                           //       title: Text(
                           //         '${sheduled[index].name}',
-                          //         style: TextStyle(color: Colors.amber),
+                          //         style: TextStyle(),
                           //       ),
                           //     );
                           //   },
@@ -289,7 +276,7 @@ class _HomeTabState extends State<HomeTab> {
                           // ),
                         ),
                 ),
-                color: Colors.black,
+
               ),
             )
           ],

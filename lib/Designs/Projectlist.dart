@@ -19,11 +19,11 @@ class ProjectList extends StatefulWidget {
 
 class _ProjectListState extends State<ProjectList> {
   @override
-  TextStyle general_text_style = TextStyle(color: Colors.brown);
+
   PlusAnimation _plusAnimation;
   static const double width = 500;
   static const double height = 200;
-  Color newcolor = Colors.transparent;
+
   bool registered_Animation;
 
 
@@ -70,10 +70,10 @@ class _ProjectListState extends State<ProjectList> {
 
         leading: Icon(
           FontAwesomeIcons.star,
-          color: Colors.purple,
+
         ),
 
-        title: Text("Add to Events", style: general_text_style),
+        title: Text("Add to Events"),
         subtitle: Text(
             "Update via this feature to let people know the details of any event"),
       ),
@@ -81,9 +81,9 @@ class _ProjectListState extends State<ProjectList> {
 
         leading: Icon(
           FontAwesomeIcons.star,
-          color: Colors.purple,
+
         ),
-        title: Text("Add to Events", style: general_text_style),
+        title: Text("Add to Events",),
         subtitle: Text(
             "Update via this feature to let people know the details of any event"),
       ),
@@ -91,9 +91,9 @@ class _ProjectListState extends State<ProjectList> {
 
         leading: Icon(
           FontAwesomeIcons.star,
-          color: Colors.purple,
+
         ),
-        title: Text("Add to Events", style: general_text_style),
+        title: Text("Add to Events", ),
         subtitle: Text(
             "Update via this feature to let people know the details of any event"),
       ),
@@ -102,7 +102,7 @@ class _ProjectListState extends State<ProjectList> {
 
 
         leading: CircleAvatar(
-            backgroundColor: Colors.transparent,
+
             radius: 20,
 
 
@@ -117,7 +117,7 @@ class _ProjectListState extends State<ProjectList> {
 
             )
         ),
-        title: Text("DTUOTG", style: general_text_style),
+        title: Text("DTUOTG",),
         subtitle: Text(
             "You know what it is "),
 
@@ -134,13 +134,12 @@ class _ProjectListState extends State<ProjectList> {
               children: [
                 Icon(Icons.shopping_bag_outlined),
                 Text(
-                  "Active Projects", style: TextStyle(color: Colors.black54),),
+                  "Active Projects",),
               ],
             ),
-            iconTheme: IconThemeData(color: Colors.black54),
+
             elevation: 0,
-            backgroundColor: Color(0xffF2EFE4),
-            foregroundColor: Colors.black,
+
           ),
           body: Container(
             decoration: BoxDecoration(
@@ -174,7 +173,7 @@ class _ProjectListState extends State<ProjectList> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
 
-                              color: Colors.white,
+
                             ),
                             child: Center(child: DescriptionCategories[index]),
                           ),

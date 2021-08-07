@@ -43,7 +43,7 @@ class EventDetailsDesign extends StatefulWidget {
 }
 
 class _EventDetailsDesignState extends State<EventDetailsDesign> {
-  Color eventdetailsbgcolor = Color(0xffF2EFE4);
+
   bool initialized = false;
   PlusAnimation _plusAnimation;
   static const double width = 500;
@@ -170,12 +170,12 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
 
     return initialized ?Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
+
         title: Text(
           '${_eventDetails.name}',
-          style: TextStyle(color: Colors.black),
+
         ),
-        backgroundColor: eventdetailsbgcolor,
+
         elevation: 0,
       ),
       body: !initialized
@@ -201,7 +201,7 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                    color: eventdetailsbgcolor,
+
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(0),
                         topRight: Radius.circular(0))),
@@ -212,14 +212,14 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         alignment: Alignment.center,
-                        color: Colors.transparent,
+
                         child: Column(
                           children: [
                             Text(
                               "Description",
                               style: TextStyle(
-                                color: Colors.black,
-                                backgroundColor: Colors.transparent,
+
+
                               ),
                             ),
                             Text(_eventDetails.description
@@ -244,15 +244,15 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         alignment: Alignment.center,
-                        color: Colors.transparent,
+
                         child: Column(
                           children: [
                             Text(
                               "Incentives",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                backgroundColor: Colors.transparent,
+
+
                               ),
                             ),
                             Text(
@@ -278,8 +278,8 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
                                       .indexOf('\$~')),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                backgroundColor: Colors.transparent,
+
+
                               ),
                             ),
                           ],
@@ -290,7 +290,7 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         alignment: Alignment.center,
-                        color: Colors.transparent,
+
                         child: Link(
                           uri: Uri.parse(_eventDetails.description
                               .toString()
@@ -320,12 +320,12 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         alignment: Alignment.center,
-                        color: Colors.transparent,
+
                         child: Text(
                           "Other links",
                           style: TextStyle(
-                            color: Colors.black,
-                            backgroundColor: Colors.transparent,
+
+
                           ),
                         ),
                       ),
@@ -334,13 +334,13 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
                       width: 100,
                       height: 100,
                       child: FloatingActionButton(
-                        splashColor: Colors.transparent,
+
                         focusElevation: 0,
                         disabledElevation: 0,
                         highlightElevation: 0,
                         hoverElevation: 0,
                         elevation: 0,
-                        backgroundColor: Colors.transparent,
+
                         onPressed: () async {
                           if (_plusAnimation.isActive == false) {
                             if (!_eventDetails.registered) {
@@ -393,18 +393,18 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
         ),
       ),
     ):Container(
-      color: Colors.white,
+
       child: Center(
           child: JumpingText(
             'loading.....',
             style: TextStyle(
-                color: Colors.blueGrey[900],
+
                 fontStyle: FontStyle.italic,
                 fontSize: 50,
                 fontWeight: FontWeight.w900),
           )),
     );
 
-  if(_eventDetails.registered==null)return Container(color:Colors.purple);
+
   }
 }

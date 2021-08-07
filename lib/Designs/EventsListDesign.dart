@@ -14,11 +14,11 @@ class EventsListDesign extends StatefulWidget {
 }
 
 class _EventsListDesignState extends State<EventsListDesign> {
-  TextStyle general_text_style = TextStyle(color: Colors.brown);
+
   PlusAnimation _plusAnimation;
   static const double width = 500;
   static const double height = 200;
-  Color newcolor = Colors.transparent;
+
   bool registered_Animation;
 
 
@@ -63,10 +63,10 @@ class _EventsListDesignState extends State<EventsListDesign> {
 
         leading: Icon(
           FontAwesomeIcons.star,
-          color: Colors.purple,
+
         ),
 
-        title: Text("Add to Events", style: general_text_style),
+        title: Text("Add to Events", ),
         subtitle: Text(
             "Update via this feature to let people know the details of any event"),
       ),
@@ -74,9 +74,9 @@ class _EventsListDesignState extends State<EventsListDesign> {
 
         leading: Icon(
           FontAwesomeIcons.star,
-          color: Colors.purple,
+
         ),
-        title: Text("Add to Events", style: general_text_style),
+        title: Text("Add to Events", ),
         subtitle: Text(
             "Update via this feature to let people know the details of any event"),
       ),
@@ -84,9 +84,9 @@ class _EventsListDesignState extends State<EventsListDesign> {
 
         leading: Icon(
           FontAwesomeIcons.star,
-          color: Colors.purple,
+
         ),
-        title: Text("Add to Events", style: general_text_style),
+        title: Text("Add to Events",),
         subtitle: Text(
             "Update via this feature to let people know the details of any event"),
       ),
@@ -95,7 +95,7 @@ class _EventsListDesignState extends State<EventsListDesign> {
 
 
         leading: CircleAvatar(),
-        title: Text("ENGIFEST", style: general_text_style),
+        title: Text("ENGIFEST", ),
         subtitle: Text(
             "You know what it is "),
         trailing: CircleAvatar(),
@@ -105,11 +105,10 @@ class _EventsListDesignState extends State<EventsListDesign> {
     return
       Scaffold(
           appBar: AppBar(
-            title: Text("Upcoming Events",style: TextStyle(color: Colors.black54),),
-            iconTheme: IconThemeData(color: Colors.black54),
+            title: Text("Upcoming Events",),
+
             elevation: 0,
-            backgroundColor: Color(0xffF2EFE4),
-            foregroundColor: Colors.black,
+
           ),
           body:  Container(
             decoration: BoxDecoration(
@@ -144,7 +143,7 @@ class _EventsListDesignState extends State<EventsListDesign> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
 
-                              color: Colors.white,
+
                             ),
                             child: Center(child: DescriptionCategories[index]),
                           ),

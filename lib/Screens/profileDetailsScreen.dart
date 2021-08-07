@@ -47,16 +47,16 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+
         title: Text('Your profile',
             style: TextStyle(
-                color: Colors.black,
+
                 fontStyle: FontStyle.normal,
 
 
                 fontFamily: 'DancingScript',
                 fontSize: 20)),
-        backgroundColor: Color(0xffF2EFE4),
+
       ),
       body: !initialized
           ? Center(
@@ -87,7 +87,7 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                         //   stackTrace,
                         // );
                         return Card(
-                          color: Colors.cyan,
+
                           child: Container(
                             margin: EdgeInsets.symmetric(
                                 vertical: 11, horizontal: 4),
@@ -101,7 +101,7 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                                 ),
                                 Text('😢 Can\'t load image',
                                     style: TextStyle(
-                                        color: Colors.black,
+
                                         fontStyle: FontStyle.normal,
 
 
@@ -115,14 +115,14 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                     ),
                   ),
                   Card(
-                    color: Colors.redAccent[100],
+
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                       padding:
                           EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                       child: Text('name - ' + data['name'].toString(),
                           style: TextStyle(
-                              color: Colors.black,
+
                               fontStyle: FontStyle.normal,
 
 
@@ -131,14 +131,14 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                     ),
                   ),
                   Card(
-                    color: Colors.amber[100],
+
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                       padding:
                           EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                       child: Text('roll no. ' + data['roll_no'].toString(),
                           style: TextStyle(
-                              color: Colors.black,
+
                               fontStyle: FontStyle.normal,
 
 
@@ -147,14 +147,14 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                     ),
                   ),
                   Card(
-                    color: Colors.redAccent[100],
+
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                       padding:
                           EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                       child: Text('Branch ' + data['branch'].toString(),
                           style: TextStyle(
-                              color: Colors.black,
+
                               fontStyle: FontStyle.normal,
 
 
@@ -164,14 +164,14 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                   ),
 
                   Card(
-                    color: Colors.amber[100],
+
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                       padding:
                           EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                       child: Text('Batch ' + data['batch'].toString(),
                           style: TextStyle(
-                              color: Colors.black,
+
                               fontStyle: FontStyle.normal,
 
 
@@ -181,14 +181,14 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                   ),
 
                   Card(
-                    color: Colors.redAccent[100],
+
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                       padding:
                           EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                       child: Text('year ' + data['year'].toString(),
                           style: TextStyle(
-                              color: Colors.black,
+
                               fontStyle: FontStyle.normal,
 
 
@@ -197,14 +197,14 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                     ),
                   ),
                   Card(
-                    color: Colors.redAccent[100],
+
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                       padding:
                       EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                       child: Text('invited by ' + data['who_sent'].toString(),
                           style: TextStyle(
-                              color: Colors.black,
+
                               fontStyle: FontStyle.normal,
 
 
@@ -214,7 +214,7 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                   ),
 
                   // Card(
-                  //   color: Colors.amber[100],
+                  //
                   //   child: Container(
                   //     margin:
                   //         EdgeInsets.symmetric(vertical: 11, horizontal: 4),
@@ -222,7 +222,7 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                   //         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                   //     child: Text('roll no. ' + data['roll_no'].toString(),
                   //         style: TextStyle(
-                  //             color: Colors.grey[800],
+                  //
                   //             fontWeight: FontWeight.w900,
                   //             fontStyle: FontStyle.italic,
                   //             fontFamily: 'Open Sans',

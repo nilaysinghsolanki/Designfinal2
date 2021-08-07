@@ -36,20 +36,20 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
   final picker = ImagePicker();
   void _showPicker(BuildContext context, num ratio) {
     showModalBottomSheet(
-        backgroundColor: Colors.transparent,
+
         elevation: 0,
-        barrierColor: Colors.black12,
+
         context: context,
         builder: (BuildContext bc) {
           return SafeArea(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.blueGrey[50],
+
                 borderRadius: BorderRadius.circular(11),
               ),
               padding: EdgeInsets.symmetric(
                   vertical: 10 * ratio, horizontal: 22 * ratio),
-//color: Colors.cyan,
+//
               margin: EdgeInsets.only(
                 top: 20 * ratio,
                 left: 15 * ratio,
@@ -61,12 +61,12 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                   new ListTile(
                       leading: new Icon(
                         Icons.photo_library,
-                        color: Colors.blueGrey[700],
+
                       ),
                       title: new Text(
                         'Photos',
                         style: TextStyle(
-                            color: Colors.blueGrey[900],
+
                             fontStyle: FontStyle.normal,
                             fontSize: 15,
                             fontWeight: FontWeight.w400),
@@ -79,11 +79,11 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                   new ListTile(
                     leading: new Icon(
                       Icons.photo_camera,
-                      color: Colors.blueGrey[700],
+
                     ),
                     title: new Text('Camera',
                         style: TextStyle(
-                            color: Colors.blueGrey[900],
+
                             fontStyle: FontStyle.normal,
                             fontSize: 15,
                             fontWeight: FontWeight.w400)),
@@ -265,7 +265,7 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                 child: CupertinoTextFormFieldRow(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+
                   ),
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                   controller: name,

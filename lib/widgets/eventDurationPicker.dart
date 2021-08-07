@@ -37,8 +37,8 @@ class _DurationPickerState extends State<DurationPicker> {
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     elevation: 0,
-                    primary: Colors.white,
-                    side: BorderSide(color: Colors.brown,width: 2)
+
+                    side: BorderSide(width: 2)
                 ),
                 onPressed: () {
                   Provider.of<AddEventScreenData>(context, listen: false)
@@ -51,7 +51,7 @@ class _DurationPickerState extends State<DurationPicker> {
 
                   Navigator.of(context).pop();
                 },
-                child: Text('ok',style: TextStyle(color: Colors.brown),))
+                child: Text('ok',style: TextStyle(),))
           ],
         ),
       ),
@@ -60,8 +60,8 @@ class _DurationPickerState extends State<DurationPicker> {
 
   void _initializeNumberPickers() {
     hours = new NumberPicker.integer(
-      selectedTextStyle: TextStyle(color: Colors.green,fontSize: 30),
-      textStyle: TextStyle(color: Colors.brown),
+      selectedTextStyle: TextStyle(fontSize: 30),
+      textStyle: TextStyle(),
       initialValue: currentHours,
       minValue: 1,
       step: 1,
@@ -73,8 +73,8 @@ class _DurationPickerState extends State<DurationPicker> {
       },
     );
     minutes = new NumberPicker.integer(
-      selectedTextStyle: TextStyle(color: Colors.green,fontSize: 30),
-      textStyle: TextStyle(color: Colors.brown),
+      selectedTextStyle: TextStyle(fontSize: 30),
+      textStyle: TextStyle(),
       initialValue: currentMinutes,
       minValue: 0,
       step: 1,

@@ -28,11 +28,9 @@ class ScheduleTab extends StatefulWidget {
 }
 
 class _ScheduleTabState extends State<ScheduleTab> {
-  Color newcolor = Colors.transparent;
-  Color GoingOnColor = Color(0xffbd9b6a);
-  Color FreePeriodColor = Color(0xff9c8f7c);
-  Color EventColor;
-  Color EventAndClassColor;
+
+
+
 
   DateTime _focusedDay = DateTime.now();
   //ValueNotifier<List<utl.Event>> _selectedEvents;
@@ -122,17 +120,17 @@ class _ScheduleTabState extends State<ScheduleTab> {
       }
     });
     return Scaffold(
-      backgroundColor: Color(0xffF2EFE4),
+
       appBar: AppBar(
         title: Text(
           "Your Schedule",
           style: TextStyle(
-            color: Colors.brown,
+
           ),
         ),
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-        iconTheme: IconThemeData(color: Colors.black),
+
+
+
         elevation: 0,
       ),
       body: !initialized
@@ -143,13 +141,13 @@ class _ScheduleTabState extends State<ScheduleTab> {
               child: Column(
                 children: [
                   Container(
-                    color: newcolor,
+
                     child: TableCalendar(
                       calendarStyle: CalendarStyle(
                           todayDecoration: BoxDecoration(
-                              color: Colors.brown[200], shape: BoxShape.circle),
+                              shape: BoxShape.circle),
                           selectedDecoration: BoxDecoration(
-                              color: Colors.brown, shape: BoxShape.circle)),
+                               shape: BoxShape.circle)),
                       daysOfWeekStyle:
                           DaysOfWeekStyle(decoration: BoxDecoration()),
                       eventLoader: (day) {},
@@ -190,10 +188,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                       });
                     },
                     labels: ['events', 'schedule'],
-                    activeBgColor: Colors.brown,
-                    activeFgColor: Colors.white,
-                    inactiveFgColor: Colors.brown,
-                    inactiveBgColor: Colors.white,
+
                   ),
                   SizedBox(
                     height: 0,
@@ -226,7 +221,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                       width: double.infinity,
                                       height: 300,
                                       child: Card(
-                                          color: Colors.white,
+
                                           semanticContainer: true,
                                           clipBehavior:
                                               Clip.antiAliasWithSaveLayer,
@@ -262,24 +257,20 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                                       Server_Connection_Functions(),
                                                   context: context));
                                         },
-                                        tileColor:
-                                            eventsedRegester[index].favorite
-                                                ? Colors.white
-                                                : Colors.blue,
+
                                         subtitle: Text(
                                           eventsedRegester[index]
                                               .owner
                                               .toString(),
                                           style: TextStyle(
-                                            color: Colors.brown,
+
                                           ),
                                         ),
                                         leading: CircleAvatar(
                                           radius: 22,
-                                          backgroundColor: Colors.black,
+
                                           child: CircleAvatar(
-                                              backgroundColor:
-                                                  Colors.transparent,
+
                                               radius: 20,
                                               child: Container(
                                                 decoration: BoxDecoration(
@@ -293,7 +284,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                         title: Text(
                                           eventsedRegester[index].name,
                                           style: TextStyle(
-                                              color: Colors.brown,
+
                                               fontSize: 19),
                                         )),
                                   )
@@ -302,7 +293,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                             }),
                       ),
                   if (!initialized) Center(child
-                      : CircularProgressIndicator(backgroundColor: Colors.white,)),
+                      : CircularProgressIndicator()),
                   if (initialized)
                     if (events0Schedule1 == 1)
                       if (lectures.isEmpty)
@@ -349,31 +340,27 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                                     border: Border(
                                                     left: BorderSide(
                                                         width: 8,
-                                                        color:
-                                                            Colors.lightGreen),
+                                                       ),
                                                   ))
                                                 : BoxDecoration(
                                                     border: Border(
                                                     left: BorderSide(
                                                         width: 8,
-                                                        color: Colors.brown),
+                                                        ),
                                                     right: happeningNow
                                                         ? BorderSide(
                                                             width: 2,
-                                                            color:
-                                                                Colors.purple)
+                                                            )
                                                         : BorderSide(width: 0),
                                                     top: happeningNow
                                                         ? BorderSide(
                                                             width: 2,
-                                                            color:
-                                                                Colors.purple)
+                                                            )
                                                         : BorderSide(width: 0),
                                                     bottom: happeningNow
                                                         ? BorderSide(
                                                             width: 2,
-                                                            color:
-                                                                Colors.purple)
+                                                            )
                                                         : BorderSide(width: 0),
                                                   )),
                                             child: ListTile(
@@ -402,28 +389,22 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                                         ],
                                                       ),
                                                 subtitle: Text('AP102'),
-                                                tileColor: lectures[index].free
-                                                    ? Colors.white
-                                                    : happeningNow
-                                                        ? Colors.white
-                                                        : Colors.white,
+
                                                 title: lectures[index].free
                                                     ? Text(
                                                         'FREE',
                                                         style: TextStyle(
-                                                            color: Colors
-                                                                .lightGreen),
+                                                            ),
                                                       )
                                                     : Text(
                                                         lectures[index].name,
                                                         style: TextStyle(
-                                                            color:
-                                                                FreePeriodColor),
+                                                           ),
                                                       ),
                                                 trailing: Text(
                                                   '$length hour',
                                                   style: TextStyle(
-                                                      color: Colors.brown,
+
                                                       fontSize: 20,
                                                       fontWeight:
                                                           FontWeight.normal),
@@ -444,7 +425,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   //       showCurrentTimeIndicator: true,
                   //       maxDate: DateTime.now().add(Duration(days: 10)),
                   //       minDate: DateTime.now().subtract(Duration(days: 10)),
-                  //       todayHighlightColor: Colors.amber[800],
+                  //       todayHighlight: s.amber[800],
                   //       showNavigationArrow: true,
                   //       initialDisplayDate: DateTime.now(),
                   //       view: CalendarView.month,
@@ -523,10 +504,10 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-//       backgroundColor: Colors.grey[100],
+//       background: s.grey
 //       appBar: AppBar(
 //         automaticallyImplyLeading: false,
-//         backgroundColor: Colors.black,
+//
 //         title: Text('Flutter Dynamic Event Calendar'),
 //       ),
 //       body: SingleChildScrollView(
@@ -538,19 +519,19 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //               initialCalendarFormat: CalendarFormat.week,
 //               calendarStyle: CalendarStyle(
 //                   canEventMarkersOverflow: true,
-//                   todayColor: Colors.orange,
-//                   selectedColor: Theme.of(context).primaryColor,
+//                   today: s.orange,
+//                   selected: Theme.of(context).primary,
 //                   todayStyle: TextStyle(
 //                       fontWeight: FontWeight.bold,
 //                       fontSize: 18.0,
-//                       color: Colors.white)),
+//                       ),
 //               headerStyle: HeaderStyle(
 //                 centerHeaderTitle: true,
 //                 formatButtonDecoration: BoxDecoration(
-//                   color: Colors.orange,
+//                   color: s.orange,
 //                   borderRadius: BorderRadius.circular(20.0),
 //                 ),
-//                 formatButtonTextStyle: TextStyle(color: Colors.white),
+//                 formatButtonTextStyle: TextStyle(,
 //                 formatButtonShowsNext: false,
 //               ),
 //               startingDayOfWeek: StartingDayOfWeek.monday,
@@ -564,21 +545,21 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                     margin: const EdgeInsets.all(4.0),
 //                     alignment: Alignment.center,
 //                     decoration: BoxDecoration(
-//                         color: Theme.of(context).primaryColor,
+//                         color: Theme.of(context).primary,
 //                         borderRadius: BorderRadius.circular(10.0)),
 //                     child: Text(
 //                       date.day.toString(),
-//                       style: TextStyle(color: Colors.white),
+//
 //                     )),
 //                 todayDayBuilder: (context, date, events) => Container(
 //                     margin: const EdgeInsets.all(4.0),
 //                     alignment: Alignment.center,
 //                     decoration: BoxDecoration(
-//                         color: Colors.orange,
+//                         color: s.orange,
 //                         borderRadius: BorderRadius.circular(10.0)),
 //                     child: Text(
 //                       date.day.toString(),
-//                       style: TextStyle(color: Colors.white),
+//
 //                     )),
 //               ),
 //               calendarController: _controller,
@@ -590,12 +571,12 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                 width: MediaQuery.of(context).size.width/2,
 //                 decoration: BoxDecoration(
 //                     borderRadius: BorderRadius.circular(30),
-//                     color: Colors.white,
-//                     border: Border.all(color: Colors.grey)
+//
+//                     border: Border.all(color: s.grey)
 //                 ),
 //                 child: Center(
 //                     child: Text(event,
-//                       style: TextStyle(color: Colors.blue,
+//                       style: TextStyle(
 //                           fontWeight: FontWeight.bold,fontSize: 16),)
 //                 ),
 //               ),
@@ -604,7 +585,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //         ),
 //       ),
 //       floatingActionButton: FloatingActionButton(
-//         backgroundColor: Colors.black,
+//
 //         child: Icon(Icons.add),
 //         onPressed: _showAddDialog,
 //       ),
@@ -615,14 +596,14 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //     await showDialog(
 //         context: context,
 //         builder: (context) => AlertDialog(
-//           backgroundColor: Colors.white70,
+//           background: s.white70,
 //           title: Text("Add Events"),
 //           content: TextField(
 //             controller: _eventController,
 //           ),
 //           actions: <Widget>[
 //             FlatButton(
-//               child: Text("Save",style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),
+//               child: Text("Save",style: TextStyle(fontWeight: FontWeight.bold),),
 //               onPressed: () {
 //                 if (_eventController.text.isEmpty) return;
 //                 setState(() {
@@ -662,20 +643,20 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                                       scf: Server_Connection_Functions(),
 //                                       context: context));
 //                             },
-//                             tileColor: eventsedRegester[index].favorite
-//                                 ? Colors.white70
-//                                 : Colors.blue,
+//                             tile: eventsedRegester[index].favorite
+//                                 ? s.white70
+//                                 : s.blue,
 //                             subtitle: Text(
 //                               eventsedRegester[index].owner.toString(),
 //                               style: TextStyle(
-//                                 color: Colors.brown,
+//
 //                               ),
 //                             ),
 //                             leading: CircleAvatar(
 //                               radius: 22,
-//                               backgroundColor: Colors.black,
+//
 //                               child: CircleAvatar(
-//                                   backgroundColor: Colors.transparent,
+//
 //                                   radius: 20,
 //                                   child: Container(
 //                                     decoration: BoxDecoration(
@@ -689,7 +670,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                             title: Text(
 //                               eventsedRegester[index].name,
 //                               style: TextStyle(
-//                                   color: Colors.brown, fontSize: 19),
+//                                    fontSize: 19),
 //                             ),
 //                           ),
 //                         ),

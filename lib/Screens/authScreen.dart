@@ -22,7 +22,7 @@ class _AuthScreenState extends State<AuthScreen> {
   PlusAnimation _plusAnimation;
   static const double width = 500;
   static const double height = 200;
-  Color newcolor = Colors.transparent;
+
 
   Artboard _riveArtboard;
   @override
@@ -65,7 +65,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
-                    color: Colors.amber),
+                    ),
               ),
               margin: EdgeInsets.only(top: 60, bottom: 20),
             ),
@@ -77,7 +77,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 child: CupertinoTextFormFieldRow(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+
                   ),
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                   controller: email,
@@ -107,7 +107,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
 
                 decoration: BoxDecoration(
-                  color: Colors.white,
+
                 ),
                 maxLength: 20,
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -135,7 +135,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 child: CupertinoTextFormFieldRow(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+
                   ),
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                   controller: pswd,
@@ -163,7 +163,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 child: CupertinoTextFormFieldRow(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+
                   ),
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                   controller: pswd2,
@@ -195,7 +195,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 child: CupertinoTextFormFieldRow(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+
                   ),
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                   controller: code,
@@ -223,7 +223,7 @@ class _AuthScreenState extends State<AuthScreen> {
             //     autovalidateMode: AutovalidateMode.onUserInteraction,
             //     maxLength: 6,
             //     decoration: BoxDecoration(
-            //       color: Colors.white,
+            //
             //     ),
             //     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             //     controller: otp,
@@ -265,8 +265,8 @@ class _AuthScreenState extends State<AuthScreen> {
                   child: Text(
                     obscureText ? 'show password' : 'hide password',
                     style: TextStyle(
-                        color: Colors.amber,
-                        backgroundColor: Color(0xffF2EFE4)),
+
+                        ),
                   )),
             ),
             //    if (!signUpOtpStep)
@@ -282,22 +282,20 @@ class _AuthScreenState extends State<AuthScreen> {
                     },
                     child: Text(
                       signingUp ? 'or log in' : 'or signup',
-                      style: TextStyle(
-                          color: Colors.amber,
-                          backgroundColor: Color(0xffF2EFE4)),
+
                     )),
               ),
             Padding(
               padding: EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
               child: ElevatedButton(
                   style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(Colors.amber),
+
                     enableFeedback: true,
                     // elevation: MaterialStateProperty.all(0),XXXXXXXXXXXXXXXXXXXXXXXXXXX
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6.0),
                     )),
-                    backgroundColor: MaterialStateProperty.all(Colors.amber),
+
                   ),
                   onPressed: () async {
                     if (formGlobalKey.currentState.validate() && !waiting) {

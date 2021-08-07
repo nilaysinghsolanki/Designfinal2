@@ -51,20 +51,20 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
   void _showPicker(BuildContext context, num ratio) {
     showModalBottomSheet(
-        backgroundColor: Colors.transparent,
+
         elevation: 0,
-        barrierColor: Colors.black12,
+
         context: context,
         builder: (BuildContext bc) {
           return SafeArea(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.blueGrey[50],
+
                 borderRadius: BorderRadius.circular(11),
               ),
               padding: EdgeInsets.symmetric(
                   vertical: 10 * ratio, horizontal: 22 * ratio),
-//color: Colors.cyan,
+//
               margin: EdgeInsets.only(
                 top: 20 * ratio,
                 left: 15 * ratio,
@@ -76,12 +76,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   new ListTile(
                       leading: new Icon(
                         Icons.photo_library,
-                        color: Colors.blueGrey[700],
+
                       ),
                       title: new Text(
                         'Photos',
                         style: TextStyle(
-                            color: Colors.blueGrey[900],
+
                             fontStyle: FontStyle.normal,
                             fontSize: 15,
                             fontWeight: FontWeight.w400),
@@ -94,11 +94,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   new ListTile(
                     leading: new Icon(
                       Icons.photo_camera,
-                      color: Colors.blueGrey[700],
+
                     ),
                     title: new Text('Camera',
                         style: TextStyle(
-                            color: Colors.blueGrey[900],
+
                             fontStyle: FontStyle.normal,
                             fontSize: 15,
                             fontWeight: FontWeight.w400)),
@@ -156,12 +156,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
     //     Provider.of<TabsScreenContext>(context, listen: false).get();
     var data = Provider.of<AddEventScreenData>(context, listen: true);
     return Scaffold(
-      backgroundColor: Colors.brown,
+
       persistentFooterButtons: [
 
         ElevatedButton.icon(
             style:
-                ElevatedButton.styleFrom(primary: Colors.white, elevation: 0),
+                ElevatedButton.styleFrom( elevation: 0),
             onPressed: () async {
 
               print('1');
@@ -212,17 +212,17 @@ class _AddEventScreenState extends State<AddEventScreen> {
             },
             icon: Icon(
               Icons.save,
-              color: Colors.brown,
+
             ),
             label: waiting
                 ? CircularProgressIndicator()
                 : Text(
                     'save',
-                    style: TextStyle(color: Colors.brown),
+
                   ))
       ],
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+
         title: Text(type == 1
             ? 'add event 🙂'
             : type == 2
@@ -231,7 +231,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
       ),
       body: Container(
 
-        color: Color(0xfff2efe4),
+
 
         child: SingleChildScrollView(
           child: Column(
@@ -251,11 +251,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
                 elevation: 0,
-                primary: Colors.white,
-                side: BorderSide(color: Colors.brown, width: 2)),
+
+                side: BorderSide( width: 2)),
             child: Text(
               'Pick A Date',
-              style: TextStyle(color: Colors.brown),
+
             ),
             autofocus: true,
             clipBehavior: Clip.hardEdge,
@@ -271,8 +271,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
                 elevation: 0,
-                primary: Colors.white,
-                side: BorderSide(color: Colors.brown, width: 2)),
+
+                side: BorderSide( width: 2)),
             onPressed: () async {
               timeOfDay = await showTimePicker(
                 context: context,
@@ -282,7 +282,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
             },
             child: Text(
               "startingTime?",
-              style: TextStyle(color: Colors.brown),
+
             ),
           ),
           Container(
@@ -293,7 +293,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
             ),
             child: ListTile(
               leading: Icon(Icons.timelapse),
-              tileColor: Colors.white,
+
               title: Text('Duration?'),
               trailing: Text('${data.getHours()}h ${data.getMinutes()}min'),
               onTap: () {
@@ -307,7 +307,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
           ),
           // ListTile(
           //   leading: Icon(Icons.people),
-          //   tileColor: Colors.blue[200],
+          //   tile: s.blue[200],
           //   title: Text('owners'),
           //   trailing: Text('${data.getOwners()}'),
           //   onTap: () {
@@ -322,35 +322,32 @@ class _AddEventScreenState extends State<AddEventScreen> {
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: Card(
               elevation: 0,
-              color: Colors.transparent,
+
               child: TextField(
                 onChanged:(value){
                   Somerandomtext=value;
                 },
                 controller: name,
-                  style: TextStyle(color: Colors.brown, fontSize: 30),
-                  cursorColor: Colors.brown,
+                  style: TextStyle( fontSize: 30),
+
                   cursorHeight: 35,
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: Colors.black26, width: 4),
+                        BorderSide( width: 4),
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: Colors.black26, width: 3),
+                        BorderSide( width: 3),
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       labelText: "Name of the event",
                       helperText: 'Keep it short, this is just a beta.',
-                      hintStyle: TextStyle(color: Colors.black26),
-                      labelStyle:
-                      TextStyle(color: Colors.brown, fontSize: 30),
-                      hoverColor: Colors.brown,
-                      fillColor: Colors.white,
 
-                      focusColor: Colors.white),
+                      labelStyle:
+                      TextStyle( fontSize: 30),
+                      ),
                   ),
             ),
           ),
@@ -358,31 +355,29 @@ class _AddEventScreenState extends State<AddEventScreen> {
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: Card(
               elevation: 0,
-              color: Colors.transparent,
+
               child: TextField(
                 controller: description,
-                  style: TextStyle(color: Colors.brown, fontSize: 30),
-                  cursorColor: Colors.brown,
+                  style: TextStyle( fontSize: 30),
+
                   cursorHeight: 35,
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: Colors.black26, width: 4),
+                        BorderSide( width: 4),
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: Colors.black26, width: 3),
+                        BorderSide( width: 3),
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       labelText: "Description",
                       helperText: 'Whats it about?',
-                      hintStyle: TextStyle(color: Colors.black26),
-                      labelStyle:
-                      TextStyle(color: Colors.brown, fontSize: 30),
-                      hoverColor: Colors.brown,
 
-                      focusColor: Colors.white),
+                      labelStyle:
+                      TextStyle( fontSize: 30),
+                     ),
 
               ),
             ),
@@ -392,31 +387,29 @@ class _AddEventScreenState extends State<AddEventScreen> {
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: Card(
               elevation: 0,
-              color: Colors.transparent,
+
               child: TextField(
                 controller: whatsInItForYou,
-                  style: TextStyle(color: Colors.brown, fontSize: 30),
-                  cursorColor: Colors.brown,
+                  style: TextStyle( fontSize: 30),
+
                   cursorHeight: 35,
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: Colors.black26, width: 4),
+                        BorderSide( width: 4),
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: Colors.black26, width: 3),
+                        BorderSide( width: 3),
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       labelText: "Incentives",
                       helperText: "What's in it for students",
-                      hintStyle: TextStyle(color: Colors.black26),
-                      labelStyle:
-                      TextStyle(color: Colors.brown, fontSize: 30),
-                      hoverColor: Colors.brown,
 
-                      focusColor: Colors.white),
+                      labelStyle:
+                      TextStyle( fontSize: 30),
+                     ),
 
                   ),
             ),
@@ -426,31 +419,29 @@ class _AddEventScreenState extends State<AddEventScreen> {
             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: Card(
               elevation: 0,
-              color: Colors.transparent,
+
               child: TextField(
                 controller: link,
-                  style: TextStyle(color: Colors.brown, fontSize: 30),
-                  cursorColor: Colors.brown,
+                  style: TextStyle( fontSize: 30),
+
                   cursorHeight: 35,
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: Colors.black26, width: 4),
+                        BorderSide( width: 4),
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: Colors.black26, width: 3),
+                        BorderSide( width: 3),
                         borderRadius: BorderRadius.circular(25.0),
                       ),
                       labelText: "link to more details/website/meeting",
 
-                      hintStyle: TextStyle(color: Colors.black26),
-                      labelStyle:
-                      TextStyle(color: Colors.brown, fontSize: 20),
-                      hoverColor: Colors.brown,
 
-                      focusColor: Colors.white),
+                      labelStyle:
+                      TextStyle( fontSize: 20),
+                     ),
                   ),
             ),
           ),

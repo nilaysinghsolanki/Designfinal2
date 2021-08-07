@@ -9,7 +9,7 @@ class Drawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        color: Colors.amber,
+
         padding: EdgeInsets.only(top: statusBarHeight),
         child: Column(
           children: [
@@ -21,7 +21,7 @@ class Drawer extends StatelessWidget {
                         '${Provider.of<UsernameData>(context, listen: false).username[0]}'),
                     leading: Icon(
                       Icons.account_circle,
-                      color: Colors.blueGrey[900],
+
                     ),
                   ),
                   ListTile(
@@ -43,7 +43,7 @@ class Drawer extends StatelessWidget {
                       label: Text('logout'))
                 ],
               ),
-              color: Colors.white,
+
             )
           ],
         ),

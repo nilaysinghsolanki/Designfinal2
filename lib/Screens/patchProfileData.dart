@@ -109,11 +109,11 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
     return !initialized
         ? CircularProgressIndicator.adaptive()
         : Scaffold(
-            backgroundColor: Colors.brown,
+
             persistentFooterButtons: [
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
+
                     elevation: 0,
                   ),
                   onPressed: () async {
@@ -296,11 +296,11 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                       ? CircularProgressIndicator()
                       : Text(
                           'save and next',
-                          style: TextStyle(color: Colors.brown),
+                          style: TextStyle(),
                         ))
             ],
             appBar: AppBar(
-              backgroundColor: Colors.transparent,
+
               title: Text('ENTER DETAILS 2nd time'),
             ),
             body: Container(
@@ -329,7 +329,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                         child: CupertinoTextFormFieldRow(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+
                           ),
                           padding:
                               EdgeInsets.symmetric(vertical: 10, horizontal: 5),

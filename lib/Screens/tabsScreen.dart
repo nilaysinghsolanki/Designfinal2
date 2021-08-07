@@ -140,7 +140,7 @@ class _TabsScreenState extends State<TabsScreen> {
           statusBarHeight: statusBarHeight,
         ),
       ),
-      backgroundColor: Colors.white,
+
       body: Stack(children: [
         _pages[_selectedPageIndex]['page'],
         Positioned(
@@ -156,40 +156,38 @@ class _TabsScreenState extends State<TabsScreen> {
         // type: BottomNavigationBarType.shifting,//with shifting..style items separatly
         selectedFontSize: 15, unselectedFontSize: 10,
         currentIndex: _selectedPageIndex, //WHICH TAB IS SELECTED/HIGHLIGHTED
-        unselectedItemColor:
-            Colors.white, //grey[300], //Theme.of(context).canvasColor,
-        selectedItemColor: Colors.amber,
+
         onTap: _selectPage, //flutter will automaticlly give 'index' of the tab
-        backgroundColor: Theme.of(context).accentColor,
+
         items: [
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.home_repair_service_sharp),
-            backgroundColor: Colors.black,
+
             icon: Icon(Icons.home_repair_service_sharp),
             label: '0',
           ),
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.calendar_today_sharp),
-            backgroundColor: Colors.black,
+
             icon: Icon(Icons.calendar_today_sharp),
             label: '1',
           ),
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.home_rounded),
-            backgroundColor: Colors.blueGrey[900],
+
             icon: Icon(Icons.home_rounded),
             label: 'HOME',
           ),
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.people_outline),
-            backgroundColor: Colors.black,
+
             icon: Icon(Icons.people_outline),
             label: '3',
           ),
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.location_on_rounded),
-            backgroundColor: Colors.black,
-            //  backgroundColor: Theme.of(context).primaryColor,//with shifting
+
+            //  background: Theme.of(context).primary,//with shifting
             icon: Icon(Icons.location_on_rounded),
             label: '4',
           ),

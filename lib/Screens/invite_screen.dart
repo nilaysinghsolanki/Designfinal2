@@ -20,9 +20,9 @@ class _InviteScreenState extends State<InviteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+
         title: Text('invite friends'),
       ),
       body: Container(decoration: BoxDecoration(
@@ -36,7 +36,7 @@ class _InviteScreenState extends State<InviteScreen> {
                   child: CupertinoTextFormFieldRow(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+
                     ),
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
                     controller: email,
@@ -59,7 +59,7 @@ class _InviteScreenState extends State<InviteScreen> {
               if (respCame) Text(resp.toString()),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.white ,
+
                       elevation: 0
                   ),
                   onPressed: () async {
@@ -76,9 +76,9 @@ class _InviteScreenState extends State<InviteScreen> {
                   },
                   child: waiting
                       ? CircularProgressIndicator(
-                          backgroundColor: Colors.amber,
+
                         )
-                      : Text('invite',style: TextStyle(color: Colors.brown),))
+                      : Text('invite',style: TextStyle(),))
             ],
           ),
         ),

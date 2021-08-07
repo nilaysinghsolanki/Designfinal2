@@ -75,14 +75,15 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
   Widget build(BuildContext context) {
     return waiting
         ? Scaffold(
-            backgroundColor: Colors.cyan[200],
+
             body: Center(
               child: FadingText('Loading...'),
             ),
           )
         : Scaffold(
             floatingActionButton: FloatingActionButton.extended(
-              backgroundColor: Colors.amber,
+
+
               onPressed: () async {
                 BuildContext bc =
                     Provider.of<MaterialNavigatorKey>(context, listen: false)
@@ -105,22 +106,22 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
               label: Text(
                 _eventDetails.registered ? 'registered' : 'register',
                 style: TextStyle(
-                  color:
-                      _eventDetails.registered ? Colors.redAccent : Colors.blue,
+
+
                 ),
               ),
               icon: Icon(
                 _eventDetails.registered
                     ? Icons.favorite
                     : Icons.favorite_border,
-                color:
-                    _eventDetails.registered ? Colors.redAccent : Colors.blue,
+
+
               ),
             ),
-            backgroundColor: Colors.cyan[100],
+
             key: _scaffoldKey,
             appBar: AppBar(
-              backgroundColor: Colors.cyan,
+
               elevation: 3,
               title: Text(
                 '${_eventDetails.name}',
@@ -140,7 +141,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Card(
-                      color: Color(0xffF2EFE4), // Colors.cyan,
+                       // s.cyan,
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                         padding:
@@ -156,7 +157,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                             //   stackTrace,
                             // );
                             return Card(
-                              color: Colors.cyan,
+
                               child: Container(
                                 margin: EdgeInsets.symmetric(
                                     vertical: 11, horizontal: 4),
@@ -170,7 +171,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                                     ),
                                     Text('😢 Can\'t load image ',
                                         style: TextStyle(
-                                            color: Colors.grey[800],
+
                                             fontWeight: FontWeight.w900,
                                             fontStyle: FontStyle.normal,
                                             fontFamily: 'Open Sans',
@@ -186,7 +187,6 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                     Row(
                       children: [
                         Card(
-                          color: Colors.amber[100],
                           child: Container(
                             margin:
                                 EdgeInsets.symmetric(vertical: 11, horizontal: 4),
@@ -194,7 +194,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                                 vertical: 11, horizontal: 44),
                             child: Text('Date',
                                 style: TextStyle(
-                                    color: Colors.grey[800],
+
                                     fontWeight: FontWeight.w900,
                                     fontStyle: FontStyle.italic,
                                     fontFamily: 'Open Sans',
@@ -203,7 +203,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                         ),
                         Card(
                           /////////////////DATE
-                          color: Colors.amber[100],
+
                           child: Container(
                             margin:
                                 EdgeInsets.symmetric(vertical: 11, horizontal: 4),
@@ -212,7 +212,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                             child: Text(
                                 '${_eventDetails.dateTime.day} / ${_eventDetails.dateTime.month} / ${_eventDetails.dateTime.year}',
                                 style: TextStyle(
-                                    color: Colors.grey[800],
+
                                     fontWeight: FontWeight.w900,
                                     fontStyle: FontStyle.italic,
                                     fontFamily: 'Open Sans',
@@ -223,7 +223,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                     ),
                     Card(
                       /////////////////DESCRIPTION
-                      color: Color(0xffF2EFE4), // Colors.redAccent[100],
+                       // s.redAccent
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                         padding:
@@ -240,7 +240,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                                       .toString()
                                       .indexOf('~\$')),
                           style: TextStyle(
-                              color: Colors.blueGrey[800],
+
                               fontWeight: FontWeight.w900,
                               fontStyle: FontStyle.italic,
                               fontFamily: 'Open Sans',
@@ -251,7 +251,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                     if (_eventDetails.description.toString().indexOf('~\$') != -1)
                       Card(
                         //////////WHATSINIT
-                        color: Color(0xffF2EFE4), // Colors.redAccent[100],
+                         // s.redAccent
                         child: Container(
                           margin:
                               EdgeInsets.symmetric(vertical: 11, horizontal: 4),
@@ -277,7 +277,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                                         .toString()
                                         .indexOf('\$~')),
                             style: TextStyle(
-                                color: Colors.black,
+
                                 fontWeight: FontWeight.w900,
                                 fontStyle: FontStyle.italic,
                                 fontFamily: 'Open Sans',
@@ -288,7 +288,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                     if (_eventDetails.description.toString().indexOf('\$~') != -1)
                       Card(
                         ////////////LINK
-                        color: Color(0xffF2EFE4), // Colors.redAccent[100],
+                         // s.redAccent
                         child: Container(
                           margin:
                               EdgeInsets.symmetric(vertical: 11, horizontal: 4),
@@ -321,7 +321,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
 
                     Card(
                       ////////////REGISTERED PEOPLE
-                      color: Colors.redAccent[100],
+
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                         padding:
@@ -329,7 +329,7 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                         child: Text(
                           'People registered  ${_eventDetails.count.toString()}',
                           style: TextStyle(
-                              color: Colors.blueGrey[800],
+
                               fontWeight: FontWeight.w900,
                               fontStyle: FontStyle.italic,
                               fontFamily: 'Open Sans',
@@ -405,9 +405,9 @@ class _EventsDetailScreenState extends State<EventsDetailScreen> {
                               _eventDetails.registered = registered;
                             });
                         },
-                        tileColor: _eventDetails.registered
-                            ? Colors.redAccent
-                            : Colors.blue,
+                        tile: _eventDetails.registered
+                            ? s.redAccent
+                            : s.blue,
                         title: Text(
                             'registered ${_eventDetails.registered.toString()}'),
                       ),
