@@ -50,12 +50,14 @@ var event_name;
 var event_description;
 bool hostorprofile=false;
 
-
 List<Widget> Events = [];
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 /////////////////////COLORS
+Color newcolor = Colors.transparent;
+TextStyle dark_theme_text_style = TextStyle(color: Colors.white);
+Color tilecolor = Colors.white;
 
-
+TextStyle general_text_style = TextStyle(color: Colors.brown);
 ////////////////////////////PAGESNAVIGATION
 bool _events_pressed = false;
 bool _internship_pressed=false;
@@ -76,7 +78,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context1) {
-     ThemeData DarkTheme=ThemeData.dark();
 
     return MultiProvider(
       providers: [
@@ -97,8 +98,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: EmailAndUsernameData())
       ],
       child: MaterialApp(
-        theme: DarkTheme,
-
         debugShowCheckedModeBanner: false,
         navigatorKey: materialNavigatorKey, // GlobalKey()
 
@@ -155,12 +154,12 @@ class _HomeScreenState extends State<HomeScreen> {
             if (result) Navigator.of(_).pushNamed('/AuthScreen');
           },
           leading: CircleAvatar(
-            child: Icon(Icons.logout, ),
-
+            child: Icon(Icons.logout, color: Colors.brown),
+            backgroundColor: Color(0xffF2EFE4),
           ),
           title: Text(
             "log out",
-
+            style: general_text_style,
           ),
         ),
       ),
@@ -168,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-
+        color: newcolor,
       ),
       child: Builder(
         builder: (_) => ListTile(
@@ -177,13 +176,13 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.of(_).pushNamed('/patchProfileScreen');
           },
           leading: CircleAvatar(
-
+            backgroundColor: Colors.brown,
           ),
           title: Text(
             "edit profile",
             style: TextStyle(
-
-
+                color: Colors.brown,
+                backgroundColor: Color(0xffF2EFE4),
                 fontSize: 20),
           ),
         ),
@@ -191,21 +190,21 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
     Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), ),
+          borderRadius: BorderRadius.circular(20), color: newcolor),
       child: Builder(
         builder: (_) => ListTile(
           onTap: () {
             Navigator.of(_).pushNamed('/schedule');
           },
           leading: CircleAvatar(
-            child: Icon(Icons.calendar_today, ),
-
+            child: Icon(Icons.calendar_today, color: Colors.brown),
+            backgroundColor: Color(0xffF2EFE4),
           ),
           title: Text(
             "Schedule",
             style: TextStyle(
-
-
+                color: Colors.brown,
+                backgroundColor: Color(0xffF2EFE4),
                 fontSize: 20),
           ),
         ),
@@ -217,70 +216,70 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.of(_).pushNamed('inviteScreen');
         },
         leading: CircleAvatar(
-          child: Icon(Icons.face_retouching_natural, ),
-
+          child: Icon(Icons.face_retouching_natural, color: Colors.brown),
+          backgroundColor: Color(0xffF2EFE4),
         ),
         title: Text(
           "invite friends",
           style: TextStyle(
-
-
+              color: Colors.brown,
+              backgroundColor: Color(0xffF2EFE4),
               fontSize: 20),
         ),
       ),
     ),
     ListTile(
       leading: CircleAvatar(
-        child: Icon(Icons.motorcycle_rounded, ),
-
+        child: Icon(Icons.motorcycle_rounded, color: Colors.brown),
+        backgroundColor: Color(0xffF2EFE4),
       ),
       title: Text(
         "Catch-A-Ride",
         style: TextStyle(
-
-
+            color: Colors.brown,
+            backgroundColor: Color(0xffF2EFE4),
             fontSize: 20),
       ),
     ),
     ListTile(
-
+      tileColor: newcolor,
       leading: CircleAvatar(
-        child: Icon(Icons.report, ),
-
+        child: Icon(Icons.report, color: Colors.brown),
+        backgroundColor: Color(0xffF2EFE4),
       ),
       title: Text(
         "Emergency",
         style: TextStyle(
-
-
+            color: Colors.brown,
+            backgroundColor: Color(0xffF2EFE4),
             fontSize: 20),
       ),
     ),
     ListTile(
-
+      tileColor: newcolor,
       leading: CircleAvatar(
-        child: Icon(Icons.work, ),
-
+        child: Icon(Icons.work, color: Colors.brown),
+        backgroundColor: Color(0xffF2EFE4),
       ),
       title: Text(
         "Active Projects",
         style: TextStyle(
-
-
+            color: Colors.brown,
+            backgroundColor: Color(0xffF2EFE4),
             fontSize: 20),
       ),
     ),
     Container(
-
+      color: newcolor,
       alignment: Alignment.bottomCenter,
       child: ListTile(
         leading: CircleAvatar(
-
+          backgroundColor: Colors.green,
         ),
-        title: Text("I have a B-Plan , for selling DTU"),
-
+        title: Text("I have a B-Plan , for selling DTU",
+            style: general_text_style),
         subtitle:
-            Text("-Every Entrepreneur at E-cell"),
+            Text("-Every Entrepreneur at E-cell", style: general_text_style),
       ),
     )
   ];
@@ -320,7 +319,7 @@ class _HomePageState extends State<HomePage> {
   bool initialized = false;
   PlusAnimation _plusAnimation;
 
-
+  Color newcolor = Colors.transparent;
 
   Artboard _riveArtboard;
   List<Event> evesForSchedule = [];
@@ -429,7 +428,7 @@ class _HomePageState extends State<HomePage> {
                   useArtboardSize: true,
                 )
                 : ListTile(
-                    trailing: Text("Projects"),
+                    trailing: Text("Projects", style: general_text_style),
                   ),
           ),
         ],
@@ -456,7 +455,7 @@ class _HomePageState extends State<HomePage> {
                                 image: eventfiltered.length!=0?CachedNetworkImageProvider(eventfiltered[itemIndex]
                                     .event_image
                                     .toString()): AssetImage("Assets/newframe.png"))),
-                        child: eventfiltered.length==0?Container(child: Text("No Upcoming events")):Container(),
+                        child: eventfiltered.length==0?Container(child: Text("No Upcoming events")):Container(color: Colors.transparent,),
                       ),
                     );
                   },
@@ -473,7 +472,7 @@ class _HomePageState extends State<HomePage> {
             useArtboardSize: true,
           ),
       ListTile(
-        title: Text("Internship/Job Opportunities"),
+        title: Text("Internship/Job Opportunities", style: general_text_style),
         trailing: Icon(Icons.work_outline),
       ),
     ];
@@ -496,7 +495,7 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),
-
+                  color: Colors.white,
                 ),
                 child: Center(child: ScatteredListtiles[index]),
               ),
@@ -588,13 +587,12 @@ class _TimeTableHomeScreenListTileState
             ? _lecture.free
                 ? GlowingProgressIndicator(child: Text('free time'))
                 : ListTile(
-                    title: Text(_lecture.name),
+                    title: Text(_lecture.name, style: general_text_style),
                     subtitle: Text(
                         lectureStart.toString() +
                             '-' +
                             '${lectureEnd.toString()}',
-                    ),
-
+                        style: general_text_style),
                     trailing: GlowingProgressIndicator(
                       child: Icon(Icons.schedule),
                     ),
@@ -625,12 +623,12 @@ class _AddEventsPageState extends State<AddEventsPage> {
         title: Text(
 
           'new Event',
-          style: TextStyle( fontSize: 30),
+          style: TextStyle(color: Colors.brown, fontSize: 30),
         ),
-
-
+        backgroundColor: newcolor,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
-
+      backgroundColor: newcolor,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -640,28 +638,30 @@ class _AddEventsPageState extends State<AddEventsPage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 0,
-
+                color: newcolor,
                 child: TextField(
-                    style: TextStyle( fontSize: 30),
-
+                    style: TextStyle(color: Colors.brown, fontSize: 30),
+                    cursorColor: Colors.brown,
                     cursorHeight: 35,
                     decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide( width: 4),
+                              BorderSide(color: Colors.black26, width: 4),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide( width: 3),
+                              BorderSide(color: Colors.black26, width: 3),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         labelText: "Name of the event",
                         helperText: 'Keep it short, this is just a beta.',
-
+                        hintStyle: TextStyle(color: Colors.black26),
                         labelStyle:
-                            TextStyle( fontSize: 30),
-                        ),
+                            TextStyle(color: Colors.brown, fontSize: 30),
+                        hoverColor: Colors.brown,
+                        fillColor: newcolor,
+                        focusColor: Colors.white),
                     onChanged: (NameOfEvent) {
                       print("The value entered is : $NameOfEvent");
                       event_name_changed = "$NameOfEvent";
@@ -672,28 +672,30 @@ class _AddEventsPageState extends State<AddEventsPage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 0,
-
+                color: newcolor,
                 child: TextField(
-                    style: TextStyle( fontSize: 30),
-
+                    style: TextStyle(color: Colors.brown, fontSize: 30),
+                    cursorColor: Colors.brown,
                     cursorHeight: 35,
                     decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide( width: 4),
+                              BorderSide(color: Colors.black26, width: 4),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide( width: 3),
+                              BorderSide(color: Colors.black26, width: 3),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         labelText: "Description",
                         helperText: 'Keep it short, this is just a beta.',
-
+                        hintStyle: TextStyle(color: Colors.black26),
                         labelStyle:
-                            TextStyle( fontSize: 30),
-                        ),
+                            TextStyle(color: Colors.brown, fontSize: 30),
+                        hoverColor: Colors.brown,
+                        fillColor: newcolor,
+                        focusColor: Colors.white),
                     onChanged: (DescriptionOfEvent) {
                       print("The value entered is : $DescriptionOfEvent");
                       event_description_channged = "$DescriptionOfEvent";
@@ -701,7 +703,7 @@ class _AddEventsPageState extends State<AddEventsPage> {
               ),
             ),
             FloatingActionButton(
-
+                backgroundColor: Colors.brown,
                 onPressed: () {
                   event_description = event_description_channged;
                   event_name = event_name_changed;
@@ -710,7 +712,7 @@ class _AddEventsPageState extends State<AddEventsPage> {
                     child: ListTile(
                       leading: Icon(
                         FontAwesomeIcons.star,
-
+                        color: Colors.purple,
                       ),
                       title: Text(event_name),
                       subtitle: Text(event_description),
@@ -738,16 +740,16 @@ class _AddToSchedulePageState extends State<AddToSchedulePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      backgroundColor: Color(0xffF2EFE4),
       appBar: AppBar(
         elevation: 0,
         title: Text(
           "Add Event Details",
-          style: TextStyle(),
+          style: TextStyle(color: Colors.brown),
         ),
-
-
-
+        titleTextStyle: TextStyle(color: Colors.black),
+        backgroundColor: Colors.transparent,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -763,28 +765,30 @@ class _AddToSchedulePageState extends State<AddToSchedulePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
                   elevation: 0,
-
+                  color: Colors.transparent,
                   child: TextField(
-                      style: TextStyle( fontSize: 30),
-
+                      style: TextStyle(color: Colors.brown, fontSize: 30),
+                      cursorColor: Colors.brown,
                       cursorHeight: 35,
                       decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide( width: 4),
+                                BorderSide(color: Colors.black26, width: 4),
                             borderRadius: BorderRadius.circular(25.0),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide( width: 3),
+                                BorderSide(color: Colors.black26, width: 3),
                             borderRadius: BorderRadius.circular(25.0),
                           ),
                           labelText: "Name of the event",
                           helperText: 'Keep it short, this is just a beta.',
-
+                          hintStyle: TextStyle(color: Colors.black26),
                           labelStyle:
-                              TextStyle( fontSize: 30),
-                          ),
+                              TextStyle(color: Colors.brown, fontSize: 30),
+                          hoverColor: Colors.brown,
+                          fillColor: newcolor,
+                          focusColor: Colors.white),
                       onChanged: (NameOfEvent) {
                         print("The value entered is : $NameOfEvent");
                         event_name_changed = "$NameOfEvent";
@@ -795,28 +799,30 @@ class _AddToSchedulePageState extends State<AddToSchedulePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
                   elevation: 0,
-
+                  color: newcolor,
                   child: TextField(
-                      style: TextStyle( fontSize: 30),
-
+                      style: TextStyle(color: Colors.brown, fontSize: 30),
+                      cursorColor: Colors.brown,
                       cursorHeight: 35,
                       decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide( width: 4),
+                                BorderSide(color: Colors.black26, width: 4),
                             borderRadius: BorderRadius.circular(25.0),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide( width: 3),
+                                BorderSide(color: Colors.black26, width: 3),
                             borderRadius: BorderRadius.circular(25.0),
                           ),
                           labelText: "Description",
                           helperText: 'Keep it short, this is just a beta.',
-
+                          hintStyle: TextStyle(color: Colors.black26),
                           labelStyle:
-                              TextStyle( fontSize: 30),
-                          ),
+                              TextStyle(color: Colors.brown, fontSize: 30),
+                          hoverColor: Colors.brown,
+                          fillColor: newcolor,
+                          focusColor: Colors.white),
                       onChanged: (DescriptionOfEvent) {
                         print("The value entered is : $DescriptionOfEvent");
                         event_description_channged = "$DescriptionOfEvent";
@@ -824,7 +830,7 @@ class _AddToSchedulePageState extends State<AddToSchedulePage> {
                 ),
               ),
               FloatingActionButton(
-
+                  backgroundColor: Colors.brown,
                   onPressed: () {
                     event_description = event_description_channged;
                     event_name = event_name_changed;
@@ -833,7 +839,7 @@ class _AddToSchedulePageState extends State<AddToSchedulePage> {
                       child: ListTile(
                         leading: Icon(
                           FontAwesomeIcons.star,
-
+                          color: Colors.purple,
                         ),
                         title: Text(event_name),
                         subtitle: Text(event_description),
@@ -864,10 +870,10 @@ class _AddProjectPageState extends State<AddProjectPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
-
+        backgroundColor: newcolor,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
-
+      backgroundColor: newcolor,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -877,28 +883,30 @@ class _AddProjectPageState extends State<AddProjectPage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 0,
-
+                color: newcolor,
                 child: TextField(
-                    style: TextStyle( fontSize: 30),
-
+                    style: TextStyle(color: Colors.brown, fontSize: 30),
+                    cursorColor: Colors.brown,
                     cursorHeight: 35,
                     decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide( width: 4),
+                              BorderSide(color: Colors.black26, width: 4),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide( width: 3),
+                              BorderSide(color: Colors.black26, width: 3),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         labelText: "Name of the event",
                         helperText: 'Keep it short, this is just a beta.',
-
+                        hintStyle: TextStyle(color: Colors.black26),
                         labelStyle:
-                            TextStyle( fontSize: 30),
-                        ),
+                            TextStyle(color: Colors.brown, fontSize: 30),
+                        hoverColor: Colors.brown,
+                        fillColor: newcolor,
+                        focusColor: Colors.white),
                     onChanged: (NameOfEvent) {
                       print("The value entered is : $NameOfEvent");
                       event_name_changed = "$NameOfEvent";
@@ -909,28 +917,30 @@ class _AddProjectPageState extends State<AddProjectPage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 0,
-
+                color: newcolor,
                 child: TextField(
-                    style: TextStyle( fontSize: 30),
-
+                    style: TextStyle(color: Colors.brown, fontSize: 30),
+                    cursorColor: Colors.brown,
                     cursorHeight: 35,
                     decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide( width: 4),
+                              BorderSide(color: Colors.black26, width: 4),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide( width: 3),
+                              BorderSide(color: Colors.black26, width: 3),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         labelText: "Description",
                         helperText: 'Keep it short, this is just a beta.',
-
+                        hintStyle: TextStyle(color: Colors.black26),
                         labelStyle:
-                            TextStyle( fontSize: 30),
-                        ),
+                            TextStyle(color: Colors.brown, fontSize: 30),
+                        hoverColor: Colors.brown,
+                        fillColor: newcolor,
+                        focusColor: Colors.white),
                     onChanged: (DescriptionOfEvent) {
                       print("The value entered is : $DescriptionOfEvent");
                       event_description_channged = "$DescriptionOfEvent";
@@ -940,9 +950,9 @@ class _AddProjectPageState extends State<AddProjectPage> {
             FloatingActionButton(
                 child: Icon(
                   Icons.check,
-
+                  color: Colors.white,
                 ),
-
+                backgroundColor: Colors.brown,
                 onPressed: () {
                   event_description = event_description_channged;
                   event_name = event_name_changed;
@@ -953,7 +963,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
                       child: ListTile(
                         leading: Icon(
                           FontAwesomeIcons.star,
-
+                          color: Colors.purple,
                         ),
                         title: Text(event_name),
                         subtitle: Text(event_description),
@@ -1036,7 +1046,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                           //   stackTrace,
                           // );
                           return Card(
-
+                            color: Colors.cyan,
                             child: Container(
                               margin: EdgeInsets.symmetric(
                                   vertical: 11, horizontal: 4),
@@ -1050,7 +1060,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                   ),
                                   Text('😢 Can\'t load image',
                                       style: TextStyle(
-
+                                          color: Colors.black,
                                           fontStyle: FontStyle.normal,
 
 
@@ -1064,14 +1074,14 @@ class _ProjectsPageState extends State<ProjectsPage> {
                       ),
                     ),
                     Card(
-
+                      color: Colors.redAccent[100],
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                         padding:
                         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                         child: Text('name - ' + data['name'].toString(),
                             style: TextStyle(
-
+                                color: Colors.black,
                                 fontStyle: FontStyle.normal,
 
 
@@ -1080,14 +1090,14 @@ class _ProjectsPageState extends State<ProjectsPage> {
                       ),
                     ),
                     Card(
-
+                      color: Colors.amber[100],
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                         padding:
                         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                         child: Text('roll no. ' + data['roll_no'].toString(),
                             style: TextStyle(
-
+                                color: Colors.black,
                                 fontStyle: FontStyle.normal,
 
 
@@ -1096,14 +1106,14 @@ class _ProjectsPageState extends State<ProjectsPage> {
                       ),
                     ),
                     Card(
-
+                      color: Colors.redAccent[100],
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                         padding:
                         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                         child: Text('Branch ' + data['branch'].toString(),
                             style: TextStyle(
-
+                                color: Colors.black,
                                 fontStyle: FontStyle.normal,
 
 
@@ -1113,14 +1123,14 @@ class _ProjectsPageState extends State<ProjectsPage> {
                     ),
 
                     Card(
-
+                      color: Colors.amber[100],
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                         padding:
                         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                         child: Text('Batch ' + data['batch'].toString(),
                             style: TextStyle(
-
+                                color: Colors.black,
                                 fontStyle: FontStyle.normal,
 
 
@@ -1130,14 +1140,14 @@ class _ProjectsPageState extends State<ProjectsPage> {
                     ),
 
                     Card(
-
+                      color: Colors.redAccent[100],
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                         padding:
                         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                         child: Text('year ' + data['year'].toString(),
                             style: TextStyle(
-
+                                color: Colors.black,
                                 fontStyle: FontStyle.normal,
 
 
@@ -1146,14 +1156,14 @@ class _ProjectsPageState extends State<ProjectsPage> {
                       ),
                     ),
                     Card(
-
+                      color: Colors.redAccent[100],
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
                         padding:
                         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                         child: Text('invited by ' + data['who_sent'].toString(),
                             style: TextStyle(
-
+                                color: Colors.black,
                                 fontStyle: FontStyle.normal,
 
 
@@ -1163,7 +1173,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                     ),
 
                     // Card(
-                    //
+                    //   color: Colors.amber[100],
                     //   child: Container(
                     //     margin:
                     //         EdgeInsets.symmetric(vertical: 11, horizontal: 4),
@@ -1171,7 +1181,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                     //         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                     //     child: Text('roll no. ' + data['roll_no'].toString(),
                     //         style: TextStyle(
-                    //
+                    //             color: Colors.grey[800],
                     //             fontWeight: FontWeight.w900,
                     //             fontStyle: FontStyle.italic,
                     //             fontFamily: 'Open Sans',
@@ -1225,7 +1235,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
     return Expanded(
       child:Container(
         alignment: Alignment.center,
-
+        color: newcolor,
         child: ListView.builder(
           itemCount: 1,
           itemBuilder: (BuildContext context, int index) {
@@ -1274,7 +1284,9 @@ class _InternshipsPageState extends State<InternshipsPage> {
                                             scf: scf,
                                             context: context));
                                   },
-
+                                  tileColor: eventfiltered[index].favorite
+                                      ? Colors.white
+                                      : Colors.white,
                                   subtitle: Text(
                                       eventfiltered[index].owner.toString(),
                                       style: TextStyle(
@@ -1283,7 +1295,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
 
                                   ),
                                   trailing: eventfiltered[index].favorite
-                                      ?Icon(Icons.star,):Icon(Icons.star_border,),
+                                      ?Icon(Icons.star,color: Colors.red,):Icon(Icons.star_border,color: Colors.red,),
                                   leading: TextButton(
                                     onPressed:(){ setState(() {
                                       hostorprofile=true;
@@ -1293,10 +1305,10 @@ class _InternshipsPageState extends State<InternshipsPage> {
                                     ) );},
                                     child: CircleAvatar(
                                       radius: 22,
-
+                                      backgroundColor: Colors.black,
                                       child: CircleAvatar(
 
-
+                                          backgroundColor: Colors.white,
                                           radius: 20,
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -1311,9 +1323,9 @@ class _InternshipsPageState extends State<InternshipsPage> {
                                   title: Text(
                                     eventfiltered[index].name,
                                     style: TextStyle(
-                                         fontSize: 19,fontFamily: 'DancingScript'),
+                                        color: Colors.brown, fontSize: 19,fontFamily: 'DancingScript'),
                                   )),
-                              Divider(height: 20,thickness: 2,),
+                              Divider(height: 20,thickness: 2,color: Colors.brown,),
                             ],
                           );
                         }),
@@ -1345,7 +1357,7 @@ class _EventsPageState extends State<EventsPage> {
   List <Event> eventsedRegester;
   List <String> imagesstring=[];
   List <Event> eventfiltered=[];
-
+Color Shimmy=Color(0xfff2efe4);
 
 
   @override
@@ -1395,7 +1407,7 @@ void dispose() {
     return Expanded(
       child:Container(
         alignment: Alignment.center,
-
+        color: newcolor,
         child: ListView.builder(
           itemCount: 1,
           itemBuilder: (BuildContext context, int index) {
@@ -1419,7 +1431,7 @@ void dispose() {
                                 child: loading?SkeletonContainer.square(
                                   width: 22,
                                   height: 22,
-
+                                  FinalColor: Shimmy,
                                 ):TextButton(
                                   onPressed:(){ setState(() {
                                     hostorprofile=true;
@@ -1429,10 +1441,10 @@ void dispose() {
                                   ) );},
                                   child: CircleAvatar(
                                     radius: 22,
-
+                                    backgroundColor: Colors.black,
                                     child: CircleAvatar(
 
-
+                                        backgroundColor: Colors.white,
                                         radius: 20,
                                         child: !loading?Container(
                                           decoration: BoxDecoration(
@@ -1444,7 +1456,7 @@ void dispose() {
                                         ):SkeletonContainer.square(
                                           width: 100,
                                           height: 20,
-
+                                          FinalColor: Shimmy,
                                         )),
                                   ),
                                 ),
@@ -1466,7 +1478,7 @@ void dispose() {
                             child: loading?SkeletonContainer.square(
                             width: 400,
                             height: 400,
-
+                              FinalColor: Shimmy,
                             ):Container(
                                decoration: BoxDecoration(
                             image: DecorationImage(
@@ -1493,11 +1505,13 @@ void dispose() {
                                             scf: scf,
                                             context: context));
                                   },
-
+                                  tileColor: eventfiltered[index].favorite
+                                      ? Colors.white
+                                      : Colors.white,
                                   subtitle: loading?SkeletonContainer.square(
                                     width: 10,
                                     height: 10,
-
+                                    FinalColor: Shimmy,
                                   ):Text(
                                       "${eventfiltered[index].dateime.day.toString()} .${eventfiltered[index].dateime.month.toString()  }",
                                       style: TextStyle(
@@ -1508,18 +1522,18 @@ void dispose() {
                                   trailing: loading?SkeletonContainer.square(
                                     width: 10,
                                     height: 10,
-
+                                    FinalColor: Shimmy,
                                   ):eventfiltered[index].favorite
-                                      ?Icon(FontAwesomeIcons.solidStar,):Icon(FontAwesomeIcons.star,),
+                                      ?Icon(FontAwesomeIcons.solidStar,color: Colors.red,):Icon(FontAwesomeIcons.star,color: Colors.red,),
 
                                   title: loading?SkeletonContainer.square(
                                     width: 10,
                                     height: 10,
-
+                                    FinalColor: Shimmy,
                                   ):Text(
                                     eventfiltered[index].name,
                                     style: TextStyle(
-                                         fontSize: 19,fontFamily: 'DancingScript'),
+                                        color: Colors.brown, fontSize: 19,fontFamily: 'DancingScript'),
                                   )),
 
                             ],
@@ -1553,17 +1567,17 @@ class _CustomPageState extends State<CustomPage> {
         title: Text(
           'Add Event',
           style: TextStyle(
-
+              color: Colors.black,
               fontStyle: FontStyle.normal,
 
 
               fontFamily: 'DancingScript',
               fontSize: 20),
         ),
-
-
+        backgroundColor: newcolor,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
-
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -1576,28 +1590,30 @@ class _CustomPageState extends State<CustomPage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 0,
-
+                color: newcolor,
                 child: TextField(
-                    style: TextStyle( fontSize: 30),
-
+                    style: TextStyle(color: Colors.brown, fontSize: 30),
+                    cursorColor: Colors.brown,
                     cursorHeight: 35,
                     decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide( width: 4),
+                              BorderSide(color: Colors.black26, width: 4),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide( width: 3),
+                              BorderSide(color: Colors.black26, width: 3),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         labelText: "Name of the event",
                         helperText: 'Keep it short, this is just a beta.',
-
+                        hintStyle: TextStyle(color: Colors.black26),
                         labelStyle:
-                            TextStyle( fontSize: 30),
-                        ),
+                            TextStyle(color: Colors.brown, fontSize: 30),
+                        hoverColor: Colors.brown,
+                        fillColor: newcolor,
+                        focusColor: Colors.white),
                     onChanged: (NameOfEvent) {
                       print("The value entered is : $NameOfEvent");
                       setState(() {
@@ -1610,28 +1626,30 @@ class _CustomPageState extends State<CustomPage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 0,
-
+                color: newcolor,
                 child: TextField(
-                    style: TextStyle( fontSize: 30),
-
+                    style: TextStyle(color: Colors.brown, fontSize: 30),
+                    cursorColor: Colors.brown,
                     cursorHeight: 35,
                     decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide( width: 4),
+                              BorderSide(color: Colors.black26, width: 4),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide( width: 3),
+                              BorderSide(color: Colors.black26, width: 3),
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                         labelText: "Description",
                         helperText: 'Keep it short, this is just a beta.',
-
+                        hintStyle: TextStyle(color: Colors.black26),
                         labelStyle:
-                            TextStyle( fontSize: 30),
-                        ),
+                            TextStyle(color: Colors.brown, fontSize: 30),
+                        hoverColor: Colors.brown,
+                        fillColor: newcolor,
+                        focusColor: Colors.white),
                     onChanged: (DescriptionOfEvent) {
                       print("The value entered is : $DescriptionOfEvent");
                       setState(() {
@@ -1646,14 +1664,20 @@ class _CustomPageState extends State<CustomPage> {
                   label: Text(
                     'save',
                     style: TextStyle(
-
+                        color: (event_name_changed == null ||
+                                event_description_channged == null)
+                            ? Colors.brown[200]
+                            : Colors.white,
                         fontSize: 20),
                   ),
                   icon: Icon(
                     Icons.check,
-
+                    color: (event_name_changed == null ||
+                            event_description_channged == null)
+                        ? Colors.brown[200]
+                        : Colors.white,
                   ),
-
+                  backgroundColor: Colors.brown,
                   onPressed: () {
                     event_description = event_description_channged;
                     event_name = event_name_changed;
@@ -1663,7 +1687,7 @@ class _CustomPageState extends State<CustomPage> {
                         child: ListTile(
                           leading: Icon(
                             FontAwesomeIcons.star,
-
+                            color: Colors.purple,
                           ),
                           title: Text(event_name),
                           subtitle: Text(event_description),
@@ -1672,7 +1696,7 @@ class _CustomPageState extends State<CustomPage> {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         duration: Duration(seconds: 1),
                         content: Text('event saved'),
-
+                        backgroundColor: Colors.brown,
                       ));
                     }
 
@@ -1698,7 +1722,7 @@ class _AddingPageState extends State<AddingPage> {
   PlusAnimation _plusAnimation;
   double width = 500;
   double height = 200;
-
+  Color newcolor = Colors.transparent;
 
   Artboard _riveArtboard;
   void initState() {
@@ -1727,13 +1751,13 @@ class _AddingPageState extends State<AddingPage> {
   void _events_page_function(bool _eventspressed) {
     if (_adding_to_app_pressed == false) {
       if (_events_pressed == true) {
-
+        newcolor = Color(0xfff2efe4);
 
         setState(() {
           _events_pressed = _eventspressed;
         });
-      }
-
+      } else
+        newcolor = Color(0xfff2efe4);
     }
   }
 
@@ -1766,21 +1790,21 @@ class _AddingPageState extends State<AddingPage> {
     List<Icon> myicons = [
       Icon(
         FontAwesomeIcons.star,
-
+        color: Colors.purple,
       ),
       Icon(
         Icons.schedule_outlined,
-
+        color: Colors.black,
       ),
       Icon(
         FontAwesomeIcons.tasks,
-
+        color: Colors.greenAccent,
       ),
     ];
     List<Text> titlelist = [
-      Text("Add to Events"),
-      Text("Add to Schedule"),
-      Text("Share details about Projects"),
+      Text("Add to Events", style: general_text_style),
+      Text("Add to Schedule", style: general_text_style),
+      Text("Share details about Projects", style: general_text_style),
     ];
     List<Text> subtitlelist = [
       Text(
@@ -1803,9 +1827,9 @@ class _AddingPageState extends State<AddingPage> {
             },
             leading: Icon(
               FontAwesomeIcons.star,
-
+              color: Colors.purple,
             ),
-            title: Text("Add to Events"),
+            title: Text("Add to Events", style: general_text_style),
             subtitle: Text(
                 "Update via this feature to let people know the details of any event"),
           ),
@@ -1823,9 +1847,9 @@ class _AddingPageState extends State<AddingPage> {
             },
             leading: Icon(
               Icons.update,
-
+              color: Colors.red,
             ),
-            title: Text("Add to Stories"),
+            title: Text("Add to Stories", style: general_text_style),
             subtitle: Text(
                 "Update about various public events and achievements your society "),
           ),
@@ -1843,9 +1867,9 @@ class _AddingPageState extends State<AddingPage> {
             },
             leading: Icon(
             Icons.work_outline,
-
+              color: Colors.blue,
             ),
-            title: Text("Add to internships/jobs"),
+            title: Text("Add to internships/jobs", style: general_text_style),
             subtitle: Text(
                 "Update via this feature to let people know the details about various internships/Jobs/Projects related opportunities for students"),
           ),
@@ -1862,9 +1886,9 @@ class _AddingPageState extends State<AddingPage> {
       //       },
       //       leading: Icon(
       //         Icons.schedule_outlined,
-      //
+      //         color: Colors.black,
       //       ),
-      //       title: Text("Add to Schedule",
+      //       title: Text("Add to Schedule", style: general_text_style),
       //       subtitle: Text(
       //           "Update your personal schedule with new tasks assigned like self study,sports.etc"),
       //     ),
@@ -1904,7 +1928,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   PlusAnimation _plusAnimation;
   static const double width = 500;
   static const double height = 200;
-
+  Color newcolor = Colors.transparent;
   bool initialized = false;
   Artboard _riveArtboard;
   var scf;
@@ -1968,37 +1992,37 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   void _events_page_function(bool _eventspressed) {
     if (_adding_to_app_pressed == false) {
       if (_events_pressed == true) {
-
+        newcolor = Color(0xfff2efe4);
 
         setState(() {
           _events_pressed = _eventspressed;
         });
-      }
-
+      } else
+        newcolor = Color(0xfff2efe4);
     }
   }
   void _Project_page_function(bool _projectpressed) {
     if (_adding_to_app_pressed == false) {
       if (_project_pressed == true) {
-
+        newcolor = Color(0xfff2efe4);
 
         setState(() {
           _project_pressed = _projectpressed;
         });
-      }
-
+      } else
+        newcolor = Color(0xfff2efe4);
     }
   }
   void _Internship_page_function(bool _internshippressed) {
     if (_adding_to_app_pressed == false) {
       if (_project_pressed == true) {
-
+        newcolor = Color(0xfff2efe4);
 
         setState(() {
           _internship_pressed= _internshippressed;
         });
-      }
-
+      } else
+        newcolor = Color(0xfff2efe4);
     }
   }
 
@@ -2012,13 +2036,13 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
 
     if (_adding_page_active == true) {
       _plusAnimation.start();
-
+      newcolor = Color(0xfff2efe4);
     } else {
       _plusAnimation.reverse();
       if (_events_pressed == true) {
-
+        newcolor = Color(0xfff2efe4);
       } else if (_events_pressed == false) {
-
+        newcolor = Color(0xfff2efe4);
       }
     }
 
@@ -2122,10 +2146,10 @@ storycontinues=true;
                           child: Container(
                             margin: EdgeInsets.all(3),
                             child: CircleAvatar(
-
+                              backgroundColor: Colors.green,
                               radius: 30,
                               child: CircleAvatar(
-
+                                backgroundColor: Colors.white,
                                 radius: 27,
                                 backgroundImage: storiesFiltered.isNotEmpty?CachedNetworkImageProvider(
 
@@ -2158,7 +2182,7 @@ storycontinues=true;
                 Container(
                   padding: EdgeInsets.all(0),
                   width: width,
-
+                  color: Colors.transparent,
                   child: _riveArtboard == null
                       ? const SizedBox()
                       : GestureDetector(
@@ -2258,7 +2282,7 @@ storycontinues=true;
                             }
                           },
                           child: Container(
-
+                            color: Colors.transparent,
                             child: Rive(
                               artboard: _riveArtboard,
                               alignment: Alignment.bottomCenter,

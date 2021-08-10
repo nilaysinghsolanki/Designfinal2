@@ -11,7 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'dart:io';
-
 import 'package:image_picker/image_picker.dart';
 
 class AddEventScreen extends StatefulWidget {
@@ -27,16 +26,14 @@ class _AddEventScreenState extends State<AddEventScreen> {
   final description = TextEditingController();
   final whatsInItForYou = TextEditingController();
   final link = TextEditingController();
-  String Somerandomtext;
   bool imagePicked = false;
   bool imageCroped = false;
   @override
   void initState() {
-    name.text = "";
-    description.text = "";
-    whatsInItForYou.text = "";
-    link.text = "";
-    Somerandomtext="-";
+    name.text = 'name';
+    description.text = 'description';
+    whatsInItForYou.text = "What's in it for Students?";
+    link.text = "link";
     // TODO: implement initState
     super.initState();
   }
@@ -51,20 +48,20 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
   void _showPicker(BuildContext context, num ratio) {
     showModalBottomSheet(
-
+        backgroundColor: Colors.transparent,
         elevation: 0,
-
+        barrierColor: Colors.black12,
         context: context,
         builder: (BuildContext bc) {
           return SafeArea(
             child: Container(
               decoration: BoxDecoration(
-
+                color: Colors.blueGrey[50],
                 borderRadius: BorderRadius.circular(11),
               ),
               padding: EdgeInsets.symmetric(
                   vertical: 10 * ratio, horizontal: 22 * ratio),
-//
+//color: Colors.cyan,
               margin: EdgeInsets.only(
                 top: 20 * ratio,
                 left: 15 * ratio,
@@ -76,12 +73,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   new ListTile(
                       leading: new Icon(
                         Icons.photo_library,
-
+                        color: Colors.blueGrey[700],
                       ),
                       title: new Text(
                         'Photos',
                         style: TextStyle(
-
+                            color: Colors.blueGrey[900],
                             fontStyle: FontStyle.normal,
                             fontSize: 15,
                             fontWeight: FontWeight.w400),
@@ -90,15 +87,15 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         getImage(ImageSource.gallery);
                         Navigator.of(context).pop();
                       }),
-
+                  Divider(),
                   new ListTile(
                     leading: new Icon(
                       Icons.photo_camera,
-
+                      color: Colors.blueGrey[700],
                     ),
                     title: new Text('Camera',
                         style: TextStyle(
-
+                            color: Colors.blueGrey[900],
                             fontStyle: FontStyle.normal,
                             fontSize: 15,
                             fontWeight: FontWeight.w400)),
@@ -156,18 +153,15 @@ class _AddEventScreenState extends State<AddEventScreen> {
     //     Provider.of<TabsScreenContext>(context, listen: false).get();
     var data = Provider.of<AddEventScreenData>(context, listen: true);
     return Scaffold(
-
+      backgroundColor: Colors.brown,
       persistentFooterButtons: [
-
         ElevatedButton.icon(
             style:
-                ElevatedButton.styleFrom( elevation: 0),
+                ElevatedButton.styleFrom(primary: Colors.white, elevation: 0),
             onPressed: () async {
-
               print('1');
               setState(() {
                 waiting = true;
-
               });
               if (dateTime != null &&
                   timeOfDay != null &&
@@ -184,7 +178,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         whatsInItForYou.text +
                         '\$~' +
                         link.text,
-                    type,
+                    1,
                     dateTime,
                     timeOfDay,
                     _image);
@@ -212,241 +206,226 @@ class _AddEventScreenState extends State<AddEventScreen> {
             },
             icon: Icon(
               Icons.save,
-
+              color: Colors.brown,
             ),
             label: waiting
                 ? CircularProgressIndicator()
                 : Text(
                     'save',
-
+                    style: TextStyle(color: Colors.brown),
                   ))
       ],
       appBar: AppBar(
-
+        backgroundColor: Colors.transparent,
         title: Text(type == 1
-            ? 'add event 🙂'
+            ? 'add event'
             : type == 2
                 ? 'projects +'
                 : '+ jobs/internships'),
       ),
       body: Container(
-
-
-
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("Assets/newframe.png"), fit: BoxFit.cover),
+            borderRadius: BorderRadius.circular(20)),
         child: SingleChildScrollView(
-          child: Column(
+          child: Form(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(Somerandomtext),
-          _image == null
-              ? ListTile(
-                  leading: Icon(Icons.add_a_photo),
-                  title: Text('No image selected.'),
-                  onTap: () => _showPicker(context, ratio),
-                )
-              : Container(
-                  child: Image.file(_image),
-                  height: 100,
+              _image == null
+                  ? ListTile(
+                      leading: Icon(Icons.add_a_photo),
+                      title: Text('No image selected.'),
+                      onTap: () => _showPicker(context, ratio),
+                    )
+                  : Container(
+                      child: Image.file(_image),
+                      height: 100,
+                    ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    primary: Colors.white,
+                    side: BorderSide(color: Colors.brown, width: 2)),
+                child: Text(
+                  'Pick A Date',
+                  style: TextStyle(color: Colors.brown),
                 ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                elevation: 0,
-
-                side: BorderSide( width: 2)),
-            child: Text(
-              'Pick A Date',
-
-            ),
-            autofocus: true,
-            clipBehavior: Clip.hardEdge,
-            onPressed: () async {
-              dateTime = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime(2021),
-                  firstDate: DateTime(2021),
-                  lastDate: DateTime(2022));
-              print('$dateTime');
-            },
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                elevation: 0,
-
-                side: BorderSide( width: 2)),
-            onPressed: () async {
-              timeOfDay = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay(hour: 1, minute: 0),
-              );
-              print('$timeOfDay');
-            },
-            child: Text(
-              "startingTime?",
-
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("Assets/newframe.png"),
-                  fit: BoxFit.cover),
-            ),
-            child: ListTile(
-              leading: Icon(Icons.timelapse),
-
-              title: Text('Duration?'),
-              trailing: Text('${data.getHours()}h ${data.getMinutes()}min'),
-              onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(child: DurationPicker());
-                    });
-              },
-            ),
-          ),
-          // ListTile(
-          //   leading: Icon(Icons.people),
-          //   tile: s.blue[200],
-          //   title: Text('owners'),
-          //   trailing: Text('${data.getOwners()}'),
-          //   onTap: () {
-          //     showDialog(
-          //         context: context,
-          //         builder: (context) {
-          //           return Dialog(child: OwnerPicker());
-          //         });
-          //   },
-          // ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            child: Card(
-              elevation: 0,
-
-              child: TextField(
-                onChanged:(value){
-                  Somerandomtext=value;
+                autofocus: true,
+                clipBehavior: Clip.hardEdge,
+                onPressed: () async {
+                  dateTime = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime(2021),
+                      firstDate: DateTime(2021),
+                      lastDate: DateTime(2022));
+                  print('$dateTime');
                 },
-                controller: name,
-                  style: TextStyle( fontSize: 30),
-
-                  cursorHeight: 35,
-                  decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                        BorderSide( width: 4),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                        BorderSide( width: 3),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      labelText: "Name of the event",
-                      helperText: 'Keep it short, this is just a beta.',
-
-                      labelStyle:
-                      TextStyle( fontSize: 30),
-                      ),
-                  ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            child: Card(
-              elevation: 0,
-
-              child: TextField(
-                controller: description,
-                  style: TextStyle( fontSize: 30),
-
-                  cursorHeight: 35,
-                  decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                        BorderSide( width: 4),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                        BorderSide( width: 3),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      labelText: "Description",
-                      helperText: 'Whats it about?',
-
-                      labelStyle:
-                      TextStyle( fontSize: 30),
-                     ),
-
               ),
-            ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    primary: Colors.white,
+                    side: BorderSide(color: Colors.brown, width: 2)),
+                onPressed: () async {
+                  timeOfDay = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay(hour: 1, minute: 0),
+                  );
+                  print('$timeOfDay');
+                },
+                child: Text(
+                  "startingTime?",
+                  style: TextStyle(color: Colors.brown),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("Assets/newframe.png"),
+                      fit: BoxFit.cover),
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.timelapse),
+                  tileColor: Colors.white,
+                  title: Text('Duration?'),
+                  trailing: Text('${data.getHours()}h ${data.getMinutes()}min'),
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(child: DurationPicker());
+                        });
+                  },
+                ),
+              ),
+              // ListTile(
+              //   leading: Icon(Icons.people),
+              //   tileColor: Colors.blue[200],
+              //   title: Text('owners'),
+              //   trailing: Text('${data.getOwners()}'),
+              //   onTap: () {
+              //     showDialog(
+              //         context: context,
+              //         builder: (context) {
+              //           return Dialog(child: OwnerPicker());
+              //         });
+              //   },
+              // ),
+              Padding(
+                child: CupertinoTextFormFieldRow(
+                  cursorColor: Colors.brown,
 
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            child: Card(
-              elevation: 0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.white),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
 
-              child: TextField(
-                controller: whatsInItForYou,
-                  style: TextStyle( fontSize: 30),
-
-                  cursorHeight: 35,
-                  decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                        BorderSide( width: 4),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                        BorderSide( width: 3),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      labelText: "Incentives",
-                      helperText: "What's in it for students",
-
-                      labelStyle:
-                      TextStyle( fontSize: 30),
-                     ),
-
-                  ),
-            ),
-
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            child: Card(
-              elevation: 0,
-
-              child: TextField(
-                controller: link,
-                  style: TextStyle( fontSize: 30),
-
-                  cursorHeight: 35,
-                  decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                        BorderSide( width: 4),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                        BorderSide( width: 3),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      labelText: "link to more details/website/meeting",
-
-
-                      labelStyle:
-                      TextStyle( fontSize: 20),
-                     ),
-                  ),
-            ),
-          ),
+                  maxLength: 20,
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                  controller: name,
+                  //  restorationId: 'username',
+                  placeholder: 'Name of the event',
+                  keyboardType: TextInputType.emailAddress,
+                  //   clearButtonMode: OverlayVisibilityMode.editing,
+                  obscureText: false,
+                  autocorrect: false,
+                  validator: (value) {
+                    if (value.length > 20) {
+                      return 'string too long';
+                    }
+                    if (value.isEmpty) {
+                      return 'enter name';
+                    }
+                  },
+                ),
+                padding:
+                    EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+              ),
+              Padding(
+                child: CupertinoTextFormFieldRow(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.white),
+                  maxLength: 2000, maxLines: 8, minLines: 1,
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                  controller: description,
+                  //  restorationId: 'username',
+                  placeholder: "",
+                  keyboardType: TextInputType.multiline,
+                  //   clearButtonMode: OverlayVisibilityMode.editing,
+                  obscureText: false,
+                  autocorrect: false,
+                  validator: (value) {
+                    if (value.length > 2000) {
+                      return 'string too long';
+                    }
+                    if (value.isEmpty) {
+                      return 'enter description';
+                    }
+                  },
+                ),
+                padding:
+                    EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+              ),
+              Padding(
+                child: CupertinoTextFormFieldRow(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.white),
+                  maxLength: 2000, maxLines: 8, minLines: 1,
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                  controller: whatsInItForYou,
+                  //  restorationId: 'username',
+                  placeholder: "",
+                  keyboardType: TextInputType.multiline,
+                  //   clearButtonMode: OverlayVisibilityMode.editing,
+                  obscureText: false,
+                  autocorrect: false,
+                  validator: (value) {
+                    if (value.length > 2000) {
+                      return 'string too long';
+                    }
+                    if (value.isEmpty) {
+                      return 'what\'s In It For students';
+                    }
+                  },
+                ),
+                padding:
+                    EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+              ),
+              Padding(
+                child: CupertinoTextFormFieldRow(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.white),
+                  maxLength: 2000, maxLines: 8, minLines: 1,
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                  controller: link,
+                  //  restorationId: 'username',
+                  placeholder: "",
+                  keyboardType: TextInputType.multiline,
+                  //   clearButtonMode: OverlayVisibilityMode.editing,
+                  obscureText: false,
+                  autocorrect: false,
+                  validator: (value) {
+                    if (value.length > 2000) {
+                      return 'string too long';
+                    }
+                    if (value.isEmpty) {
+                      return 'link for event or website';
+                    }
+                  },
+                ),
+                padding:
+                    EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+              ),
             ],
-          ),
+          )),
         ),
       ),
     );

@@ -19,7 +19,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   PlusAnimation _plusAnimation;
   static const double width = 500;
   static const double height = 200;
-
+  Color newcolor = Colors.transparent;
 
   Artboard _riveArtboard;
   String accessTokenValue;
@@ -145,7 +145,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
 
     return  Scaffold(
-
+      backgroundColor: Colors.white,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(

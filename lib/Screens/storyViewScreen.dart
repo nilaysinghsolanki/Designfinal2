@@ -56,7 +56,7 @@ class StoryViewScreen extends StatelessWidget {
               imageFit: BoxFit.fitWidth,
               caption: Text(
                 e.owner,
-
+                style: TextStyle(color: Colors.white),
               ),
               url: e.event_image,
               controller: controller,
@@ -89,10 +89,10 @@ class StoryViewScreen extends StatelessWidget {
             Navigator.of(context).pop();
           },
           child: Icon(
-            Icons.cancel_outlined,
+            Icons.cancel_outlined,color: Colors.black,
           ),
         ),
-
+        backgroundColor: Color(0xffF2EFE4),
         iconTheme: IconThemeData(
 
         ),
