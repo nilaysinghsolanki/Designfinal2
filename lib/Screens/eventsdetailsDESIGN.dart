@@ -126,7 +126,7 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
         "Authorization": "Bearer $accessTokenValue"
       };
       http.Response response = await http.get(
-        Uri.https('dtuotg.azurewebsites.net', 'events/details/$eventID'),
+        Uri.https('dtuotgbeta.azurewebsites.net', 'events/details/$eventID'),
         headers: headersEventDetails,
       );
       print('/////////$eventID');

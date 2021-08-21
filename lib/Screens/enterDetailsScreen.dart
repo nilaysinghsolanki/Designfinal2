@@ -186,7 +186,7 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                   )
                 });
                 responsee = await dio.put(
-                  'https://dtuotg.azurewebsites.net/auth/profile/$username',
+                  'https://dtuotgbeta.azurewebsites.net/auth/profile/$username',
                   data: formdata,
                   options: Options(
                     headers: headersProfile,
@@ -207,7 +207,7 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                 // };
                 // http.Response response = await http.put(
                 //     Uri.https(
-                //         'dtuotg.azurewebsites.net', 'auth/profile/$username'),
+                //         'dtuotgbeta.azurewebsites.net', 'auth/profile/$username'),
                 //     headers: headersProfile,
                 //     body: json.encode(mapjsonnprofile));
                 // int statusCode = response.statusCode;

@@ -113,7 +113,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         };
 
         http.Response response = await http.get(
-          Uri.https('dtuotg.azurewebsites.net', 'auth/check-auth'),
+          Uri.https('dtuotgbeta.azurewebsites.net', 'auth/check-auth'),
           headers: headersAccessToken,
         );
         int statusCode = response.statusCode;

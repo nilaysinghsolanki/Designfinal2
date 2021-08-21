@@ -60,7 +60,7 @@ class StoryViewScreen extends StatelessWidget {
               ),
               url: e.event_image,
               controller: controller,
-              imageBackground: e.event_image,
+
               duration: Duration(seconds: 5))
       )
           .toList();

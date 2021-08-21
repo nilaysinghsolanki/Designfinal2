@@ -76,7 +76,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
         "Authorization": "Bearer $accessToken"
       };
       http.Response response = await http.get(
-        Uri.https('dtuotg.azurewebsites.net', '/auth/profile/view/$username'),
+        Uri.https('dtuotgbeta.azurewebsites.net', '/auth/profile/view/$username'),
         headers: headersEvents,
       );
       int statusCode = response.statusCode;
@@ -153,7 +153,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                       //   "image": _image
                       // };
                       // http.Response response = await http.patch(
-                      //     Uri.https('dtuotg.azurewebsites.net',
+                      //     Uri.https('dtuotgbeta.azurewebsites.net',
                       //         'auth/profile/$username'),
                       //     headers: headersProfile,
                       //     body: json.encode(mapjsonnprofile));
@@ -182,7 +182,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                         )
                       });
                       responsee = await dio.patch(
-                        'dtuotg.azurewebsites.netauth/profile/$username',
+                        'dtuotgbeta.azurewebsites.netauth/profile/$username',
                         data: formdata,
                         options: Options(
                           headers: headersProfile,
@@ -256,7 +256,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                   //       "image": _image
                   //     };
                   //     http.Response response = await http.patch(
-                  //         Uri.https('dtuotg.azurewebsites.net',
+                  //         Uri.https('dtuotgbeta.azurewebsites.net',
                   //             'auth/profile/$username'),
                   //         headers: headersProfile,
                   //         body: json.encode(mapjsonnprofile));

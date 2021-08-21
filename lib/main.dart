@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: EmailAndUsernameData())
       ],
       child: MaterialApp(
-        theme: DarkTheme,
+
 
         debugShowCheckedModeBanner: false,
         navigatorKey: materialNavigatorKey, // GlobalKey()

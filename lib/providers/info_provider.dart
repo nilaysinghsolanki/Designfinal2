@@ -53,7 +53,7 @@ class EventsImages with ChangeNotifier {
         "Authorization": "Bearer $accessTokenValue"
       };
       http.Response response = await http.get(
-        Uri.https('dtuotg.azurewebsites.net', 'events'),
+        Uri.https('dtuotgbeta.azurewebsites.net', 'events'),
         headers: headersEventDetails,
       );
 

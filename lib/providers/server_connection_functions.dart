@@ -25,7 +25,7 @@ class Server_Connection_Functions {
     };
 
     http.Response response = await http.get(
-      Uri.https('dtuotg.azurewebsites.net', '/auth/profile/view/$username'),
+      Uri.https('dtuotgbeta.azurewebsites.net', '/auth/profile/view/$username'),
       headers: headers,
     );
     int statusCode = response.statusCode;
@@ -47,7 +47,7 @@ class Server_Connection_Functions {
     };
 
     http.Response response = await http.get(
-      Uri.https('dtuotg.azurewebsites.net', '/auth/profile/view/$username'),
+      Uri.https('dtuotgbeta.azurewebsites.net', '/auth/profile/view/$username'),
       headers: headers,
     );
     int statusCode = response.statusCode;
@@ -74,7 +74,7 @@ class Server_Connection_Functions {
       "event_id": "$eventId",
     };
     http.Response response = await http.post(
-        Uri.https('dtuotg.azurewebsites.net', 'events/register/'),
+        Uri.https('dtuotgbeta.azurewebsites.net', 'events/register/'),
         headers: headersRegisterEvent,
         body: json.encode(mapjsonBody));
     print(json.encode(mapjsonBody));
@@ -104,7 +104,7 @@ class Server_Connection_Functions {
       "event_id": "$eventId",
     };
     http.Response response = await http.post(
-        Uri.https('dtuotg.azurewebsites.net', 'events/unregister/'),
+        Uri.https('dtuotgbeta.azurewebsites.net', 'events/unregister/'),
         headers: headersUnregisterEvent,
         body: json.encode(mapjsonBody));
     print(json.encode(mapjsonBody));
@@ -133,7 +133,7 @@ class Server_Connection_Functions {
       "Authorization": "Bearer $accessTokenValue"
     };
     http.Response response = await http.get(
-      Uri.https('dtuotg.azurewebsites.net', 'events'),
+      Uri.https('dtuotgbeta.azurewebsites.net', 'events'),
       headers: headersEvents,
     );
     int statusCode = response.statusCode;
@@ -202,7 +202,7 @@ class Server_Connection_Functions {
       )
     });
     response = await dio.post(
-      'https://dtuotg.azurewebsites.net/events/create/',
+      'https://dtuotgbeta.azurewebsites.net/events/create/',
       data: formdata,
       options: Options(
         headers: headersCreateEvent,
@@ -228,7 +228,7 @@ class Server_Connection_Functions {
     //   print('1');
 
     //   http.Response response = await http.post(
-    //       Uri.https('dtuotg.azurewebsites.net', 'events/create/'),
+    //       Uri.https('dtuotgbeta.azurewebsites.net', 'events/create/'),
     //       headers: headersCreateEvent,
     //       body: json.encode(mapjsonBody));
     //   print('///////resp CREATE EVENT  ${response.body}');
@@ -248,7 +248,7 @@ class Server_Connection_Functions {
     };
     Map mapjsonBody = {"email": "$email"};
     http.Response response = await http.post(
-        Uri.https('dtuotg.azurewebsites.net', 'auth/send-invites/'),
+        Uri.https('dtuotgbeta.azurewebsites.net', 'auth/send-invites/'),
         headers: headersInvite,
         body: json.encode(mapjsonBody));
     print(json.encode(mapjsonBody));
@@ -272,7 +272,7 @@ class Server_Connection_Functions {
     };
     print('2');
     http.Response response = await http.get(
-      Uri.https('dtuotg.azurewebsites.net', 'timetable/',
+      Uri.https('dtuotgbeta.azurewebsites.net', 'timetable/',
           {"year": "2k19", "batchgrp": "A", "batchnum": "1"}),
       headers: headersTimeTable,
     );

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/utils/utils.dart';
 import 'package:nilay_dtuotg_2/plus_controller.dart';
@@ -47,6 +48,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
         body: //AuthForm(),
             Container(
+              height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage("Assets/newframe.png"),
@@ -56,489 +58,554 @@ class _AuthScreenState extends State<AuthScreen> {
       child: Form(
         key: formGlobalKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: Column(
-          children: [
-            //.......................HEADING
-            Container(
-              child: Text(
-                signingUp ? 'Sign Up' : 'Log in',
-                style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              //.......................HEADING
+              Container(
+                child: Text(
+                  signingUp ? 'Sign Up' : 'Log in',
+                  style: TextStyle(
+                  
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      ),
+                ),
+                margin: EdgeInsets.only(top: 60, bottom: 20),
+              ),
+              //......................TEXT ENTRYING
+
+              if (signingUp)
+                //  if (!signUpOtpStep)
+                Padding(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25.0)
                     ),
-              ),
-              margin: EdgeInsets.only(top: 60, bottom: 20),
-            ),
-            //......................TEXT ENTRYING
 
-            if (signingUp)
-              //  if (!signUpOtpStep)
-              Padding(
-                child: CupertinoTextFormFieldRow(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: BoxDecoration(
+                    child: TextField(
 
+
+                      controller: email,
+                      style: TextStyle( fontSize: 30),
+
+                      cursorHeight: 35,
+                      decoration: InputDecoration(
+
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide( width: 4),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide( width: 3),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        labelText: "email id ",
+                        labelStyle:
+                        TextStyle( fontSize: 20,color: Colors.black),
+                      ),
+
+                    ),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                  controller: email,
-                  //   restorationId: 'email',
-                  placeholder: 'email',
-                  keyboardType: TextInputType.emailAddress,
-                  // clearButtonMode: OverlayVisibilityMode.editing,
-                  obscureText: false,
-                  autocorrect: false,
-                  validator: (value) {
-                    if (signingUp) {
-                      if (value.isNotEmpty && !value.contains('@')) {
-                        return 'enter a valid mail id';
-                      }
-                      if (value.isEmpty) {
-                        return 'enter email';
-                      }
-                    }
-                  },
+                  padding:
+                      EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
                 ),
-                padding:
-                    EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
-              ),
-            //   if (!signUpOtpStep)
-            Padding(
-              child: CupertinoTextFormFieldRow(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-
-                decoration: BoxDecoration(
-
-                ),
-                maxLength: 20,
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                controller: username,
-                //  restorationId: 'username',
-                placeholder: 'username',
-                keyboardType: TextInputType.emailAddress,
-                //   clearButtonMode: OverlayVisibilityMode.editing,
-                obscureText: false,
-                autocorrect: false,
-                validator: (value) {
-                  if (value.length > 20) {
-                    return 'string too long';
-                  }
-                  if (value.isEmpty) {
-                    return 'enter username';
-                  }
-                },
-              ),
-              padding: EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
-            ),
-            if (!forgotPassword)
-              //  if (!signUpOtpStep)
-              Padding(
-                child: CupertinoTextFormFieldRow(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: BoxDecoration(
-
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                  controller: pswd,
-                  //   restorationId: 'pswd',
-                  placeholder: 'enter password',
-                  keyboardType: TextInputType.emailAddress,
-                  // clearButtonMode: OverlayVisibilityMode.editing,
-                  obscureText: obscureText,
-                  autocorrect: false,
-                  validator: (value) {
-                    if (value.length < 6) {
-                      return 'atleast 6 digits please';
-                    }
-                    if (value.isEmpty) {
-                      return 'enter password';
-                    }
-                  },
-                ),
-                padding:
-                    EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
-              ),
-            if (signingUp)
               //   if (!signUpOtpStep)
               Padding(
-                child: CupertinoTextFormFieldRow(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+
+                child: Container(
                   decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25.0)
+                  ),
+                  child: TextField(
+
+
+                    controller: username,
+                    style: TextStyle( fontSize: 30),
+
+                    cursorHeight: 35,
+                    decoration: InputDecoration(
+
+                      fillColor: Colors.white,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "Username",
+
+                      labelStyle:
+                      TextStyle( fontSize: 20,color: Colors.black),
+                    ),
 
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                  controller: pswd2,
-                  // restorationId: 're enter pswd',
-                  placeholder: 're enter enter pswd',
-                  keyboardType: TextInputType.visiblePassword,
-                  //  clearButtonMode: OverlayVisibilityMode.editing,
-                  obscureText: obscureText,
-                  autocorrect: false,
-                  validator: (value) {
-                    if (signingUp) {
-                      if (value.length < 6) {
-                        return 'atleast 6 digit';
-                      }
-                      if (value.isEmpty) {
-                        return 're enter pswd';
-                      }
-                    }
-                  },
                 ),
-                padding:
-                    EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+                padding: EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
               ),
-            //////
+              if (!forgotPassword)
+                //  if (!signUpOtpStep)
+                Padding(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(25.0)
+                    ),
+                    child: TextField(
+                      obscureText: obscureText,
 
-            if (signingUp)
-              //  if (!signUpOtpStep)
-              Padding(
-                child: CupertinoTextFormFieldRow(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: BoxDecoration(
 
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                  controller: code,
-                  //   restorationId: 'email',
-                  placeholder: 'code',
-                  keyboardType: TextInputType.number,
-                  // clearButtonMode: OverlayVisibilityMode.editing,
-                  obscureText: false,
-                  autocorrect: false,
-                  validator: (value) {
-                    if (signingUp) {
-                      if (value.isEmpty) {
-                        return 'enter code';
-                      }
-                    }
-                  },
-                ),
-                padding:
-                    EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
-              ),
-            //////
-            //  if (signUpOtpStep)
-            // Padding(
-            //   child: CupertinoTextFormFieldRow(
-            //     autovalidateMode: AutovalidateMode.onUserInteraction,
-            //     maxLength: 6,
-            //     decoration: BoxDecoration(
-            //
-            //     ),
-            //     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-            //     controller: otp,
-            //     //  restorationId: 'otp',
-            //     placeholder: 'enter OTP',
-            //     keyboardType: TextInputType.number,
-            //     //  clearButtonMode: OverlayVisibilityMode.editing,
-            //     obscureText: false,
-            //     autocorrect: false,
-            //     validator: (value) {
-            //       if (signingUp && signUpOtpStep) {
-            //         if (value.contains(' ')) {
-            //           return 'no spaces allowed';
-            //         }
-            //         if (value.contains('.')) {
-            //           return '. not allowed';
-            //         }
-            //         if (value.length != 6) {
-            //           return '6 digits bro';
-            //         }
-            //         if (value.isEmpty) {
-            //           return 'enter otp';
-            //         }
-            //       }
-            //     },
-            //   ),
-            //   padding:
-            //       EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
-            // ),
-            //    if (!signUpOtpStep)
-            Padding(
-              padding: EdgeInsets.only(left: 22, top: 0, bottom: 0, right: 22),
-              child: CupertinoButton(
-                  onPressed: () {
-                    setState(() {
-                      obscureText = !obscureText;
-                    });
-                  },
-                  child: Text(
-                    obscureText ? 'show password' : 'hide password',
-                    style: TextStyle(
+                      controller: pswd,
+                      style: TextStyle( fontSize: 30),
 
+                      cursorHeight: 35,
+                      decoration: InputDecoration(
+
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide( width: 4),
+                          borderRadius: BorderRadius.circular(25.0),
                         ),
-                  )),
-            ),
-            //    if (!signUpOtpStep)
-            if (!waiting)
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide( width: 3),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        labelText: "enter new password",
+
+
+                        labelStyle:
+                        TextStyle( fontSize: 20,color: Colors.black),
+                      ),
+
+                    ),
+                  ),
+                  padding:
+                      EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+                ),
+              if (signingUp)
+                //   if (!signUpOtpStep)
+                Padding(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(25.0)
+                    ),
+
+                    child: TextField(
+
+                      obscureText: obscureText,
+
+
+                      controller: pswd2,
+                      style: TextStyle( fontSize: 30),
+
+                      cursorHeight: 35,
+                      decoration: InputDecoration(
+
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide( width: 4),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide( width: 3),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        labelText: "enter new password",
+
+
+                        labelStyle:
+                        TextStyle( fontSize: 20,color: Colors.black),
+                      ),
+
+                    ),
+                  ),
+                  padding:
+                      EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+                ),
+              //////
+
+              if (signingUp)
+                //  if (!signUpOtpStep)
+                Padding(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(25.0)
+                    ),
+                    child: TextField(
+
+                      controller: code,
+                      style: TextStyle( fontSize: 30),
+
+                      cursorHeight: 35,
+                      decoration: InputDecoration(
+
+                        fillColor: Colors.white,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide( width: 4),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide( width: 3),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        labelText: "Code",
+
+
+                        labelStyle:
+                        TextStyle( fontSize: 20,color: Colors.black),
+                      ),
+
+                    ),
+                  ),
+                  padding:
+                      EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+                ),
+              //////
+              //  if (signUpOtpStep)
+              // Padding(
+              //   child: CupertinoTextFormFieldRow(
+              //     autovalidateMode: AutovalidateMode.onUserInteraction,
+              //     maxLength: 6,
+              //     decoration: BoxDecoration(
+              //
+              //     ),
+              //     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              //     controller: otp,
+              //     //  restorationId: 'otp',
+              //     placeholder: 'enter OTP',
+              //     keyboardType: TextInputType.number,
+              //     //  clearButtonMode: OverlayVisibilityMode.editing,
+              //     obscureText: false,
+              //     autocorrect: false,
+              //     validator: (value) {
+              //       if (signingUp && signUpOtpStep) {
+              //         if (value.contains(' ')) {
+              //           return 'no spaces allowed';
+              //         }
+              //         if (value.contains('.')) {
+              //           return '. not allowed';
+              //         }
+              //         if (value.length != 6) {
+              //           return '6 digits bro';
+              //         }
+              //         if (value.isEmpty) {
+              //           return 'enter otp';
+              //         }
+              //       }
+              //     },
+              //   ),
+              //   padding:
+              //       EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+              // ),
+              //    if (!signUpOtpStep)
               Padding(
-                padding:
-                    EdgeInsets.only(left: 22, top: 0, bottom: 0, right: 22),
+                padding: EdgeInsets.only(left: 22, top: 0, bottom: 0, right: 22),
                 child: CupertinoButton(
                     onPressed: () {
                       setState(() {
-                        signingUp = !signingUp;
+                        obscureText = !obscureText;
                       });
                     },
                     child: Text(
-                      signingUp ? 'or log in' : 'or signup',
+                      obscureText ? 'show password' : 'hide password',
+                      style: TextStyle(
+                        color: Colors.black,
 
+                          ),
                     )),
               ),
-            Padding(
-              padding: EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
-              child: ElevatedButton(
-                  style: ButtonStyle(
-
-                    enableFeedback: true,
-                    // elevation: MaterialStateProperty.all(0),XXXXXXXXXXXXXXXXXXXXXXXXXXX
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                    )),
-
-                  ),
-                  onPressed: () async {
-                    if (formGlobalKey.currentState.validate() && !waiting) {
-                      //*******************LOGIN */
-                      if (!signingUp && waiting == false
-                          // && !signUpOtpStep
-                          ) {
+              //    if (!signUpOtpStep)
+              if (!waiting)
+                Padding(
+                  padding:
+                      EdgeInsets.only(left: 22, top: 0, bottom: 0, right: 22),
+                  child: CupertinoButton(
+                      onPressed: () {
                         setState(() {
-                          waiting = true;
+                          signingUp = !signingUp;
                         });
-                        Map<String, String> headerslogin = {
-                          "Content-type": "application/json"
-                        };
-                        Map mapjsonnlogin = {
-                          "username": "${username.text}",
-                          "password": "${pswd.text}"
-                        };
-                        http.Response response = await http.post(
-                            Uri.https(
-                                'dtuotg.azurewebsites.net', 'auth/login/'),
-                            headers: headerslogin,
-                            body: json.encode(mapjsonnlogin));
-                        int statusCode = response.statusCode;
-                        print(
-                            '///////${response.body}/////////////////////// $statusCode');
+                      },
+                      child: Text(
 
-                        Map resp = json.decode(response.body);
-                        /////failed login
-                        if (resp["status"] == 'FAILED')
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Dialog(
-                                  child: Container(
-                                    child: Text(response.body),
-                                  ),
-                                );
-                              });
-                        //////
-                        setState(() {
-                          waiting = false;
-                          if (resp["status"] != 'FAILED') {
-                            Provider.of<OwnerIdData>(context, listen: false)
-                                .addOwnerId(resp["user_id"]);
-                            print(
-                                'owner id///////////////////////////${resp["user_id"]}');
+                        signingUp ? 'OR LOG IN' : 'OR SIGN UP',
+                        style:TextStyle(
+                          color:Colors.black,
+                        ),
 
-                            ///successfull login
-                            print(resp["tokens"]["access"].toString());
-                            print(
-                                'first time login.............. ${resp["first_time_login"]}');
-                            //
-                            if (resp["first_time_login"] == true) {
-                              Provider.of<AccessTokenData>(context,
-                                      listen: false)
-                                  .setTokenAndDate(
-                                      resp["tokens"]["access"].toString());
-                              Provider.of<UsernameData>(context, listen: false)
-                                  .addUsername(username.text);
-                              Navigator.of(context).pushNamed(
-                                  '/EnterDetailsScreen',
-                                  arguments:
-                                      ScreenArguments(username: username.text));
-                            } else {
-                              Provider.of<AccessTokenData>(context,
-                                      listen: false)
-                                  .addAccessToken(
-                                      resp["tokens"]["access"].toString(),
-                                      DateTime.now());
-                              Provider.of<UsernameData>(context, listen: false)
-                                  .addUsername(username.text);
+                      )),
+                ),
+              Padding(
+                padding: EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.black),
 
-                              Navigator.of(context).pushNamed('/homeScreen');
-                            }
-                          }
-                        });
-                      }
-//////////////////////////////////////////////////////////////
-                      // if (signUpOtpStep) {
-                      //   setState(() {
-                      //     waiting = true;
-                      //   });
-                      //   String urlEmailVerify =
-                      //       'https://dtu-otg.herokuapp.com/auth/email-verify/';
-                      //   Map<String, String> headersEmailVerify = {
-                      //     "Content-type": "application/json"
-                      //   };
-                      //   Map mapjsonnEmailVerify = {
-                      //     "username": "${username.text}",
-                      //     "code": int.parse(otp.text)
-                      //   };
-                      //   http.Response response = await http.post(
-                      //       Uri.https('dtu-otg.herokuapp.com',
-                      //           'auth/email-verify/'),
-                      //       headers: headersEmailVerify,
-                      //       body: json.encode(mapjsonnEmailVerify));
-                      //   int statusCode = response.statusCode;
-                      //   print(
-                      //       '///////${response.body}/////////////////////// $statusCode');
+                      enableFeedback: true,
+                      // elevation: MaterialStateProperty.all(0),XXXXXXXXXXXXXXXXXXXXXXXXXXX
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0),
+                      )),
 
-                      //   Map resp = json.decode(response.body);
-                      //   if (resp["status"] != 'OK')
-                      //     showDialog(
-                      //         context: context,
-                      //         builder: (context) {
-                      //           return Dialog(
-                      //             child: Container(
-                      //               child: Text(response.body),
-                      //             ),
-                      //           );
-                      //         });
-                      //   setState(() {
-                      //     waiting = false;
-                      //     if (resp["status"] == 'OK') {
-                      //       signUpOtpStep = false;
-                      //       signingUp = false;
-                      //       obscureText = false;
-                      //       // Navigator.of(context)
-                      //       //     .pushNamed('/EnterDetailsScreen');
-                      //     }
-                      //   });
-                      //   if (resp["status"] == 'OK')
-                      //     showDialog(
-                      //         context: context,
-                      //         builder: (context) {
-                      //           return Dialog(
-                      //             child: Container(
-                      //               padding: EdgeInsets.all(22),
-                      //               child: Text(
-                      //                   'You are signed up , now go and log in to use the app'),
-                      //             ),
-                      //           );
-                      //         });
-                      // }
-////////////////////////////////////////////////////////////////////////////////////
-                      if (signingUp //&& !signUpOtpStep
-                          &&
-                          waiting == false) {
-                        if (pswd.text == pswd2.text) {
-                          Map<String, String> headers = {
-                            "Content-type": "application/json"
-                          };
-                          Map mapjsonn = {
-                            "email": "${email.text}",
-                            "username": "${username.text}",
-                            "password": "${pswd.text}",
-                            "code": "${code.text}"
-                          };
-                          // print(jsonn);
-                          // var urL = Uri(
-                          //     path: 'https://dtu-otg.herokuapp.com/auth/register/');
-
-                          String url =
-                              'https://dtuotg.azurewebsites.net/auth/register/';
+                    ),
+                    onPressed: () async {
+                      if (formGlobalKey.currentState.validate() && !waiting) {
+                        //*******************LOGIN */
+                        if (!signingUp && waiting == false
+                            // && !signUpOtpStep
+                            ) {
                           setState(() {
                             waiting = true;
                           });
+                          Map<String, String> headerslogin = {
+                            "Content-type": "application/json"
+                          };
+                          Map mapjsonnlogin = {
+                            "username": "${username.text}",
+                            "password": "${pswd.text}"
+                          };
                           http.Response response = await http.post(
                               Uri.https(
-                                  'dtuotg.azurewebsites.net', 'auth/register/'),
-                              headers: headers,
-                              body: json.encode(mapjsonn));
+                                  'dtuotgbeta.azurewebsites.net', 'auth/login/'),
+                              headers: headerslogin,
+                              body: json.encode(mapjsonnlogin));
                           int statusCode = response.statusCode;
                           print(
                               '///////${response.body}/////////////////////// $statusCode');
 
-                          //404 not found
-                          //201 obj created
-                          //503 internal server error
-                          //200 ok
                           Map resp = json.decode(response.body);
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Dialog(
-                                  child: Container(
-                                    child: Text(response.body),
-                                  ),
-                                );
-                              });
+                          /////failed login
+                          if (resp["status"] == 'FAILED')
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Username or password is incorrect"),duration: Duration(milliseconds: 1000),));
+
+                          //////
                           setState(() {
                             waiting = false;
-                            if (resp["status"] == 'OK') {
-                              //  signUpOtpStep = true;
-                              // Provider.of<EmailAndUsernameData>(context,
-                              //         listen: false)
-                              //     .addEmailAndUsername(
-                              //         email.text, username.text);
-                              setState(() {
-                                waiting = false;
+                            if (resp["status"] != 'FAILED') {
+                              Provider.of<OwnerIdData>(context, listen: false)
+                                  .addOwnerId(resp["user_id"]);
+                              print(
+                                  'owner id///////////////////////////${resp["user_id"]}');
 
-                                signingUp = false;
-                                obscureText = false;
-                              });
+                              ///successfull login
+                              print(resp["tokens"]["access"].toString());
+                              print(
+                                  'first time login.............. ${resp["first_time_login"]}');
                               //
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return Dialog(
-                                      child: Container(
-                                        padding: EdgeInsets.all(22),
-                                        child: Text(
-                                            'You are signed up , now go and log in to use the app'),
-                                      ),
-                                    );
-                                  });
-                              //
-                            }
+                              if (resp["first_time_login"] == true) {
+                                Provider.of<AccessTokenData>(context,
+                                        listen: false)
+                                    .setTokenAndDate(
+                                        resp["tokens"]["access"].toString());
+                                Provider.of<UsernameData>(context, listen: false)
+                                    .addUsername(username.text);
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Logging you in ${username.text.toString()}"),duration: Duration(milliseconds: 1000),));
+
+                                Navigator.of(context).pushNamed(
+                                    '/EnterDetailsScreen',
+                                    arguments:
+                                        ScreenArguments(username: username.text));
+                              } else {
+                                Provider.of<AccessTokenData>(context,
+                                        listen: false)
+                                    .addAccessToken(
+                                        resp["tokens"]["access"].toString(),
+                                        DateTime.now());
+                                Provider.of<UsernameData>(context, listen: false)
+                                    .addUsername(username.text);
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Logging you in ${username.text.toString()}"),duration: Duration(milliseconds: 1000),));
+
+
+
+                                Navigator.of(context).pushNamed('/homeScreen');
+
+                              }
+                                }
                           });
-                        } else {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Dialog(
-                                  child: Container(
-                                    child: Text('both pswds should be same'),
-                                  ),
-                                );
-                              });
                         }
+//////////////////////////////////////////////////////////////
+                        // if (signUpOtpStep) {
+                        //   setState(() {
+                        //     waiting = true;
+                        //   });
+                        //   String urlEmailVerify =
+                        //       'https://dtu-otg.herokuapp.com/auth/email-verify/';
+                        //   Map<String, String> headersEmailVerify = {
+                        //     "Content-type": "application/json"
+                        //   };
+                        //   Map mapjsonnEmailVerify = {
+                        //     "username": "${username.text}",
+                        //     "code": int.parse(otp.text)
+                        //   };
+                        //   http.Response response = await http.post(
+                        //       Uri.https('dtu-otg.herokuapp.com',
+                        //           'auth/email-verify/'),
+                        //       headers: headersEmailVerify,
+                        //       body: json.encode(mapjsonnEmailVerify));
+                        //   int statusCode = response.statusCode;
+                        //   print(
+                        //       '///////${response.body}/////////////////////// $statusCode');
+
+                        //   Map resp = json.decode(response.body);
+                        //   if (resp["status"] != 'OK')
+                        //     showDialog(
+                        //         context: context,
+                        //         builder: (context) {
+                        //           return Dialog(
+                        //             child: Container(
+                        //               child: Text(response.body),
+                        //             ),
+                        //           );
+                        //         });
+                        //   setState(() {
+                        //     waiting = false;
+                        //     if (resp["status"] == 'OK') {
+                        //       signUpOtpStep = false;
+                        //       signingUp = false;
+                        //       obscureText = false;
+                        //       // Navigator.of(context)
+                        //       //     .pushNamed('/EnterDetailsScreen');
+                        //     }
+                        //   });
+                        //   if (resp["status"] == 'OK')
+                        //     showDialog(
+                        //         context: context,
+                        //         builder: (context) {
+                        //           return Dialog(
+                        //             child: Container(
+                        //               padding: EdgeInsets.all(22),
+                        //               child: Text(
+                        //                   'You are signed up , now go and log in to use the app'),
+                        //             ),
+                        //           );
+                        //         });
+                        // }
+////////////////////////////////////////////////////////////////////////////////////
+                        if (signingUp //&& !signUpOtpStep
+                            &&
+                            waiting == false) {
+                          if (pswd.text == pswd2.text) {
+                            Map<String, String> headers = {
+                              "Content-type": "application/json"
+                            };
+                            Map mapjsonn = {
+                              "email": "${email.text}",
+                              "username": "${username.text}",
+                              "password": "${pswd.text}",
+                              "code": "${code.text}"
+                            };
+                            // print(jsonn);
+                            // var urL = Uri(
+                            //     path: 'https://dtu-otg.herokuapp.com/auth/register/');
+
+                            String url =
+                                'https://dtuotgbeta.azurewebsites.net/auth/register/';
+                            setState(() {
+                              waiting = true;
+                            });
+                            http.Response response = await http.post(
+                                Uri.https(
+                                    'dtuotgbeta.azurewebsites.net', 'auth/register/'),
+                                headers: headers,
+                                body: json.encode(mapjsonn));
+                            int statusCode = response.statusCode;
+                            print(
+                                '///////${response.body}/////////////////////// $statusCode');
+
+                            //404 not found
+                            //201 obj created
+                            //503 internal server error
+                            //200 ok
+                            Map resp = json.decode(response.body);
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                    child: Container(
+                                      child: Text(response.body),
+                                    ),
+                                  );
+                                });
+                            setState(() {
+                              waiting = false;
+                              if (resp["status"] == 'OK') {
+                                //  signUpOtpStep = true;
+                                // Provider.of<EmailAndUsernameData>(context,
+                                //         listen: false)
+                                //     .addEmailAndUsername(
+                                //         email.text, username.text);
+                                setState(() {
+                                  waiting = false;
+
+                                  signingUp = false;
+                                  obscureText = false;
+                                });
+                                //
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        child: Container(
+                                          padding: EdgeInsets.all(22),
+                                          child: Text(
+                                              'You are signed up , now go and log in to use the app'),
+                                        ),
+                                      );
+                                    });
+                                //
+                              }
+                            });
+                          } else {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                    child: Container(
+                                      child: Text('both pswds should be same'),
+                                    ),
+                                  );
+                                });
+                          }
+                        }
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                child: Container(
+                                  child: Text('enter valid inputs'),
+                                ),
+                              );
+                            });
                       }
-                    } else {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              child: Container(
-                                child: Text('enter valid inputs'),
-                              ),
-                            );
-                          });
-                    }
-                  },
-                  child: waiting
-                      ? CircularProgressIndicator()
-                      : Text(signingUp
-                          // ? signUpOtpStep
-                          //   ? '       verify otp        '
-                          // : '            send otp            '
-                          ? '   sign up   '
-                          : '              log in              ')),
-            )
-          ],
+                    },
+                    child: waiting
+                        ? CircularProgressIndicator()
+                        : Text(signingUp
+                            // ? signUpOtpStep
+                            //   ? '       verify otp        '
+                            // : '            send otp            '
+                            ? '   SIGN UP '
+                            : '              LOG IN           ')),
+              )
+            ],
+          ),
         ),
       ),
     ));
