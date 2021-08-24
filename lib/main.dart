@@ -91,6 +91,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: AddEventScreenData()),
         ChangeNotifierProvider.value(value: Event()),
         ChangeNotifierProvider.value(value: EventsData()),
+        ChangeNotifierProvider.value(value: ProjectData()),
         ChangeNotifierProvider.value(value: UsernameData()),
         ChangeNotifierProvider.value(value: ProfileData()),
         ChangeNotifierProvider.value(value: AccessTokenData()),
@@ -155,7 +156,8 @@ class _HomeScreenState extends State<HomeScreen> {
             if (result) Navigator.of(_).pushNamed('/AuthScreen');
           },
           leading: CircleAvatar(
-            child: Icon(Icons.logout, ),
+            backgroundColor: Colors.transparent,
+            child: Icon(Icons.logout, color: Colors.black,),
 
           ),
           title: Text(
@@ -177,6 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.of(_).pushNamed('/patchProfileScreen');
           },
           leading: CircleAvatar(
+            backgroundColor: Colors.transparent,
 
           ),
           title: Text(
@@ -198,7 +201,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.of(_).pushNamed('/schedule');
           },
           leading: CircleAvatar(
-            child: Icon(Icons.calendar_today, ),
+            backgroundColor: Colors.transparent,
+            child: Hero(tag: "tag1",child: Icon(Icons.calendar_today, color: Colors.black,)),
 
           ),
           title: Text(
@@ -217,7 +221,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.of(_).pushNamed('inviteScreen');
         },
         leading: CircleAvatar(
-          child: Icon(Icons.face_retouching_natural, ),
+          backgroundColor: Colors.transparent,
+          child: Hero(tag: "inviteherotag",child: Icon(Icons.face_retouching_natural,color: Colors.black, )),
 
         ),
         title: Text(
@@ -231,7 +236,8 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
     ListTile(
       leading: CircleAvatar(
-        child: Icon(Icons.motorcycle_rounded, ),
+        backgroundColor: Colors.transparent,
+        child: Icon(Icons.motorcycle_rounded, color: Colors.black,),
 
       ),
       title: Text(
@@ -245,6 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ListTile(
 
       leading: CircleAvatar(
+        backgroundColor: Colors.transparent,
         child: Icon(Icons.report, ),
 
       ),
@@ -259,7 +266,8 @@ class _HomeScreenState extends State<HomeScreen> {
     ListTile(
 
       leading: CircleAvatar(
-        child: Icon(Icons.work, ),
+        backgroundColor: Colors.transparent,
+        child: Icon(Icons.work,color: Colors.black, ),
 
       ),
       title: Text(
@@ -275,6 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
       alignment: Alignment.bottomCenter,
       child: ListTile(
         leading: CircleAvatar(
+          backgroundColor: Colors.transparent,
 
         ),
         title: Text("I have a B-Plan , for selling DTU"),
@@ -495,6 +504,7 @@ class _HomePageState extends State<HomePage> {
               flipAxis: FlipAxis.y,
               child: Container(
                 decoration: BoxDecoration(
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(5.0),
 
                 ),

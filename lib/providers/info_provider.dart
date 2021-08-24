@@ -147,6 +147,76 @@ class EventsData with ChangeNotifier {
     return events;
   }
 }
+class ProjectData with ChangeNotifier {
+
+
+
+  bool onceDownloaded = false;
+  setOnceDownloaded(bool _) {
+    onceDownloaded = _;
+  }
+
+  bool getOnceDownloaded() => onceDownloaded;
+
+  List<Project> events = [
+    Project(
+
+
+        favorite: true,
+        id: 1,
+        name: 'french seminar',
+        owner: 'french'),
+    Project(
+
+
+        id: 2,
+        favorite: true,
+        name: 'fest',
+        owner: 'name1'),
+    Project(
+
+
+        id: 3,
+        name: 'workshop',
+        favorite: true,
+        owner: 'name2'),
+    Project(
+
+
+        id: 4,
+        name: 'event',
+        favorite: true,
+        owner: 'name3')
+  ];
+  changeFavoriteStatus(int id) {
+    int index = events.indexWhere(
+          (element) => element.id == id,
+    );
+
+    Project e = Project(
+      description: events[index].description,
+        discord: events[index].discord,
+
+        image: events[index].image,
+        owner_pic: events[index].owner_pic,
+        name: events[index].name,
+        owner: events[index].owner,
+        id: events[index].id,
+
+        );
+    events[index] = e;
+    notifyListeners();
+  }
+
+  setEvents(List<Project> events) {
+    this.events = events;
+    notifyListeners();
+  }
+
+  List<Project> getEvents() {
+    return events;
+  }
+}
 
 class AccessTokenData with ChangeNotifier {
   List<String> accessToken = [];

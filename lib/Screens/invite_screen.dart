@@ -25,7 +25,8 @@ class _InviteScreenState extends State<InviteScreen> {
 
         title: Text('invite friends'),
       ),
-      body: Container(decoration: BoxDecoration(
+      body: Container(
+        height:MediaQuery.of(context).size.height,decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage("Assets/newframe.png"), fit: BoxFit.cover),
       ),
         child: SingleChildScrollView(
@@ -58,7 +59,9 @@ class _InviteScreenState extends State<InviteScreen> {
               ),
               if (respCame) Text(resp.toString()),
               ElevatedButton(
+
                   style: ElevatedButton.styleFrom(
+                    primary: Colors.transparent,
 
                       elevation: 0
                   ),
@@ -78,7 +81,7 @@ class _InviteScreenState extends State<InviteScreen> {
                       ? CircularProgressIndicator(
 
                         )
-                      : Text('invite',style: TextStyle(),))
+                      : Hero(tag: "inviteherotag",child: CircleAvatar(backgroundColor:Colors.transparent,child:Icon(Icons.face_retouching_natural,color: Colors.black, ), )))
             ],
           ),
         ),

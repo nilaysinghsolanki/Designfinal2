@@ -156,17 +156,53 @@ class Server_Connection_Functions {
     print(resp);
     return true;
   }
+  Future<bool> fetchListOfProjects(BuildContext context) async {
+    List<Project> eves = [];
+    var accessToken =
+        Provider.of<AccessTokenData>(context, listen: false).accessToken;
+    print('///////access token event fetch 🙂');
+    var accessTokenValue = accessToken[0];
+    Map<String, String> headersEvents = {
+      "Content-type": "application/json",
+      "accept": "application/json",
+      "Authorization": "Bearer $accessTokenValue"
+    };
+    http.Response response = await http.get(
+      Uri.https('dtuotgbeta.azurewebsites.net', 'projects/all'),
+      headers: headersEvents,
+    );
+    int statusCode = response.statusCode;
 
+    List<dynamic> resp = json.decode(response.body);
+    eves = resp.map<Project>((e) {
+      return Project(
+        discord: e['discord'],
+          description: e['description'],
+
+
+          name: e['name'],
+          owner: e['owner'],
+          id: e['id'],
+
+
+          owner_pic: e['owner_pic'],
+          image: e['image']);
+    }).toList();
+
+    Provider.of<ProjectData>(context, listen: false).setEvents(eves);
+    print(resp);
+    return true;
+  }
   Future<int> createEvent(BuildContext context, String name, String description,
       int type, DateTime dateTime, TimeOfDay timeOfDay, File image) async {
     var accessToken =
-        await Provider.of<AccessTokenData>(context, listen: false).accessToken;
+    await Provider.of<AccessTokenData>(context, listen: false).accessToken;
 
     var hours =
-        await Provider.of<AddEventScreenData>(context, listen: false).hours;
+    await Provider.of<AddEventScreenData>(context, listen: false).hours;
     print('$hours');
     int minutes =
-        await Provider.of<AddEventScreenData>(context, listen: false).minutes;
+    await Provider.of<AddEventScreenData>(context, listen: false).minutes;
     print('$minutes');
 
     var accessTokenValue = accessToken[0];
@@ -202,7 +238,79 @@ class Server_Connection_Functions {
       )
     });
     response = await dio.post(
-      'https://dtuotgbeta.azurewebsites.net/events/create/',
+      'http://dtuotgbeta.azurewebsites.net/events/create/',
+      data: formdata,
+      options: Options(
+        headers: headersCreateEvent,
+      ),
+      onSendProgress: (int sent, int total) {
+        print('$sent $total');
+      },
+    );
+
+    ///
+    //   Map mapjsonBody = {
+    //     "owner": owner1,
+    //     "name": "$name",
+    //     "description": "$description",
+    //     "date_time": "${date_time.toIso8601String()}",
+    //     "duration": "$hours:$minutes:00",
+    //     "latitude": "27.204600000",
+    //     "longitude": "77.497700000",
+    //     "type_event": "${type.toString()}",
+    //     "user_registered": true,
+    //     "image": image.readAsBytesSync()
+    //   };
+    //   print('1');
+
+    //   http.Response response = await http.post(
+    //       Uri.https('dtuotgbeta.azurewebsites.net', 'events/create/'),
+    //       headers: headersCreateEvent,
+    //       body: json.encode(mapjsonBody));
+    //   print('///////resp CREATE EVENT  ${response.body}');
+    //   print('1');
+    //   Map<String, dynamic> resp = json.decode(response.body);
+    return response.statusCode;
+    //
+  }
+
+  Future<int> createProject(BuildContext context, String name, String description, File image,git) async {
+    var accessToken =
+        await Provider.of<AccessTokenData>(context, listen: false).accessToken;
+
+
+
+    var accessTokenValue = accessToken[0];
+    print('1');
+    int owner1 = Provider.of<OwnerIdData>(context, listen: false).ownerID[0];
+
+    Map<String, String> headersCreateEvent = {
+      "Content-type": "multipart/form-data",
+      "accept": "application/json",
+      "Authorization": "Bearer $accessTokenValue"
+    };
+    print('1');
+
+    print('1');
+
+    ///
+    Response response;
+    var dio = Dio();
+    var formdata = FormData.fromMap({
+      "owner": owner1,
+      "name": "$name",
+      "description": "$description",
+
+
+
+
+      "image": await MultipartFile.fromFile(
+        image.path,
+        filename: image.path,
+      )
+    });
+    response = await dio.post(
+      'http://dtuotgbeta.azurewebsites.net/events/create/',
       data: formdata,
       options: Options(
         headers: headersCreateEvent,

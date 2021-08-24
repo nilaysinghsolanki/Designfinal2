@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -28,9 +27,11 @@ class ScheduleTab extends StatefulWidget {
 }
 
 class _ScheduleTabState extends State<ScheduleTab> {
-
-
-
+  Color newcolor = Colors.transparent;
+  Color GoingOnColor = Color(0xffbd9b6a);
+  Color FreePeriodColor = Color(0xff9c8f7c);
+  Color EventColor;
+  Color EventAndClassColor;
 
   DateTime _focusedDay = DateTime.now();
   //ValueNotifier<List<utl.Event>> _selectedEvents;
@@ -119,321 +120,341 @@ class _ScheduleTabState extends State<ScheduleTab> {
         if (element.dateime == _selectedDay) {}
       }
     });
-    return Scaffold(
-
-      appBar: AppBar(
-        title: Text(
-          "Your Schedule",
-          style: TextStyle(
-
+    return Hero(
+      tag: "tag1",
+      child: Scaffold(
+        backgroundColor: Color(0xffF2EFE4),
+        appBar: AppBar(
+          title: Text(
+            "Your Schedule",
+            style: TextStyle(
+              color: Colors.brown,
+            ),
           ),
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.black,
+          iconTheme: IconThemeData(color: Colors.black),
+          elevation: 0,
         ),
+        body: !initialized
+            ? CircularProgressIndicator()
+            : Container(
+          decoration: BoxDecoration(),
+          padding: EdgeInsets.only(top: 0),
+          child: Column(
+            children: [
+              Container(
+                color: newcolor,
+                child: TableCalendar(
+                  calendarStyle: CalendarStyle(
+                      todayDecoration: BoxDecoration(
+                          color: Colors.brown[200], shape: BoxShape.circle),
+                      selectedDecoration: BoxDecoration(
+                          color: Colors.brown, shape: BoxShape.circle)),
+                  daysOfWeekStyle:
+                  DaysOfWeekStyle(decoration: BoxDecoration()),
+                  eventLoader: (day) {},
+                  calendarFormat: _calendarFormat,
+                  onFormatChanged: (format) {
+                    setState(() {
+                      _calendarFormat = format;
+                    });
+                  },
+                  selectedDayPredicate: (day) {
+                    return isSameDay(_selectedDay, day);
+                  },
+                  onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      print(selectedDay.toString());
+                      print(focusedDay.toString());
+                      _selectedDay = selectedDay;
+                      lectures =
+                          Provider.of<TimeTableData>(context, listen: false)
+                              .get(selectedDay.weekday);
+                      _focusedDay =
+                          focusedDay; // update `_focusedDay` here as well
+                    });
+                  },
+                  firstDay: DateTime.now().subtract(Duration(days: 100)),
+                  lastDay: DateTime.now().add(Duration(days: 100)),
+                  focusedDay: _focusedDay,
+                ),
+              ),
 
-
-
-        elevation: 0,
-      ),
-      body: !initialized
-          ? CircularProgressIndicator()
-          : Container(
-              decoration: BoxDecoration(),
-              padding: EdgeInsets.only(top: 0),
-              child: Column(
-                children: [
-                  Container(
-
-                    child: TableCalendar(
-                      calendarStyle: CalendarStyle(
-                          todayDecoration: BoxDecoration(
-                              shape: BoxShape.circle),
-                          selectedDecoration: BoxDecoration(
-                               shape: BoxShape.circle)),
-                      daysOfWeekStyle:
-                          DaysOfWeekStyle(decoration: BoxDecoration()),
-                      eventLoader: (day) {},
-                      calendarFormat: _calendarFormat,
-                      onFormatChanged: (format) {
-                        setState(() {
-                          _calendarFormat = format;
-                        });
-                      },
-                      selectedDayPredicate: (day) {
-                        return isSameDay(_selectedDay, day);
-                      },
-                      onDaySelected: (selectedDay, focusedDay) {
-                        setState(() {
-                          print(selectedDay.toString());
-                          print(focusedDay.toString());
-                          _selectedDay = selectedDay;
-                          lectures =
-                              Provider.of<TimeTableData>(context, listen: false)
-                                  .get(selectedDay.weekday);
-                          _focusedDay =
-                              focusedDay; // update `_focusedDay` here as well
-                        });
-                      },
-                      firstDay: DateTime.now().subtract(Duration(days: 100)),
-                      lastDay: DateTime.now().add(Duration(days: 100)),
-                      focusedDay: _focusedDay,
+              ToggleSwitch(
+                cornerRadius: 22,
+                minWidth: 150,
+                initialLabelIndex: events0Schedule1,
+                onToggle: (index) {
+                  setState(() {
+                    events0Schedule1 = index;
+                  });
+                },
+                labels: ['events', 'schedule'],
+                activeBgColor: Colors.brown,
+                activeFgColor: Colors.white,
+                inactiveFgColor: Colors.brown,
+                inactiveBgColor: Colors.white,
+              ),
+              SizedBox(
+                height: 0,
+              ),
+              if (events0Schedule1 == 0)
+                if (initialized)
+                  if (sheduledToday.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 0),
+                      child: Text(
+                        '',
+                        style: TextStyle(fontSize: 20),
+                      ),
                     ),
-                  ),
-
-                  ToggleSwitch(
-                    cornerRadius: 22,
-                    minWidth: 150,
-                    initialLabelIndex: events0Schedule1,
-                    onToggle: (index) {
-                      setState(() {
-                        events0Schedule1 = index;
-                      });
-                    },
-                    labels: ['events', 'schedule'],
-
-                  ),
-                  SizedBox(
-                    height: 0,
-                  ),
-                  if (events0Schedule1 == 0)
-                    if (initialized)
-                      if (sheduledToday.isEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 0),
-                          child: Text(
-                            '',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                        ),
-                  if (events0Schedule1 == 0)
-                    if (true) //(sheduledToday.isNotEmpty)
-                      Expanded(
-                        child: ListView.builder(
-                            padding: EdgeInsets.all(0),
-                            physics: const BouncingScrollPhysics(
-                                parent: AlwaysScrollableScrollPhysics()),
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: eventsedRegester.length,
-                            itemBuilder: (context, index) {
-                              return Stack(
-                                children: [
-                                  GestureDetector(
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 300,
-                                      child: Card(
-
-                                          semanticContainer: true,
-                                          clipBehavior:
-                                              Clip.antiAliasWithSaveLayer,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                          ),
-                                          elevation: 5,
-                                          margin: EdgeInsets.all(5),
+              if (events0Schedule1 == 0)
+                if (true) //(sheduledToday.isNotEmpty)
+                  Expanded(
+                    child: ListView.builder(
+                        padding: EdgeInsets.all(0),
+                        physics: const BouncingScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics()),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: eventsedRegester.length,
+                        itemBuilder: (context, index) {
+                          return Stack(
+                            children: [
+                              GestureDetector(
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 300,
+                                  child: Card(
+                                      color: Colors.white,
+                                      semanticContainer: true,
+                                      clipBehavior:
+                                      Clip.antiAliasWithSaveLayer,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(10.0),
+                                      ),
+                                      elevation: 5,
+                                      margin: EdgeInsets.all(5),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: CachedNetworkImageProvider(
+                                                  '${eventsedRegester[index].event_image.toString()}',
+                                                ),
+                                                fit: BoxFit.fill),
+                                            shape: BoxShape.rectangle),
+                                      )),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: ListTile(
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(
+                                          '/eventsdetailsdesign',
+                                          arguments: ScreenArguments(
+                                              id: eventsedRegester[index]
+                                                  .id,
+                                              scf:
+                                              Server_Connection_Functions(),
+                                              context: context));
+                                    },
+                                    tileColor:
+                                    eventsedRegester[index].favorite
+                                        ? Colors.white
+                                        : Colors.blue,
+                                    subtitle: Text(
+                                      eventsedRegester[index]
+                                          .owner
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Colors.brown,
+                                      ),
+                                    ),
+                                    leading: CircleAvatar(
+                                      radius: 22,
+                                      backgroundColor: Colors.black,
+                                      child: CircleAvatar(
+                                          backgroundColor:
+                                          Colors.transparent,
+                                          radius: 20,
                                           child: Container(
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: CachedNetworkImageProvider(
-                                                      '${eventsedRegester[index].event_image.toString()}',
-                                                    ),
+                                                        '${eventsedRegester[index].owner_image.toString()}'),
                                                     fit: BoxFit.fill),
-                                                shape: BoxShape.rectangle),
+                                                shape: BoxShape.circle),
                                           )),
                                     ),
-                                  ),
-                                  Positioned(
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    child: ListTile(
-                                        onTap: () {
-                                          Navigator.of(context).pushNamed(
-                                              '/eventsdetailsdesign',
-                                              arguments: ScreenArguments(
-                                                  id: eventsedRegester[index]
-                                                      .id,
-                                                  scf:
-                                                      Server_Connection_Functions(),
-                                                  context: context));
-                                        },
-
-                                        subtitle: Text(
-                                          eventsedRegester[index]
-                                              .owner
-                                              .toString(),
-                                          style: TextStyle(
-
-                                          ),
-                                        ),
-                                        leading: CircleAvatar(
-                                          radius: 22,
-
-                                          child: CircleAvatar(
-
-                                              radius: 20,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                        image: CachedNetworkImageProvider(
-                                                            '${eventsedRegester[index].owner_image.toString()}'),
-                                                        fit: BoxFit.fill),
-                                                    shape: BoxShape.circle),
-                                              )),
-                                        ),
-                                        title: Text(
-                                          eventsedRegester[index].name,
-                                          style: TextStyle(
-
-                                              fontSize: 19),
-                                        )),
-                                  )
-                                ],
-                              );
-                            }),
+                                    title: Text(
+                                      eventsedRegester[index].name,
+                                      style: TextStyle(
+                                          color: Colors.brown,
+                                          fontSize: 19),
+                                    )),
+                              )
+                            ],
+                          );
+                        }),
+                  ),
+              if (!initialized) Center(child
+                  : CircularProgressIndicator(backgroundColor: Colors.white,)),
+              if (initialized)
+                if (events0Schedule1 == 1)
+                  if (lectures.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 50),
+                      child: Text(
+                        'empty lectures',
+                        style: TextStyle(fontSize: 50),
                       ),
-                  if (!initialized) Center(child
-                      : CircularProgressIndicator()),
-                  if (initialized)
-                    if (events0Schedule1 == 1)
-                      if (lectures.isEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 50),
-                          child: Text(
-                            'empty lectures',
-                            style: TextStyle(fontSize: 50),
-                          ),
-                        ),
-                  if (events0Schedule1 == 1)
-                    if (lectures.isNotEmpty)
-                      Expanded(
-                        child: new ListView.builder(
-                          itemBuilder: (context, index) {
-                            int hour = lectures[index].time.hour;
-                            int length = lectures[index].length;
-                            bool happeningNow = false;
+                    ),
+              if (events0Schedule1 == 1)
+                if (lectures.isNotEmpty)
+                  Expanded(
+                    child: new ListView.builder(
+                      itemBuilder: (context, index) {
+                        int hour = lectures[index].time.hour;
+                        int length = lectures[index].length;
+                        bool happeningNow = false;
 
-                            if (lectures[index].time.hour ==
-                                TimeOfDay.now().hour) {
-                              happeningNow = true;
-                            } else {
-                              if ((lectures[index].time.hour <
-                                      TimeOfDay.now().hour) &&
-                                  ((lectures[index].time.hour +
-                                          lectures[index].length) >
-                                      TimeOfDay.now().hour)) {
-                                happeningNow = true;
-                              }
-                            }
+                        if (lectures[index].time.hour ==
+                            TimeOfDay.now().hour) {
+                          happeningNow = true;
+                        } else {
+                          if ((lectures[index].time.hour <
+                              TimeOfDay.now().hour) &&
+                              ((lectures[index].time.hour +
+                                  lectures[index].length) >
+                                  TimeOfDay.now().hour)) {
+                            happeningNow = true;
+                          }
+                        }
 
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              child: AnimationConfiguration.staggeredList(
-                                  position: index,
-                                  child: SlideAnimation(
-                                      child: FlipAnimation(
-                                          flipAxis: FlipAxis.y,
-                                          child: Container(
-                                            decoration: lectures[index].free
-                                                ? BoxDecoration(
-                                                    border: Border(
-                                                    left: BorderSide(
-                                                        width: 8,
-                                                       ),
-                                                  ))
-                                                : BoxDecoration(
-                                                    border: Border(
-                                                    left: BorderSide(
-                                                        width: 8,
-                                                        ),
-                                                    right: happeningNow
-                                                        ? BorderSide(
-                                                            width: 2,
-                                                            )
-                                                        : BorderSide(width: 0),
-                                                    top: happeningNow
-                                                        ? BorderSide(
-                                                            width: 2,
-                                                            )
-                                                        : BorderSide(width: 0),
-                                                    bottom: happeningNow
-                                                        ? BorderSide(
-                                                            width: 2,
-                                                            )
-                                                        : BorderSide(width: 0),
-                                                  )),
-                                            child: ListTile(
-                                                leading: _focusedDay ==
-                                                            DateTime.now() &&
-                                                        happeningNow
-                                                    ? Text(
-                                                        'NOW',
-                                                        style: TextStyle(
-                                                            fontSize: 17,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal),
-                                                      )
-                                                    : Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        children: [
-                                                          Icon(
-                                                            Icons
-                                                                .access_time_outlined,
-                                                          ),
-                                                          Text(
-                                                              '$hour-${hour + length}')
-                                                        ],
-                                                      ),
-                                                subtitle: Text('AP102'),
-
-                                                title: lectures[index].free
-                                                    ? Text(
-                                                        'FREE',
-                                                        style: TextStyle(
-                                                            ),
-                                                      )
-                                                    : Text(
-                                                        lectures[index].name,
-                                                        style: TextStyle(
-                                                           ),
-                                                      ),
-                                                trailing: Text(
-                                                  '$length hour',
-                                                  style: TextStyle(
-
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                                )),
-                                          )))),
-                            );
-                          },
-                          itemCount: lectures.length,
-                        ),
-                      ),
-                  // Container(
-                  //     height: 300,
-                  //     padding: EdgeInsets.only(top: 70),
-                  //     child: SfCalendar(
-                  //       appointmentBuilder: (BuildContext context,
-                  //           CalendarAppointmentDetails calendarAppointmentDetails) {},
-                  //       firstDayOfWeek: 1,
-                  //       showCurrentTimeIndicator: true,
-                  //       maxDate: DateTime.now().add(Duration(days: 10)),
-                  //       minDate: DateTime.now().subtract(Duration(days: 10)),
-                  //       todayHighlight: s.amber[800],
-                  //       showNavigationArrow: true,
-                  //       initialDisplayDate: DateTime.now(),
-                  //       view: CalendarView.month,
-                  //       monthViewSettings: MonthViewSettings(numberOfWeeksInView: 1),
-                  //     )),
-                ],
-              ),
-            ),
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          child: AnimationConfiguration.staggeredList(
+                              position: index,
+                              child: SlideAnimation(
+                                  child: FlipAnimation(
+                                      flipAxis: FlipAxis.y,
+                                      child: Container(
+                                        decoration: lectures[index].free
+                                            ? BoxDecoration(
+                                            border: Border(
+                                              left: BorderSide(
+                                                  width: 8,
+                                                  color:
+                                                  Colors.lightGreen),
+                                            ))
+                                            : BoxDecoration(
+                                            border: Border(
+                                              left: BorderSide(
+                                                  width: 8,
+                                                  color: Colors.brown),
+                                              right: happeningNow
+                                                  ? BorderSide(
+                                                  width: 2,
+                                                  color:
+                                                  Colors.purple)
+                                                  : BorderSide(width: 0),
+                                              top: happeningNow
+                                                  ? BorderSide(
+                                                  width: 2,
+                                                  color:
+                                                  Colors.purple)
+                                                  : BorderSide(width: 0),
+                                              bottom: happeningNow
+                                                  ? BorderSide(
+                                                  width: 2,
+                                                  color:
+                                                  Colors.purple)
+                                                  : BorderSide(width: 0),
+                                            )),
+                                        child: ListTile(
+                                            leading: _focusedDay ==
+                                                DateTime.now() &&
+                                                happeningNow
+                                                ? Text(
+                                              'NOW',
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight:
+                                                  FontWeight
+                                                      .normal),
+                                            )
+                                                : Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .spaceEvenly,
+                                              children: [
+                                                Icon(
+                                                  Icons
+                                                      .access_time_outlined,
+                                                ),
+                                                Text(
+                                                    '$hour-${hour + length}')
+                                              ],
+                                            ),
+                                            subtitle: Text('AP102'),
+                                            tileColor: lectures[index].free
+                                                ? Colors.white
+                                                : happeningNow
+                                                ? Colors.white
+                                                : Colors.white,
+                                            title: lectures[index].free
+                                                ? Text(
+                                              'FREE',
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .lightGreen),
+                                            )
+                                                : Text(
+                                              lectures[index].name,
+                                              style: TextStyle(
+                                                  color:
+                                                  FreePeriodColor),
+                                            ),
+                                            trailing: Text(
+                                              '$length hour',
+                                              style: TextStyle(
+                                                  color: Colors.brown,
+                                                  fontSize: 20,
+                                                  fontWeight:
+                                                  FontWeight.normal),
+                                            )),
+                                      )))),
+                        );
+                      },
+                      itemCount: lectures.length,
+                    ),
+                  ),
+              // Container(
+              //     height: 300,
+              //     padding: EdgeInsets.only(top: 70),
+              //     child: SfCalendar(
+              //       appointmentBuilder: (BuildContext context,
+              //           CalendarAppointmentDetails calendarAppointmentDetails) {},
+              //       firstDayOfWeek: 1,
+              //       showCurrentTimeIndicator: true,
+              //       maxDate: DateTime.now().add(Duration(days: 10)),
+              //       minDate: DateTime.now().subtract(Duration(days: 10)),
+              //       todayHighlightColor: Colors.amber[800],
+              //       showNavigationArrow: true,
+              //       initialDisplayDate: DateTime.now(),
+              //       view: CalendarView.month,
+              //       monthViewSettings: MonthViewSettings(numberOfWeeksInView: 1),
+              //     )),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -504,10 +525,10 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-//       background: s.grey
+//       backgroundColor: Colors.grey[100],
 //       appBar: AppBar(
 //         automaticallyImplyLeading: false,
-//
+//         backgroundColor: Colors.black,
 //         title: Text('Flutter Dynamic Event Calendar'),
 //       ),
 //       body: SingleChildScrollView(
@@ -519,19 +540,19 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //               initialCalendarFormat: CalendarFormat.week,
 //               calendarStyle: CalendarStyle(
 //                   canEventMarkersOverflow: true,
-//                   today: s.orange,
-//                   selected: Theme.of(context).primary,
+//                   todayColor: Colors.orange,
+//                   selectedColor: Theme.of(context).primaryColor,
 //                   todayStyle: TextStyle(
 //                       fontWeight: FontWeight.bold,
 //                       fontSize: 18.0,
-//                       ),
+//                       color: Colors.white)),
 //               headerStyle: HeaderStyle(
 //                 centerHeaderTitle: true,
 //                 formatButtonDecoration: BoxDecoration(
-//                   color: s.orange,
+//                   color: Colors.orange,
 //                   borderRadius: BorderRadius.circular(20.0),
 //                 ),
-//                 formatButtonTextStyle: TextStyle(,
+//                 formatButtonTextStyle: TextStyle(color: Colors.white),
 //                 formatButtonShowsNext: false,
 //               ),
 //               startingDayOfWeek: StartingDayOfWeek.monday,
@@ -545,21 +566,21 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                     margin: const EdgeInsets.all(4.0),
 //                     alignment: Alignment.center,
 //                     decoration: BoxDecoration(
-//                         color: Theme.of(context).primary,
+//                         color: Theme.of(context).primaryColor,
 //                         borderRadius: BorderRadius.circular(10.0)),
 //                     child: Text(
 //                       date.day.toString(),
-//
+//                       style: TextStyle(color: Colors.white),
 //                     )),
 //                 todayDayBuilder: (context, date, events) => Container(
 //                     margin: const EdgeInsets.all(4.0),
 //                     alignment: Alignment.center,
 //                     decoration: BoxDecoration(
-//                         color: s.orange,
+//                         color: Colors.orange,
 //                         borderRadius: BorderRadius.circular(10.0)),
 //                     child: Text(
 //                       date.day.toString(),
-//
+//                       style: TextStyle(color: Colors.white),
 //                     )),
 //               ),
 //               calendarController: _controller,
@@ -571,12 +592,12 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                 width: MediaQuery.of(context).size.width/2,
 //                 decoration: BoxDecoration(
 //                     borderRadius: BorderRadius.circular(30),
-//
-//                     border: Border.all(color: s.grey)
+//                     color: Colors.white,
+//                     border: Border.all(color: Colors.grey)
 //                 ),
 //                 child: Center(
 //                     child: Text(event,
-//                       style: TextStyle(
+//                       style: TextStyle(color: Colors.blue,
 //                           fontWeight: FontWeight.bold,fontSize: 16),)
 //                 ),
 //               ),
@@ -585,7 +606,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //         ),
 //       ),
 //       floatingActionButton: FloatingActionButton(
-//
+//         backgroundColor: Colors.black,
 //         child: Icon(Icons.add),
 //         onPressed: _showAddDialog,
 //       ),
@@ -596,14 +617,14 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //     await showDialog(
 //         context: context,
 //         builder: (context) => AlertDialog(
-//           background: s.white70,
+//           backgroundColor: Colors.white70,
 //           title: Text("Add Events"),
 //           content: TextField(
 //             controller: _eventController,
 //           ),
 //           actions: <Widget>[
 //             FlatButton(
-//               child: Text("Save",style: TextStyle(fontWeight: FontWeight.bold),),
+//               child: Text("Save",style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),
 //               onPressed: () {
 //                 if (_eventController.text.isEmpty) return;
 //                 setState(() {
@@ -643,20 +664,20 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                                       scf: Server_Connection_Functions(),
 //                                       context: context));
 //                             },
-//                             tile: eventsedRegester[index].favorite
-//                                 ? s.white70
-//                                 : s.blue,
+//                             tileColor: eventsedRegester[index].favorite
+//                                 ? Colors.white70
+//                                 : Colors.blue,
 //                             subtitle: Text(
 //                               eventsedRegester[index].owner.toString(),
 //                               style: TextStyle(
-//
+//                                 color: Colors.brown,
 //                               ),
 //                             ),
 //                             leading: CircleAvatar(
 //                               radius: 22,
-//
+//                               backgroundColor: Colors.black,
 //                               child: CircleAvatar(
-//
+//                                   backgroundColor: Colors.transparent,
 //                                   radius: 20,
 //                                   child: Container(
 //                                     decoration: BoxDecoration(
@@ -670,7 +691,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                             title: Text(
 //                               eventsedRegester[index].name,
 //                               style: TextStyle(
-//                                    fontSize: 19),
+//                                   color: Colors.brown, fontSize: 19),
 //                             ),
 //                           ),
 //                         ),

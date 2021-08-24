@@ -418,7 +418,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Logging you in ${username.text.toString()}"),duration: Duration(milliseconds: 1000),));
 
                                 Navigator.of(context).pushNamed(
-                                    '/EnterDetailsScreen',
+                                    '/homeScreen',
                                     arguments:
                                         ScreenArguments(username: username.text));
                               } else {
@@ -515,7 +515,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             //     path: 'https://dtu-otg.herokuapp.com/auth/register/');
 
                             String url =
-                                'https://dtuotgbeta.azurewebsites.net/auth/register/';
+                                'http://dtuotgbeta.azurewebsites.net/auth/register/';
                             setState(() {
                               waiting = true;
                             });

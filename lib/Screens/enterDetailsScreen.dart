@@ -1,3 +1,4 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nilay_dtuotg_2/models/screenArguments.dart';
 import 'package:nilay_dtuotg_2/providers/info_provider.dart';
 import 'package:nilay_dtuotg_2/widgets/rollNumberPicker.dart';
@@ -43,6 +44,7 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
         builder: (BuildContext bc) {
           return SafeArea(
             child: Container(
+
               decoration: BoxDecoration(
 
                 borderRadius: BorderRadius.circular(11),
@@ -142,8 +144,12 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
         ? DateTime.now().year
         : Provider.of<ProfileData>(context).year[0];
     return Scaffold(
-      persistentFooterButtons: [
-        ElevatedButton(
+      floatingActionButton:
+
+
+        FloatingActionButton(
+         backgroundColor: Colors.black,
+          
           ////////TOKEN?save, BATCH,RESPONSE CHECK,IF OK THEN SAVE IN DATA BASE
             onPressed: () async {
               if (formGlobalKey.currentState.validate() && waiting == false) {
@@ -172,6 +178,7 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                 Response responsee;
                 var dio = Dio();
                 var formdata = FormData.fromMap({
+                  "owner_id__username": "${username}",
                   "name": "${name.text}",
                   "roll_no": "$formattedRollNum",
                   "branch":
@@ -185,8 +192,8 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                     filename: _image.path,
                   )
                 });
-                responsee = await dio.put(
-                  'https://dtuotgbeta.azurewebsites.net/auth/profile/$username',
+                responsee = await dio.patch(
+                  'http://dtuotgbeta.azurewebsites.net/auth/profile/$username',
                   data: formdata,
                   options: Options(
                     headers: headersProfile,
@@ -240,319 +247,334 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
               }
             },
             child:
-            waiting ? CircularProgressIndicator() : Text('save and next'))
-      ],
+            waiting?CircularProgressIndicator.adaptive(
+              backgroundColor: Colors.white,
+            ):Icon(
+              FontAwesomeIcons.save
+            )),
+
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: Text('ENTER DETAILS 1st time'),
       ),
       body: SingleChildScrollView(
-        child: Form(
-          key: formGlobalKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: Column(
-            children: [
-              _image == null
-                  ? ListTile(
-                leading: Icon(Icons.add_a_photo),
-                title: Text('No image selected.'),
-                onTap: () => _showPicker(context, ratio),
-              )
-                  : Container(
-                child: Image.file(_image),
-                height: 100,
-              ),
-              Padding(
-                child: CupertinoTextFormFieldRow(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: BoxDecoration(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("Assets/newframe.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Form(
 
+            key: formGlobalKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: Column(
+              children: [
+                _image == null
+                    ? ListTile(
+                  leading: Icon(Icons.add_a_photo),
+                  title: Text('No image selected.'),
+                  onTap: () => _showPicker(context, ratio),
+                )
+                    : Container(
+                  child: Image.file(_image),
+                  height: 100,
+                ),
+                Padding(
+                  child: CupertinoTextFormFieldRow(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: BoxDecoration(
+
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                    controller: name,
+                    //   restorationId: 'email',
+                    placeholder: 'official name',
+                    keyboardType: TextInputType.name,
+                    // clearButtonMode: OverlayVisibilityMode.editing,
+                    obscureText: false,
+                    autocorrect: false,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'enter name';
+                      }
+                    },
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                  controller: name,
-                  //   restorationId: 'email',
-                  placeholder: 'official name',
-                  keyboardType: TextInputType.name,
-                  // clearButtonMode: OverlayVisibilityMode.editing,
-                  obscureText: false,
-                  autocorrect: false,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'enter name';
-                    }
-                  },
+                  padding:
+                  EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
                 ),
-                padding:
-                EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
-              ),
-              ListTile(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          child: RollNumberPicker(),
-                        );
+                ListTile(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            child: RollNumberPicker(),
+                          );
+                        });
+                  },
+                  title: Text('rollnumber'),
+                  trailing: Text(rollNum.toString()),
+                ),
+                ListTile(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            child: yp.YearPicker(),
+                          );
+                        });
+                  },
+                  title: Text('year'),
+                  trailing: Text(year.toString()),
+                ),
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: DropDownFormField(
+                    titleText: 'BRANCH',
+                    hintText: 'Please choose one',
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return 'select  branch';
+                    //   }
+                    // },
+                    value: _myBranch,
+                    onSaved: (value) {
+                      Provider.of<ProfileData>(context, listen: false)
+                          .setBranch(value);
+                      setState(() {
+                        _myBranch = value;
                       });
-                },
-                title: Text('rollnumber'),
-                trailing: Text(rollNum.toString()),
-              ),
-              ListTile(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          child: yp.YearPicker(),
-                        );
+                    },
+                    onChanged: (value) {
+                      Provider.of<ProfileData>(context, listen: false)
+                          .setBranch(value);
+                      setState(() {
+                        _myBranch = value;
                       });
-                },
-                title: Text('year'),
-                trailing: Text(year.toString()),
-              ),
-              Container(
-                padding: EdgeInsets.all(16),
-                child: DropDownFormField(
-                  titleText: 'BRANCH',
-                  hintText: 'Please choose one',
-                  // validator: (value) {
-                  //   if (value.isEmpty) {
-                  //     return 'select  branch';
-                  //   }
-                  // },
-                  value: _myBranch,
-                  onSaved: (value) {
-                    Provider.of<ProfileData>(context, listen: false)
-                        .setBranch(value);
-                    setState(() {
-                      _myBranch = value;
-                    });
-                  },
-                  onChanged: (value) {
-                    Provider.of<ProfileData>(context, listen: false)
-                        .setBranch(value);
-                    setState(() {
-                      _myBranch = value;
-                    });
-                  },
-                  dataSource: [
-                    {
-                      "display": "ECE",
-                      "value": "ec",
                     },
-                    {
-                      "display": "BT",
-                      "value": "bt",
-                    },
-                    {
-                      "display": "CE",
-                      "value": "ce",
-                    },
-                    {
-                      "display": "CO",
-                      "value": "co",
-                    },
-                    {
-                      "display": "EE",
-                      "value": "ee",
-                    },
-                    {
-                      "display": "EN",
-                      "value": "en",
-                    },
-                    {
-                      "display": "EP",
-                      "value": "ep",
-                    },
-                    {
-                      "display": "it",
-                      "value": "it",
-                    },
-                    {
-                      "display": "me",
-                      "value": "me",
-                    },
-                    {
-                      "display": "ae",
-                      "value": "ae",
-                    },
-                    {
-                      "display": "mc",
-                      "value": "mc",
-                    },
-                    {
-                      "display": "pe",
-                      "value": "pe",
-                    },
-                    {
-                      "display": "pt",
-                      "value": "pt",
-                    },
-                    {
-                      "display": "se",
-                      "value": "se",
-                    },
-                    {
-                      "display": "bd",
-                      "value": "bd",
-                    }
-                  ],
-                  textField: 'display',
-                  valueField: 'value',
+                    dataSource: [
+                      {
+                        "display": "ECE",
+                        "value": "ec",
+                      },
+                      {
+                        "display": "BT",
+                        "value": "bt",
+                      },
+                      {
+                        "display": "CE",
+                        "value": "ce",
+                      },
+                      {
+                        "display": "CO",
+                        "value": "co",
+                      },
+                      {
+                        "display": "EE",
+                        "value": "ee",
+                      },
+                      {
+                        "display": "EN",
+                        "value": "en",
+                      },
+                      {
+                        "display": "EP",
+                        "value": "ep",
+                      },
+                      {
+                        "display": "it",
+                        "value": "it",
+                      },
+                      {
+                        "display": "me",
+                        "value": "me",
+                      },
+                      {
+                        "display": "ae",
+                        "value": "ae",
+                      },
+                      {
+                        "display": "mc",
+                        "value": "mc",
+                      },
+                      {
+                        "display": "pe",
+                        "value": "pe",
+                      },
+                      {
+                        "display": "pt",
+                        "value": "pt",
+                      },
+                      {
+                        "display": "se",
+                        "value": "se",
+                      },
+                      {
+                        "display": "bd",
+                        "value": "bd",
+                      }
+                    ],
+                    textField: 'display',
+                    valueField: 'value',
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(16),
-                child: DropDownFormField(
-                  titleText: 'Batch',
-                  hintText: 'Please choose one',
-                  // validator: (value) {
-                  //   if (value != '') {
-                  //     return 'select  batch';
-                  //   }
-                  // },
-                  value: _myBatch,
-                  onSaved: (value) {
-                    Provider.of<ProfileData>(context, listen: false)
-                        .setBatch(value);
-                    setState(() {
-                      _myBatch = value;
-                    });
-                  },
-                  onChanged: (value) {
-                    Provider.of<ProfileData>(context, listen: false)
-                        .setBatch(value);
-                    setState(() {
-                      _myBatch = value;
-                    });
-                  },
-                  dataSource: [
-                    {
-                      "display": "a1",
-                      "value": "a1",
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: DropDownFormField(
+                    titleText: 'Batch',
+                    hintText: 'Please choose one',
+                    // validator: (value) {
+                    //   if (value != '') {
+                    //     return 'select  batch';
+                    //   }
+                    // },
+                    value: _myBatch,
+                    onSaved: (value) {
+                      Provider.of<ProfileData>(context, listen: false)
+                          .setBatch(value);
+                      setState(() {
+                        _myBatch = value;
+                      });
                     },
-                    {
-                      "display": "B1",
-                      "value": "b1",
+                    onChanged: (value) {
+                      Provider.of<ProfileData>(context, listen: false)
+                          .setBatch(value);
+                      setState(() {
+                        _myBatch = value;
+                      });
                     },
-                    {
-                      "display": "a2",
-                      "value": "a2",
-                    },
-                    {
-                      "display": "b2",
-                      "value": "b2",
-                    },
-                    {
-                      "display": "a3",
-                      "value": "a3",
-                    },
-                    {
-                      "display": "b3",
-                      "value": "b3",
-                    },
-                    {
-                      "display": "a4",
-                      "value": "a4",
-                    },
-                    {
-                      "display": "b4",
-                      "value": "b4",
-                    },
-                    {
-                      "display": "a5",
-                      "value": "A5",
-                    },
-                    {
-                      "display": "b5",
-                      "value": "b5",
-                    },
-                    {
-                      "display": "a6",
-                      "value": "a6",
-                    },
-                    {
-                      "display": "b6",
-                      "value": "b6",
-                    },
-                    {
-                      "display": "a7",
-                      "value": "a7",
-                    },
-                    {
-                      "display": "b7",
-                      "value": "b7",
-                    },
-                    {
-                      "display": "a8",
-                      "value": "a8",
-                    },
-                    {
-                      "display": "b8",
-                      "value": "b8",
-                    },
-                    {
-                      "display": "a9",
-                      "value": "a9",
-                    },
-                    {
-                      "display": "b9",
-                      "value": "b9",
-                    },
-                    {
-                      "display": "a10",
-                      "value": "a10",
-                    },
-                    {
-                      "display": "b10",
-                      "value": "b10",
-                    },
-                    {
-                      "display": "a11",
-                      "value": "a11",
-                    },
-                    {
-                      "display": "b11",
-                      "value": "b11",
-                    },
-                    {
-                      "display": "a12",
-                      "value": "a12",
-                    },
-                    {
-                      "display": "b12",
-                      "value": "b12",
-                    },
-                    {
-                      "display": "a13",
-                      "value": "a13",
-                    },
-                    {
-                      "display": "b13",
-                      "value": "b13",
-                    },
-                    {
-                      "display": "a14",
-                      "value": "a14",
-                    },
-                    {
-                      "display": "b14",
-                      "value": "b14",
-                    },
-                    {
-                      "display": "a15",
-                      "value": "a15",
-                    },
-                    {
-                      "display": "b15",
-                      "value": "b15",
-                    },
-                  ],
-                  textField: 'display',
-                  valueField: 'value',
-                ),
-              )
-            ],
+                    dataSource: [
+                      {
+                        "display": "a1",
+                        "value": "a1",
+                      },
+                      {
+                        "display": "B1",
+                        "value": "b1",
+                      },
+                      {
+                        "display": "a2",
+                        "value": "a2",
+                      },
+                      {
+                        "display": "b2",
+                        "value": "b2",
+                      },
+                      {
+                        "display": "a3",
+                        "value": "a3",
+                      },
+                      {
+                        "display": "b3",
+                        "value": "b3",
+                      },
+                      {
+                        "display": "a4",
+                        "value": "a4",
+                      },
+                      {
+                        "display": "b4",
+                        "value": "b4",
+                      },
+                      {
+                        "display": "a5",
+                        "value": "A5",
+                      },
+                      {
+                        "display": "b5",
+                        "value": "b5",
+                      },
+                      {
+                        "display": "a6",
+                        "value": "a6",
+                      },
+                      {
+                        "display": "b6",
+                        "value": "b6",
+                      },
+                      {
+                        "display": "a7",
+                        "value": "a7",
+                      },
+                      {
+                        "display": "b7",
+                        "value": "b7",
+                      },
+                      {
+                        "display": "a8",
+                        "value": "a8",
+                      },
+                      {
+                        "display": "b8",
+                        "value": "b8",
+                      },
+                      {
+                        "display": "a9",
+                        "value": "a9",
+                      },
+                      {
+                        "display": "b9",
+                        "value": "b9",
+                      },
+                      {
+                        "display": "a10",
+                        "value": "a10",
+                      },
+                      {
+                        "display": "b10",
+                        "value": "b10",
+                      },
+                      {
+                        "display": "a11",
+                        "value": "a11",
+                      },
+                      {
+                        "display": "b11",
+                        "value": "b11",
+                      },
+                      {
+                        "display": "a12",
+                        "value": "a12",
+                      },
+                      {
+                        "display": "b12",
+                        "value": "b12",
+                      },
+                      {
+                        "display": "a13",
+                        "value": "a13",
+                      },
+                      {
+                        "display": "b13",
+                        "value": "b13",
+                      },
+                      {
+                        "display": "a14",
+                        "value": "a14",
+                      },
+                      {
+                        "display": "b14",
+                        "value": "b14",
+                      },
+                      {
+                        "display": "a15",
+                        "value": "a15",
+                      },
+                      {
+                        "display": "b15",
+                        "value": "b15",
+                      },
+                    ],
+                    textField: 'display',
+                    valueField: 'value',
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

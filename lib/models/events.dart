@@ -55,3 +55,27 @@ class EventDetails with ChangeNotifier {
     this.event_image,
   });
 }
+class Project with ChangeNotifier {
+  String name;
+  int id;
+  bool favorite;
+  String owner;
+
+  String discord;
+
+  String description;
+
+  String owner_pic;
+  String image;
+
+  Project(
+      {
+        this.discord,
+        this.owner_pic,
+        this.image,
+        this.id,
+        this.description,
+        this.name,
+        this.owner,
+        this.favorite});
+}
