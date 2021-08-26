@@ -148,8 +148,8 @@ class Server_Connection_Functions {
           id: e['id'],
           eventType: e['type_event'],
           dateime: DateTime.parse(e['date_time']),
-          owner_image: e['owner_image'],
-          event_image: e['event_image']);
+          owner_image: e['owner_pic'],
+          event_image: e['image']);
     }).toList();
 
     Provider.of<EventsData>(context, listen: false).setEvents(eves);
@@ -168,7 +168,7 @@ class Server_Connection_Functions {
       "Authorization": "Bearer $accessTokenValue"
     };
     http.Response response = await http.get(
-      Uri.https('dtuotgbeta.azurewebsites.net', 'projects/all'),
+      Uri.https('dtuotgbeta.azurewebsites.net', '/projects/all/'),
       headers: headersEvents,
     );
     int statusCode = response.statusCode;
@@ -274,7 +274,16 @@ class Server_Connection_Functions {
     //
   }
 
-  Future<int> createProject(BuildContext context, String name, String description, File image,git) async {
+  Future<int> createProject(BuildContext context, String name, String description, File image,
+
+
+  String owner,
+
+
+
+
+
+  ) async {
     var accessToken =
         await Provider.of<AccessTokenData>(context, listen: false).accessToken;
 

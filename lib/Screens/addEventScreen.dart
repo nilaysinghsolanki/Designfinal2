@@ -155,7 +155,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
     // BuildContext bc =
     //     Provider.of<TabsScreenContext>(context, listen: false).get();
     var data = Provider.of<AddEventScreenData>(context, listen: true);
-    return Scaffold(
+    return type!=3?Scaffold(
 
       persistentFooterButtons: [
 
@@ -445,6 +445,300 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   ),
             ),
           ),
+            ],
+          ),
+        ),
+      ),
+    ):Scaffold(
+
+      persistentFooterButtons: [
+
+        ElevatedButton.icon(
+            style:
+            ElevatedButton.styleFrom( elevation: 0),
+            onPressed: () async {
+
+              print('1');
+              setState(() {
+                waiting = true;
+
+              });
+              if (dateTime != null &&
+                  timeOfDay != null &&
+                  name != null &&
+                  description != null &&
+                  type != null) {
+                print('2');
+                var scf = Provider.of<SCF>(context, listen: false).get();
+                int resp = await scf.createProject(
+                    context,
+                    name.text,
+                    description.text +
+                        '~\$' +
+                        whatsInItForYou.text +
+                        '\$~' +
+                        link.text,
+                    type,
+                    dateTime,
+                    timeOfDay,
+                    _image);
+                scf.fetchListOfEvents(context);
+
+                print('3');
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        child: Padding(
+                          padding: EdgeInsets.all(50),
+                          child: Text(resp.toString()),
+                        ),
+                      );
+                    });
+
+                if (resp <= 205) {
+                  Navigator.of(context).pop();
+                }
+              }
+              setState(() {
+                waiting = false;
+              });
+            },
+            icon: Icon(
+              Icons.save,
+
+            ),
+            label: waiting
+                ? CircularProgressIndicator()
+                : Text(
+              'save',
+
+            ))
+      ],
+      appBar: AppBar(
+
+        title: Text(type == 1
+            ? 'add event 🙂'
+            : type == 2
+            ? 'projects +'
+            : '+ jobs/internships'),
+      ),
+      body: Container(
+
+
+
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(Somerandomtext),
+              _image == null
+                  ? ListTile(
+                leading: Icon(Icons.add_a_photo),
+                title: Text('No image selected.'),
+                onTap: () => _showPicker(context, ratio),
+              )
+                  : Container(
+                child: Image.file(_image),
+                height: 100,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    elevation: 0,
+
+                    side: BorderSide( width: 2)),
+                child: Text(
+                  'Pick A Date',
+
+                ),
+                autofocus: true,
+                clipBehavior: Clip.hardEdge,
+                onPressed: () async {
+                  dateTime = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime(2021),
+                      firstDate: DateTime(2021),
+                      lastDate: DateTime(2022));
+                  print('$dateTime');
+                },
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    elevation: 0,
+
+                    side: BorderSide( width: 2)),
+                onPressed: () async {
+                  timeOfDay = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay(hour: 1, minute: 0),
+                  );
+                  print('$timeOfDay');
+                },
+                child: Text(
+                  "startingTime?",
+
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("Assets/newframe.png"),
+                      fit: BoxFit.cover),
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.timelapse),
+
+                  title: Text('Duration?'),
+                  trailing: Text('${data.getHours()}h ${data.getMinutes()}min'),
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(child: DurationPicker());
+                        });
+                  },
+                ),
+              ),
+              // ListTile(
+              //   leading: Icon(Icons.people),
+              //   tile: s.blue[200],
+              //   title: Text('owners'),
+              //   trailing: Text('${data.getOwners()}'),
+              //   onTap: () {
+              //     showDialog(
+              //         context: context,
+              //         builder: (context) {
+              //           return Dialog(child: OwnerPicker());
+              //         });
+              //   },
+              // ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Card(
+                  elevation: 0,
+
+                  child: TextField(
+                    onChanged:(value){
+                      Somerandomtext=value;
+                    },
+                    controller: name,
+                    style: TextStyle( fontSize: 30),
+
+                    cursorHeight: 35,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "Name of the event",
+                      helperText: 'Keep it short, this is just a beta.',
+
+                      labelStyle:
+                      TextStyle( fontSize: 30),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Card(
+                  elevation: 0,
+
+                  child: TextField(
+                    controller: description,
+                    style: TextStyle( fontSize: 30),
+
+                    cursorHeight: 35,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "Description",
+                      helperText: 'Whats it about?',
+
+                      labelStyle:
+                      TextStyle( fontSize: 30),
+                    ),
+
+                  ),
+                ),
+
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Card(
+                  elevation: 0,
+
+                  child: TextField(
+                    controller: whatsInItForYou,
+                    style: TextStyle( fontSize: 30),
+
+                    cursorHeight: 35,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "Incentives",
+                      helperText: "What's in it for students",
+
+                      labelStyle:
+                      TextStyle( fontSize: 30),
+                    ),
+
+                  ),
+                ),
+
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Card(
+                  elevation: 0,
+
+                  child: TextField(
+                    controller: link,
+                    style: TextStyle( fontSize: 30),
+
+                    cursorHeight: 35,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "link to more details/website/meeting",
+
+
+                      labelStyle:
+                      TextStyle( fontSize: 20),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

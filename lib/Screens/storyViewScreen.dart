@@ -77,26 +77,7 @@ class StoryViewScreen extends StatelessWidget {
     return Scaffold(
 
 
-      appBar: AppBar(
 
-        elevation: 0,
-
-
-
-
-        leading: TextButton(
-          onPressed: (){
-            Navigator.of(context).pop();
-          },
-          child: Icon(
-            Icons.cancel_outlined,
-          ),
-        ),
-
-        iconTheme: IconThemeData(
-
-        ),
-      ),
       body: GestureDetector(
 
 

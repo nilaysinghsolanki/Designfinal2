@@ -136,9 +136,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
           iconTheme: IconThemeData(color: Colors.black),
           elevation: 0,
         ),
-        body: !initialized
-            ? CircularProgressIndicator()
-            : Container(
+        body: Container(
           decoration: BoxDecoration(),
           padding: EdgeInsets.only(top: 0),
           child: Column(

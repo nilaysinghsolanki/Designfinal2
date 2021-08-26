@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:nilay_dtuotg_2/Screens/galleryView.dart';
@@ -11,7 +13,6 @@ import 'package:nilay_dtuotg_2/widgets/utils.dart';
 import './Screens/tabsScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
-
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,26 +49,22 @@ void main() => runApp(MyApp());
 
 var event_name;
 var event_description;
-bool hostorprofile=false;
-
+bool hostorprofile = false;
 
 List<Widget> Events = [];
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 /////////////////////COLORS
 
-
 ////////////////////////////PAGESNAVIGATION
 bool _events_pressed = false;
-bool _internship_pressed=false;
-bool _project_pressed=false;
+bool _internship_pressed = false;
+bool _project_pressed = false;
 bool _adding_to_app_pressed = false;
 
 class MyApp extends StatelessWidget {
-
   PlusAnimation _plusAnimation;
   static const double width = 500;
   static const double height = 200;
-
 
   Artboard _riveArtboard;
   bool _events_pressed = false;
@@ -76,7 +73,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context1) {
-     ThemeData DarkTheme=ThemeData.dark();
+    ThemeData DarkTheme = ThemeData.dark();
 
     return MultiProvider(
       providers: [
@@ -98,8 +95,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: EmailAndUsernameData())
       ],
       child: MaterialApp(
-
-
         debugShowCheckedModeBanner: false,
         navigatorKey: materialNavigatorKey, // GlobalKey()
 
@@ -120,7 +115,7 @@ class MyApp extends StatelessWidget {
           '/schedule': (context1) => ScheduleTab(),
           '/homeScreen': (context1) => HomeScreen(),
           '/loading': (context1) => LoadingScreen(),
-          '/eventdetailsdesign': (context) =>EventDetailsDesign(
+          '/eventdetailsdesign': (context) => EventDetailsDesign(
                 key: _scaffoldKey,
               ),
         },
@@ -140,7 +135,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   List<Widget> ScatteredListtiles = [
     Container(
       decoration: BoxDecoration(
@@ -157,12 +151,13 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           leading: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: Icon(Icons.logout, color: Colors.black,),
-
+            child: Icon(
+              Icons.logout,
+              color: Colors.black,
+            ),
           ),
           title: Text(
             "log out",
-
           ),
         ),
       ),
@@ -170,31 +165,27 @@ class _HomeScreenState extends State<HomeScreen> {
     Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-
       ),
       child: Builder(
         builder: (_) => ListTile(
           onTap: () async {
             print('.patch profile..');
-            Navigator.of(_).pushNamed('/patchProfileScreen');
+            Navigator.of(_).pushNamed('patchProfileScreen');
           },
           leading: CircleAvatar(
             backgroundColor: Colors.transparent,
-
           ),
           title: Text(
             "edit profile",
-            style: TextStyle(
-
-
-                fontSize: 20),
+            style: TextStyle(fontSize: 20),
           ),
         ),
       ),
     ),
     Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), ),
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Builder(
         builder: (_) => ListTile(
           onTap: () {
@@ -202,15 +193,16 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           leading: CircleAvatar(
             backgroundColor: Colors.transparent,
-            child: Hero(tag: "tag1",child: Icon(Icons.calendar_today, color: Colors.black,)),
-
+            child: Hero(
+                tag: "tag1",
+                child: Icon(
+                  Icons.calendar_today,
+                  color: Colors.black,
+                )),
           ),
           title: Text(
             "Schedule",
-            style: TextStyle(
-
-
-                fontSize: 20),
+            style: TextStyle(fontSize: 20),
           ),
         ),
       ),
@@ -222,81 +214,70 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         leading: CircleAvatar(
           backgroundColor: Colors.transparent,
-          child: Hero(tag: "inviteherotag",child: Icon(Icons.face_retouching_natural,color: Colors.black, )),
-
+          child: Hero(
+              tag: "inviteherotag",
+              child: Icon(
+                Icons.face_retouching_natural,
+                color: Colors.black,
+              )),
         ),
         title: Text(
           "invite friends",
-          style: TextStyle(
-
-
-              fontSize: 20),
+          style: TextStyle(fontSize: 20),
         ),
       ),
     ),
     ListTile(
       leading: CircleAvatar(
         backgroundColor: Colors.transparent,
-        child: Icon(Icons.motorcycle_rounded, color: Colors.black,),
-
+        child: Icon(
+          Icons.motorcycle_rounded,
+          color: Colors.black,
+        ),
       ),
       title: Text(
         "Catch-A-Ride",
-        style: TextStyle(
-
-
-            fontSize: 20),
+        style: TextStyle(fontSize: 20),
       ),
     ),
     ListTile(
-
       leading: CircleAvatar(
         backgroundColor: Colors.transparent,
-        child: Icon(Icons.report, ),
-
+        child: Icon(
+          Icons.report,
+        ),
       ),
       title: Text(
         "Emergency",
-        style: TextStyle(
-
-
-            fontSize: 20),
+        style: TextStyle(fontSize: 20),
       ),
     ),
     ListTile(
-
       leading: CircleAvatar(
         backgroundColor: Colors.transparent,
-        child: Icon(Icons.work,color: Colors.black, ),
-
+        child: Icon(
+          Icons.work,
+          color: Colors.black,
+        ),
       ),
       title: Text(
         "Active Projects",
-        style: TextStyle(
-
-
-            fontSize: 20),
+        style: TextStyle(fontSize: 20),
       ),
     ),
     Container(
-
       alignment: Alignment.bottomCenter,
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Colors.transparent,
-
         ),
         title: Text("I have a B-Plan , for selling DTU"),
-
-        subtitle:
-            Text("-Every Entrepreneur at E-cell"),
+        subtitle: Text("-Every Entrepreneur at E-cell"),
       ),
     )
   ];
   @override
   Widget build(BuildContext context) {
-    
-
     return Container(
       child: Scaffold(
         drawer: Drawer(
@@ -329,29 +310,27 @@ class _HomePageState extends State<HomePage> {
   bool initialized = false;
   PlusAnimation _plusAnimation;
 
-
-
   Artboard _riveArtboard;
   List<Event> evesForSchedule = [];
   List<Event> sheduled = [];
   double width = 500;
   int weekDayIndex = 1;
-  bool loading=true;
+  bool loading = true;
 
   double height = 200;
   List<Event> sheduledToday = [];
-  List<Event> eventsedRegester =[];
-  List<Event> eventfiltered =[];
-  List<NetworkImage> CachedImages=[];
+  List<Event> eventsedRegester = [];
+  List<Event> eventfiltered = [];
+  List<NetworkImage> CachedImages = [];
 
   @override
   void initState() {
-
     super.initState();
     scf = Provider.of<SCF>(context, listen: false).get();
-    eventsedRegester=Provider.of<EventsData>(context,listen:false).getEvents();
+    eventsedRegester =
+        Provider.of<EventsData>(context, listen: false).getEvents();
     eventsedRegester.forEach((element) {
-      if(element.eventType=="University"){
+      if (element.eventType == "University") {
         print("/////////////////////EVENT TYPE IS HERE ${element.eventType}");
         eventfiltered.add(element);
       }
@@ -382,23 +361,17 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+
   Future LoadData() async {
-
-
-
     setState(() {
-      loading=false;
+      loading = false;
     });
-
-
-
   }
 
   var scf;
   bool eventsInitialized = false;
 
   void didChangeDependencies() async {
-
     print('home init');
     if (!eventsInitialized) {
       if (!Provider.of<EventsData>(context, listen: false)
@@ -413,7 +386,6 @@ class _HomePageState extends State<HomePage> {
         //         .getAccessToken());
       }
 
-
       setState(() {
         eventsInitialized = true;
       });
@@ -425,18 +397,16 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-
     List<Widget> ScatteredListtiles = [
       Column(
         children: [
           SingleChildScrollView(
             child: !eventsInitialized
                 ? Rive(
-                  artboard: _riveArtboard,
-                  alignment: Alignment.bottomCenter,
-                  useArtboardSize: true,
-                )
+                    artboard: _riveArtboard,
+                    alignment: Alignment.bottomCenter,
+                    useArtboardSize: true,
+                  )
                 : ListTile(
                     trailing: Text("Projects"),
                   ),
@@ -446,8 +416,9 @@ class _HomePageState extends State<HomePage> {
       DateTime.now().hour <= 17 && DateTime.now().hour >= 8
           ? TimeTableHomeScreenListTile()
           : ListTile(),
-       loading ==false?Center(
-            child: CarouselSlider.builder(
+      loading == false
+          ? Center(
+              child: CarouselSlider.builder(
                   itemCount: eventfiltered.length,
                   itemBuilder: (context, itemIndex, pageViewIndex) {
                     return GestureDetector(
@@ -462,25 +433,30 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 fit: BoxFit.fitHeight,
-                                image: eventfiltered.length!=0?CachedNetworkImageProvider(eventfiltered[itemIndex]
-                                    .event_image
-                                    .toString()): AssetImage("Assets/newframe.png"))),
-                        child: eventfiltered.length==0?Container(child: Text("No Upcoming events")):Container(),
+                                image: eventfiltered.length != 0
+                                    ? CachedNetworkImageProvider(
+                                        eventfiltered[itemIndex]
+                                            .event_image
+                                            .toString())
+                                    : AssetImage("Assets/newframe.png"))),
+                        child: eventfiltered.length == 0
+                            ? Container(child: Text("No Upcoming events"))
+                            : Container(),
                       ),
                     );
                   },
                   options: CarouselOptions(
-                      autoPlay: eventfiltered.length!=0?true:false,
+                      autoPlay: eventfiltered.length != 0 ? true : false,
                       enlargeCenterPage: false,
                       autoPlayInterval: Duration(seconds: 5),
                       height: 500,
                       viewportFraction: 1)),
-          )
+            )
           : Rive(
-            artboard: _riveArtboard,
-            alignment: Alignment.bottomCenter,
-            useArtboardSize: true,
-          ),
+              artboard: _riveArtboard,
+              alignment: Alignment.bottomCenter,
+              useArtboardSize: true,
+            ),
       ListTile(
         title: Text("Internship/Job Opportunities"),
         trailing: Icon(Icons.work_outline),
@@ -506,7 +482,6 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5.0),
-
                 ),
                 child: Center(child: ScatteredListtiles[index]),
               ),
@@ -573,10 +548,11 @@ class _TimeTableHomeScreenListTileState
       setState(() {
         initialized = true;
       });
-       lectureStart =
-      _lecture.time.hour > 12 ? _lecture.time.hour - 12 : _lecture.time.hour;
-       lectureEnd =
-      lectureStart == 12 ? _lecture.length : lectureStart + _lecture.length;
+      lectureStart = _lecture.time.hour > 12
+          ? _lecture.time.hour - 12
+          : _lecture.time.hour;
+      lectureEnd =
+          lectureStart == 12 ? _lecture.length : lectureStart + _lecture.length;
     }
 
     // TODO: implement didChangeDependencies
@@ -592,7 +568,6 @@ class _TimeTableHomeScreenListTileState
 
   @override
   Widget build(BuildContext context) {
-
     return initialized
         ? lectures.isNotEmpty
             ? _lecture.free
@@ -600,11 +575,10 @@ class _TimeTableHomeScreenListTileState
                 : ListTile(
                     title: Text(_lecture.name),
                     subtitle: Text(
-                        lectureStart.toString() +
-                            '-' +
-                            '${lectureEnd.toString()}',
+                      lectureStart.toString() +
+                          '-' +
+                          '${lectureEnd.toString()}',
                     ),
-
                     trailing: GlowingProgressIndicator(
                       child: Icon(Icons.schedule),
                     ),
@@ -630,17 +604,12 @@ class _AddEventsPageState extends State<AddEventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         title: Text(
-
           'new Event',
-          style: TextStyle( fontSize: 30),
+          style: TextStyle(fontSize: 30),
         ),
-
-
       ),
-
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -650,28 +619,22 @@ class _AddEventsPageState extends State<AddEventsPage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 0,
-
                 child: TextField(
-                    style: TextStyle( fontSize: 30),
-
+                    style: TextStyle(fontSize: 30),
                     cursorHeight: 35,
                     decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide( width: 4),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide( width: 3),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        labelText: "Name of the event",
-                        helperText: 'Keep it short, this is just a beta.',
-
-                        labelStyle:
-                            TextStyle( fontSize: 30),
-                        ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "Name of the event",
+                      helperText: 'Keep it short, this is just a beta.',
+                      labelStyle: TextStyle(fontSize: 30),
+                    ),
                     onChanged: (NameOfEvent) {
                       print("The value entered is : $NameOfEvent");
                       event_name_changed = "$NameOfEvent";
@@ -682,51 +645,42 @@ class _AddEventsPageState extends State<AddEventsPage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 0,
-
                 child: TextField(
-                    style: TextStyle( fontSize: 30),
-
+                    style: TextStyle(fontSize: 30),
                     cursorHeight: 35,
                     decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide( width: 4),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide( width: 3),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        labelText: "Description",
-                        helperText: 'Keep it short, this is just a beta.',
-
-                        labelStyle:
-                            TextStyle( fontSize: 30),
-                        ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "Description",
+                      helperText: 'Keep it short, this is just a beta.',
+                      labelStyle: TextStyle(fontSize: 30),
+                    ),
                     onChanged: (DescriptionOfEvent) {
                       print("The value entered is : $DescriptionOfEvent");
                       event_description_channged = "$DescriptionOfEvent";
                     }),
               ),
             ),
-            FloatingActionButton(
+            FloatingActionButton(onPressed: () {
+              event_description = event_description_channged;
+              event_name = event_name_changed;
 
-                onPressed: () {
-                  event_description = event_description_channged;
-                  event_name = event_name_changed;
-
-                  Events.add(Card(
-                    child: ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.star,
-
-                      ),
-                      title: Text(event_name),
-                      subtitle: Text(event_description),
-                    ),
-                  ));
-                }),
+              Events.add(Card(
+                child: ListTile(
+                  leading: Icon(
+                    FontAwesomeIcons.star,
+                  ),
+                  title: Text(event_name),
+                  subtitle: Text(event_description),
+                ),
+              ));
+            }),
           ],
         ),
       ),
@@ -748,16 +702,12 @@ class _AddToSchedulePageState extends State<AddToSchedulePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         elevation: 0,
         title: Text(
           "Add Event Details",
           style: TextStyle(),
         ),
-
-
-
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -773,28 +723,22 @@ class _AddToSchedulePageState extends State<AddToSchedulePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
                   elevation: 0,
-
                   child: TextField(
-                      style: TextStyle( fontSize: 30),
-
+                      style: TextStyle(fontSize: 30),
                       cursorHeight: 35,
                       decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide( width: 4),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide( width: 3),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          labelText: "Name of the event",
-                          helperText: 'Keep it short, this is just a beta.',
-
-                          labelStyle:
-                              TextStyle( fontSize: 30),
-                          ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 4),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 3),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        labelText: "Name of the event",
+                        helperText: 'Keep it short, this is just a beta.',
+                        labelStyle: TextStyle(fontSize: 30),
+                      ),
                       onChanged: (NameOfEvent) {
                         print("The value entered is : $NameOfEvent");
                         event_name_changed = "$NameOfEvent";
@@ -805,51 +749,42 @@ class _AddToSchedulePageState extends State<AddToSchedulePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
                   elevation: 0,
-
                   child: TextField(
-                      style: TextStyle( fontSize: 30),
-
+                      style: TextStyle(fontSize: 30),
                       cursorHeight: 35,
                       decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide( width: 4),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide( width: 3),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          labelText: "Description",
-                          helperText: 'Keep it short, this is just a beta.',
-
-                          labelStyle:
-                              TextStyle( fontSize: 30),
-                          ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 4),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 3),
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        labelText: "Description",
+                        helperText: 'Keep it short, this is just a beta.',
+                        labelStyle: TextStyle(fontSize: 30),
+                      ),
                       onChanged: (DescriptionOfEvent) {
                         print("The value entered is : $DescriptionOfEvent");
                         event_description_channged = "$DescriptionOfEvent";
                       }),
                 ),
               ),
-              FloatingActionButton(
+              FloatingActionButton(onPressed: () {
+                event_description = event_description_channged;
+                event_name = event_name_changed;
 
-                  onPressed: () {
-                    event_description = event_description_channged;
-                    event_name = event_name_changed;
-
-                    Events.add(Card(
-                      child: ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.star,
-
-                        ),
-                        title: Text(event_name),
-                        subtitle: Text(event_description),
-                      ),
-                    ));
-                  }),
+                Events.add(Card(
+                  child: ListTile(
+                    leading: Icon(
+                      FontAwesomeIcons.star,
+                    ),
+                    title: Text(event_name),
+                    subtitle: Text(event_description),
+                  ),
+                ));
+              }),
             ],
           ),
         ),
@@ -873,11 +808,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-
-
-      ),
-
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -887,28 +818,22 @@ class _AddProjectPageState extends State<AddProjectPage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 0,
-
                 child: TextField(
-                    style: TextStyle( fontSize: 30),
-
+                    style: TextStyle(fontSize: 30),
                     cursorHeight: 35,
                     decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide( width: 4),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide( width: 3),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        labelText: "Name of the event",
-                        helperText: 'Keep it short, this is just a beta.',
-
-                        labelStyle:
-                            TextStyle( fontSize: 30),
-                        ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "Name of the event",
+                      helperText: 'Keep it short, this is just a beta.',
+                      labelStyle: TextStyle(fontSize: 30),
+                    ),
                     onChanged: (NameOfEvent) {
                       print("The value entered is : $NameOfEvent");
                       event_name_changed = "$NameOfEvent";
@@ -919,28 +844,22 @@ class _AddProjectPageState extends State<AddProjectPage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 0,
-
                 child: TextField(
-                    style: TextStyle( fontSize: 30),
-
+                    style: TextStyle(fontSize: 30),
                     cursorHeight: 35,
                     decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide( width: 4),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide( width: 3),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        labelText: "Description",
-                        helperText: 'Keep it short, this is just a beta.',
-
-                        labelStyle:
-                            TextStyle( fontSize: 30),
-                        ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "Description",
+                      helperText: 'Keep it short, this is just a beta.',
+                      labelStyle: TextStyle(fontSize: 30),
+                    ),
                     onChanged: (DescriptionOfEvent) {
                       print("The value entered is : $DescriptionOfEvent");
                       event_description_channged = "$DescriptionOfEvent";
@@ -950,9 +869,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
             FloatingActionButton(
                 child: Icon(
                   Icons.check,
-
                 ),
-
                 onPressed: () {
                   event_description = event_description_channged;
                   event_name = event_name_changed;
@@ -963,7 +880,6 @@ class _AddProjectPageState extends State<AddProjectPage> {
                       child: ListTile(
                         leading: Icon(
                           FontAwesomeIcons.star,
-
                         ),
                         title: Text(event_name),
                         subtitle: Text(event_description),
@@ -977,6 +893,7 @@ class _AddProjectPageState extends State<AddProjectPage> {
     );
   }
 }
+
 /////////////////////////////////////////PROJECTPAGE
 class ProjectsPage extends StatefulWidget {
   const ProjectsPage({Key key}) : super(key: key);
@@ -986,24 +903,25 @@ class ProjectsPage extends StatefulWidget {
 }
 
 class _ProjectsPageState extends State<ProjectsPage> {
-  List <Event> eventsedRegester;
-  List <String> imagesstring=[];
-  List <Event> eventfiltered=[];
+  List<Event> eventsedRegester;
+  List<String> imagesstring = [];
+  List<Event> eventfiltered = [];
   bool initialized = false;
   Map<String, dynamic> data;
   ScreenArguments args;
-  bool host_pressed=false;
+  bool host_pressed = false;
 
   @override
   void didChangeDependencies() async {
-
-
     if (!initialized) {
       BuildContext ctx =
           Provider.of<MaterialNavigatorKey>(context, listen: false)
               .materialNavigatorKey
               .currentContext;
-      data =host_pressed==true? await Server_Connection_Functions().getHostData(context, args.username): await Server_Connection_Functions().getProfileData(ctx);
+      data = host_pressed == true
+          ? await Server_Connection_Functions()
+              .getHostData(context, args.username)
+          : await Server_Connection_Functions().getProfileData(ctx);
       print(data['image']);
       setState(() {
         initialized = true;
@@ -1016,184 +934,110 @@ class _ProjectsPageState extends State<ProjectsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return  Expanded(
+    return Expanded(
       child: Container(
-        child: !initialized
-              ? Center(
-            child: Container(child: FadingText('Loading...')),
-          )
-              : Container(
-
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("Assets/newframe.png"),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      child: Image.network(
-                        data['image'],
-                        errorBuilder: (BuildContext context, Object exception,
-                            StackTrace stackTrace) {
-                          // Appropriate logging or analytics, e.g.
-                          // myAnalytics.recordError(
-                          //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
-                          //   exception,
-                          //   stackTrace,
-                          // );
-                          return Card(
-
-                            child: Container(
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 11, horizontal: 4),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 11, horizontal: 44),
-                              child: Column(
-                                children: [
-                                  Icon(
-                                    Icons.person_outline,
-                                    size: 55,
-                                  ),
-                                  Text('😢 Can\'t load image',
-                                      style: TextStyle(
-
-                                          fontStyle: FontStyle.normal,
-
-
-                                          fontFamily: 'DancingScript',
-                                          fontSize: 20)),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    Card(
-
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                        padding:
-                        EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                        child: Text('name - ' + data['name'].toString(),
-                            style: TextStyle(
-
-                                fontStyle: FontStyle.normal,
-
-
-                                fontFamily: 'DancingScript',
-                                fontSize: 20)),
-                      ),
-                    ),
-                    Card(
-
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                        padding:
-                        EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                        child: Text('roll no. ' + data['roll_no'].toString(),
-                            style: TextStyle(
-
-                                fontStyle: FontStyle.normal,
-
-
-                                fontFamily: 'DancingScript',
-                                fontSize: 20)),
-                      ),
-                    ),
-                    Card(
-
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                        padding:
-                        EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                        child: Text('Branch ' + data['branch'].toString(),
-                            style: TextStyle(
-
-                                fontStyle: FontStyle.normal,
-
-
-                                fontFamily: 'DancingScript',
-                                fontSize: 20)),
-                      ),
-                    ),
-
-                    Card(
-
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                        padding:
-                        EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                        child: Text('Batch ' + data['batch'].toString(),
-                            style: TextStyle(
-
-                                fontStyle: FontStyle.normal,
-
-
-                                fontFamily: 'DancingScript',
-                                fontSize: 20)),
-                      ),
-                    ),
-
-                    Card(
-
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                        padding:
-                        EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                        child: Text('year ' + data['year'].toString(),
-                            style: TextStyle(
-
-                                fontStyle: FontStyle.normal,
-
-
-                                fontFamily: 'DancingScript',
-                                fontSize: 20)),
-                      ),
-                    ),
-                    Card(
-
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                        padding:
-                        EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                        child: Text('invited by ' + data['who_sent'].toString(),
-                            style: TextStyle(
-
-                                fontStyle: FontStyle.normal,
-
-
-                                fontFamily: 'DancingScript',
-                                fontSize: 20)),
-                      ),
-                    ),
-
-                    // Card(
-                    //
-                    //   child: Container(
-                    //     margin:
-                    //         EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                    //     padding:
-                    //         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                    //     child: Text('roll no. ' + data['roll_no'].toString(),
-                    //         style: TextStyle(
-                    //
-                    //             fontWeight: FontWeight.w900,
-                    //             fontStyle: FontStyle.italic,
-                    //             fontFamily: 'Open Sans',
-                    //             fontSize: 20)),
-                    //   ),
-                    // ),
-                    // ListTile(
-                    //   title: Text(data['who_sent'].toString()),
-                    // ),
-                  ],
-                )),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 10.0,
+            sigmaY: 10.0,
           ),
+          child: !initialized
+              ? Center(
+                  child: Container(child: FadingText('Loading...')),
+                )
+              : Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("Assets/ProfileBG.png"),
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(
+                            0, MediaQuery.of(context).size.height / 7, 0, 0),
+                        color: Colors.transparent,
+                        height: MediaQuery.of(context).size.height / 5,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 40,
+                          backgroundImage: CachedNetworkImageProvider(data['image'].toString(),),
+
+
+                          ),
+                        ),
+                      Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                        child: Text(data['name'].toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontStyle: FontStyle.normal,
+                                fontFamily: 'DancingScript',
+                                fontSize: 20)),
+                      ),
+                      Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                        child: Text(data['description'].toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontStyle: FontStyle.normal,
+                                fontFamily: 'DancingScript',
+                                fontSize: 20)),
+                      ),
+
+                      Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                        child: Row(
+                          children: [
+                            Text('invited by ',
+                                style: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    fontFamily: 'DancingScript',
+                                    fontSize: 20)),
+                            Text(data['who_sent'].toString(),
+                                style: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    fontFamily: 'DancingScript',
+                                    fontSize: 20)),
+                          ],
+                        ),
+                      ),
+
+                      // Card(
+                      //
+                      //   child: Container(
+                      //     margin:
+                      //         EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      //     padding:
+                      //         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                      //     child: Text('roll no. ' + data['roll_no'].toString(),
+                      //         style: TextStyle(
+                      //
+                      //             fontWeight: FontWeight.w900,
+                      //             fontStyle: FontStyle.italic,
+                      //             fontFamily: 'Open Sans',
+                      //             fontSize: 20)),
+                      //   ),
+                      // ),
+                      // ListTile(
+                      //   title: Text(data['who_sent'].toString()),
+                      // ),
+                    ],
+                  )),
+                ),
+        ),
       ),
     );
   }
@@ -1208,34 +1052,104 @@ class InternshipsPage extends StatefulWidget {
 }
 
 class _InternshipsPageState extends State<InternshipsPage> {
-  List <Event> eventsedRegester;
-  List <String> imagesstring=[];
-  List <Event> eventfiltered=[];
+  List<Project> eventsedRegester;
+  List<String> imagesstring = [];
+  List<Project> eventfiltered = [];
 
   @override
   void initState() {
-
     // TODO: implement initState
     super.initState();
   }
-
   @override
 
+  void didChangeDependencies() async{
+    if (!Provider.of<ProjectData>(context, listen: false)
+        .getOnceDownloaded()) {
+      scf = Provider.of<SCF>(context, listen: false).get();
+      await scf.fetchListOfProjects(context);
+      Provider.of<ProjectData>(context, listen: false).setOnceDownloaded(true);
+
+      // Provider.of<EventsImages>(context, listen: false).fetchList(
+      //     Provider.of<EventsData>(context, listen: false).getEvents(),
+      //     Provider.of<AccessTokenData>(context, listen: false)
+      //         .getAccessToken());
+    }
+
+
+    eventsedRegester =
+        Provider.of<ProjectData>(context, listen: false).getProjects();
+
+    eventsedRegester.forEach((element) {
+      eventfiltered.add(element);
+    });
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+  void _showSecondPage(BuildContext context,Project projects) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => Scaffold(
+          appBar:AppBar(
+            title:Hero(
+              tag:"lolol",
+              child: Text(
+                projects.name,
+                style: TextStyle(
+                    fontSize: 19,
+                    fontFamily: 'DancingScript'),
+              ),
+            ),
+
+          ),
+
+          body: Stack(
+            children: [
+              Hero(
+                tag: 'my-hero-animation-tag',
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                            '${projects.image}',
+                          ),
+                          fit: BoxFit.fitWidth),
+                      shape: BoxShape.rectangle),
+                ),
+              ),
+
+              Container(child:Text("${projects.description}")),
+              Hero(
+                tag:"lol",
+                child: CircleAvatar(
+                  radius: 30,
+                  child: CircleAvatar(
+                      radius: 28,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: CachedNetworkImageProvider(
+                                    '${projects.owner_pic.toString()}'),
+                                fit: BoxFit.fill),
+                            shape: BoxShape.circle),
+                      )),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
   @override
   Widget build(BuildContext context) {
-    scf = Provider.of<SCF>(context, listen: false).get();
-    eventsedRegester=Provider.of<EventsData>(context,listen:false).getEvents();
-    eventsedRegester.forEach((element) {
-      if(element.eventType=="Social"){
-        print("/////////////////////EVENT TYPE IS HERE ${element.eventType}");
-        eventfiltered.add(element);
-      }
-    });
+
 
     return Expanded(
-      child:Container(
+      child: Container(
         alignment: Alignment.center,
-
         child: ListView.builder(
           itemCount: 1,
           itemBuilder: (BuildContext context, int index) {
@@ -1256,74 +1170,80 @@ class _InternshipsPageState extends State<InternshipsPage> {
                           return Column(
                             children: [
                               GestureDetector(
+                                onTap: () => _showSecondPage(context,Project(
+                              image:eventfiltered[index].image.toString(),owner_pic:eventfiltered[index].owner_pic.toString(),
+owner:eventfiltered[index].owner.toString(),name:eventfiltered[index].name.toString(),description: eventfiltered[index].description.toString()
+                                )),
                                 child: Container(
-                                  width: double.infinity,
-                                  height: 400,
-
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: CachedNetworkImageProvider(
-                                              '${eventfiltered[index].event_image.toString()}',
-                                            ),
-                                            fit: BoxFit.fitHeight),
-                                        shape: BoxShape.rectangle),
+                                  width: MediaQuery.of(context).size.height*5/6,
+                                  height: MediaQuery.of(context).size.height/2,
+                                  child: Hero(
+                                    tag: 'my-hero-animation-tag',
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: CachedNetworkImageProvider(
+                                                '${eventfiltered[index].image.toString()}',
+                                              ),
+                                              fit: BoxFit.fitHeight),
+                                          shape: BoxShape.rectangle),
+                                    ),
                                   ),
                                 ),
                               ),
                               ListTile(
-
-
-
-
                                   onTap: () {
-                                    Navigator.of(context).pushNamed(
-                                        '/eventdetailsdesign',
-                                        arguments: ScreenArguments(
-                                            id: eventfiltered[index].id,
-                                            scf: scf,
-                                            context: context));
-                                  },
 
+
+
+                                  },
                                   subtitle: Text(
                                       eventfiltered[index].owner.toString(),
                                       style: TextStyle(
-                                          fontFamily: 'DancingScript'
-                                      )
+                                          fontFamily: 'DancingScript')),
 
-                                  ),
-                                  trailing: eventfiltered[index].favorite
-                                      ?Icon(Icons.star,):Icon(Icons.star_border,),
                                   leading: TextButton(
-                                    onPressed:(){ setState(() {
-                                      hostorprofile=true;
-                                    });Navigator.of(context).pushNamed('/ProfileDetailsScreen',arguments: ScreenArguments(
-                                        username: eventfiltered[index].owner,hostpressed: hostorprofile
-
-                                    ) );},
-                                    child: CircleAvatar(
-                                      radius: 22,
-
+                                    onPressed: () {
+                                      setState(() {
+                                        hostorprofile = true;
+                                      });
+                                      Navigator.of(context).pushNamed(
+                                          '/ProfileDetailsScreen',
+                                          arguments: ScreenArguments(
+                                              username:
+                                                  eventfiltered[index].owner,
+                                              hostpressed: hostorprofile));
+                                    },
+                                    child: Hero(
+                                      tag:"lol",
                                       child: CircleAvatar(
-
-
-                                          radius: 20,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: CachedNetworkImageProvider(
-                                                        '${eventfiltered[index].owner_image.toString()}'),
-                                                    fit: BoxFit.fill),
-                                                shape: BoxShape.circle),
-                                          )),
+                                        radius: 22,
+                                        child: CircleAvatar(
+                                            radius: 20,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: CachedNetworkImageProvider(
+                                                          '${eventfiltered[index].owner_pic.toString()}'),
+                                                      fit: BoxFit.fill),
+                                                  shape: BoxShape.circle),
+                                            )),
+                                      ),
                                     ),
                                   ),
-                                  title: Text(
-                                    eventfiltered[index].name,
-                                    style: TextStyle(
-                                         fontSize: 19,fontFamily: 'DancingScript'),
+                                  title: Hero(
+                                    tag:"lolol",
+                                    child: Text(
+                                      eventfiltered[index].name,
+                                      style: TextStyle(
+                                          fontSize: 19,
+                                          fontFamily: 'DancingScript'),
+                                    ),
                                   )),
-                              Divider(height: 20,thickness: 2,),
+                              Divider(
+                                height: 20,
+                                thickness: 2,
+                              ),
                             ],
                           );
                         }),
@@ -1338,7 +1258,6 @@ class _InternshipsPageState extends State<InternshipsPage> {
   }
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////EVENTSPAGE
 
 class EventsPage extends StatefulWidget {
@@ -1351,20 +1270,18 @@ class EventsPage extends StatefulWidget {
 var scf;
 
 class _EventsPageState extends State<EventsPage> {
-  bool loading =true;
-  List <Event> eventsedRegester;
-  List <String> imagesstring=[];
-  List <Event> eventfiltered=[];
-
-
+  bool loading = true;
+  List<Event> eventsedRegester;
+  List<String> imagesstring = [];
+  List<Event> eventfiltered = [];
 
   @override
   void initState() {
-
     scf = Provider.of<SCF>(context, listen: false).get();
-    eventsedRegester=Provider.of<EventsData>(context,listen:false).getEvents();
+    eventsedRegester =
+        Provider.of<EventsData>(context, listen: false).getEvents();
     eventsedRegester.forEach((element) {
-      if(element.eventType=="University"){
+      if (element.eventType == "University") {
         print("/////////////////////EVENT TYPE IS HERE ${element.eventType}");
         eventfiltered.add(element);
       }
@@ -1374,24 +1291,19 @@ class _EventsPageState extends State<EventsPage> {
     super.initState();
     LoadData();
     print("///////////////////////////INITIATED");
-
   }
+
   Future LoadData() async {
-
-
-
     if (!mounted) return;
     setState(() {
-      loading=false;
+      loading = false;
     });
 
-
-print("//////////////////////////////LOADED");
+    print("//////////////////////////////LOADED");
   }
 
   @override
-void dispose() {
-
+  void dispose() {
     // TODO: implement dispose
     super.dispose();
   }
@@ -1400,12 +1312,9 @@ void dispose() {
   Widget build(BuildContext context) {
     print("//////////////////////////////BUILDING");
 
-
-
     return Expanded(
-      child:Container(
+      child: Container(
         alignment: Alignment.center,
-
         child: ListView.builder(
           itemCount: 1,
           itemBuilder: (BuildContext context, int index) {
@@ -1417,7 +1326,6 @@ void dispose() {
                   verticalOffset: 100.0,
                   child: FlipAnimation(
                     child: ListView.builder(
-
                         physics: ClampingScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
@@ -1426,75 +1334,73 @@ void dispose() {
                           return Column(
                             children: [
                               Center(
-                                child: loading?SkeletonContainer.square(
-                                  width: 22,
-                                  height: 22,
-
-                                ):TextButton(
-                                  onPressed:(){ setState(() {
-                                    hostorprofile=true;
-                                  });Navigator.of(context).pushNamed('/ProfileDetailsScreen',arguments: ScreenArguments(
-                                      username: eventfiltered[index].owner,hostpressed: hostorprofile
-
-                                  ) );},
-                                  child: CircleAvatar(
-                                    radius: 22,
-
-                                    child: CircleAvatar(
-
-
-                                        radius: 20,
-                                        child: !loading?Container(
+                                child: loading
+                                    ? SkeletonContainer.square(
+                                        width: 22,
+                                        height: 22,
+                                      )
+                                    : TextButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            hostorprofile = true;
+                                          });
+                                          Navigator.of(context).pushNamed(
+                                              '/ProfileDetailsScreen',
+                                              arguments: ScreenArguments(
+                                                  username: eventfiltered[index]
+                                                      .owner,
+                                                  hostpressed: hostorprofile));
+                                        },
+                                        child: CircleAvatar(
+                                          radius: 22,
+                                          child: CircleAvatar(
+                                              radius: 20,
+                                              child: !loading
+                                                  ? Container(
+                                                      decoration: BoxDecoration(
+                                                          image: DecorationImage(
+                                                              image: CachedNetworkImageProvider(
+                                                                  '${eventfiltered[index].owner_image.toString()}'),
+                                                              fit: BoxFit.fill),
+                                                          shape:
+                                                              BoxShape.circle),
+                                                    )
+                                                  : SkeletonContainer.square(
+                                                      width: 100,
+                                                      height: 20,
+                                                    )),
+                                        ),
+                                      ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(
+                                      '/eventdetailsdesign',
+                                      arguments: ScreenArguments(
+                                          id: eventfiltered[index].id,
+                                          scf: scf,
+                                          context: context));
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 400,
+                                  child: loading
+                                      ? SkeletonContainer.square(
+                                          width: 400,
+                                          height: 400,
+                                        )
+                                      : Container(
                                           decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: CachedNetworkImageProvider(
-                                                      '${eventfiltered[index].owner_image.toString()}'),
-                                                  fit: BoxFit.fill),
-                                              shape: BoxShape.circle),
-                                        ):SkeletonContainer.square(
-                                          width: 100,
-                                          height: 20,
-
-                                        )),
-                                  ),
+                                            image: DecorationImage(
+                                                image: CachedNetworkImageProvider(
+                                                    '${eventfiltered[index].event_image.toString()}',
+                                                    errorListener: () {}),
+                                                fit: BoxFit.fitHeight),
+                                          ),
+                                        ),
                                 ),
                               ),
-
-                          GestureDetector(
-                            onTap: (){
-                              Navigator.of(context).pushNamed(
-                                  '/eventdetailsdesign',
-                                  arguments: ScreenArguments(
-                                      id: eventfiltered[index].id,
-                                      scf: scf,
-                                      context: context));
-                            },
-                            child: Container(
-                            width: double.infinity,
-                            height: 400,
-
-                            child: loading?SkeletonContainer.square(
-                            width: 400,
-                            height: 400,
-
-                            ):Container(
-                               decoration: BoxDecoration(
-                            image: DecorationImage(
-                            image: CachedNetworkImageProvider( '${eventfiltered[index].event_image.toString()}',errorListener: (){
-
-                            }
-
-                            ),
-                            fit: BoxFit.fitHeight),
-                            ),
-                            ),
-                            ),
-                          ),
                               ListTile(
-
-
-
-
                                   onTap: () {
                                     Navigator.of(context).pushNamed(
                                         '/eventdetailsdesign',
@@ -1503,35 +1409,38 @@ void dispose() {
                                             scf: scf,
                                             context: context));
                                   },
-
-                                  subtitle: loading?SkeletonContainer.square(
-                                    width: 10,
-                                    height: 10,
-
-                                  ):Text(
-                                      "${eventfiltered[index].dateime.day.toString()} .${eventfiltered[index].dateime.month.toString()  }",
-                                      style: TextStyle(
-                                          fontFamily: 'DancingScript'
-                                      )
-
-                                  ),
-                                  trailing: loading?SkeletonContainer.square(
-                                    width: 10,
-                                    height: 10,
-
-                                  ):eventfiltered[index].favorite
-                                      ?Icon(FontAwesomeIcons.solidStar,):Icon(FontAwesomeIcons.star,),
-
-                                  title: loading?SkeletonContainer.square(
-                                    width: 10,
-                                    height: 10,
-
-                                  ):Text(
-                                    eventfiltered[index].name,
-                                    style: TextStyle(
-                                         fontSize: 19,fontFamily: 'DancingScript'),
-                                  )),
-
+                                  subtitle: loading
+                                      ? SkeletonContainer.square(
+                                          width: 10,
+                                          height: 10,
+                                        )
+                                      : Text(
+                                          "${eventfiltered[index].dateime.day.toString()} .${eventfiltered[index].dateime.month.toString()}",
+                                          style: TextStyle(
+                                              fontFamily: 'DancingScript')),
+                                  trailing: loading
+                                      ? SkeletonContainer.square(
+                                          width: 10,
+                                          height: 10,
+                                        )
+                                      : eventfiltered[index].favorite
+                                          ? Icon(
+                                              FontAwesomeIcons.solidStar,
+                                            )
+                                          : Icon(
+                                              FontAwesomeIcons.star,
+                                            ),
+                                  title: loading
+                                      ? SkeletonContainer.square(
+                                          width: 10,
+                                          height: 10,
+                                        )
+                                      : Text(
+                                          eventfiltered[index].name,
+                                          style: TextStyle(
+                                              fontSize: 19,
+                                              fontFamily: 'DancingScript'),
+                                        )),
                             ],
                           );
                         }),
@@ -1563,17 +1472,11 @@ class _CustomPageState extends State<CustomPage> {
         title: Text(
           'Add Event',
           style: TextStyle(
-
               fontStyle: FontStyle.normal,
-
-
               fontFamily: 'DancingScript',
               fontSize: 20),
         ),
-
-
       ),
-
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -1586,28 +1489,22 @@ class _CustomPageState extends State<CustomPage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 0,
-
                 child: TextField(
-                    style: TextStyle( fontSize: 30),
-
+                    style: TextStyle(fontSize: 30),
                     cursorHeight: 35,
                     decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide( width: 4),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide( width: 3),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        labelText: "Name of the event",
-                        helperText: 'Keep it short, this is just a beta.',
-
-                        labelStyle:
-                            TextStyle( fontSize: 30),
-                        ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "Name of the event",
+                      helperText: 'Keep it short, this is just a beta.',
+                      labelStyle: TextStyle(fontSize: 30),
+                    ),
                     onChanged: (NameOfEvent) {
                       print("The value entered is : $NameOfEvent");
                       setState(() {
@@ -1620,28 +1517,22 @@ class _CustomPageState extends State<CustomPage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 elevation: 0,
-
                 child: TextField(
-                    style: TextStyle( fontSize: 30),
-
+                    style: TextStyle(fontSize: 30),
                     cursorHeight: 35,
                     decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide( width: 4),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide( width: 3),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        labelText: "Description",
-                        helperText: 'Keep it short, this is just a beta.',
-
-                        labelStyle:
-                            TextStyle( fontSize: 30),
-                        ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "Description",
+                      helperText: 'Keep it short, this is just a beta.',
+                      labelStyle: TextStyle(fontSize: 30),
+                    ),
                     onChanged: (DescriptionOfEvent) {
                       print("The value entered is : $DescriptionOfEvent");
                       setState(() {
@@ -1655,15 +1546,11 @@ class _CustomPageState extends State<CustomPage> {
               child: FloatingActionButton.extended(
                   label: Text(
                     'save',
-                    style: TextStyle(
-
-                        fontSize: 20),
+                    style: TextStyle(fontSize: 20),
                   ),
                   icon: Icon(
                     Icons.check,
-
                   ),
-
                   onPressed: () {
                     event_description = event_description_channged;
                     event_name = event_name_changed;
@@ -1673,7 +1560,6 @@ class _CustomPageState extends State<CustomPage> {
                         child: ListTile(
                           leading: Icon(
                             FontAwesomeIcons.star,
-
                           ),
                           title: Text(event_name),
                           subtitle: Text(event_description),
@@ -1682,7 +1568,6 @@ class _CustomPageState extends State<CustomPage> {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         duration: Duration(seconds: 1),
                         content: Text('event saved'),
-
                       ));
                     }
 
@@ -1708,7 +1593,6 @@ class _AddingPageState extends State<AddingPage> {
   PlusAnimation _plusAnimation;
   double width = 500;
   double height = 200;
-
 
   Artboard _riveArtboard;
   void initState() {
@@ -1737,13 +1621,10 @@ class _AddingPageState extends State<AddingPage> {
   void _events_page_function(bool _eventspressed) {
     if (_adding_to_app_pressed == false) {
       if (_events_pressed == true) {
-
-
         setState(() {
           _events_pressed = _eventspressed;
         });
       }
-
     }
   }
 
@@ -1776,15 +1657,12 @@ class _AddingPageState extends State<AddingPage> {
     List<Icon> myicons = [
       Icon(
         FontAwesomeIcons.star,
-
       ),
       Icon(
         Icons.schedule_outlined,
-
       ),
       Icon(
         FontAwesomeIcons.tasks,
-
       ),
     ];
     List<Text> titlelist = [
@@ -1813,7 +1691,6 @@ class _AddingPageState extends State<AddingPage> {
             },
             leading: Icon(
               FontAwesomeIcons.star,
-
             ),
             title: Text("Add to Events"),
             subtitle: Text(
@@ -1833,7 +1710,6 @@ class _AddingPageState extends State<AddingPage> {
             },
             leading: Icon(
               Icons.update,
-
             ),
             title: Text("Add to Stories"),
             subtitle: Text(
@@ -1852,8 +1728,7 @@ class _AddingPageState extends State<AddingPage> {
               Navigator.of(context).pushNamed('AddEventScreen', arguments: 3);
             },
             leading: Icon(
-            Icons.work_outline,
-
+              Icons.work_outline,
             ),
             title: Text("Add to internships/jobs"),
             subtitle: Text(
@@ -1912,8 +1787,8 @@ class MyRiveAnimation extends StatefulWidget {
 
 class _MyRiveAnimationState extends State<MyRiveAnimation> {
   PlusAnimation _plusAnimation;
-  static const double width = 500;
-  static const double height = 200;
+  double width;
+  double height;
 
   bool initialized = false;
   Artboard _riveArtboard;
@@ -1921,16 +1796,20 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   List<Event> sheduledToday = [];
 
   bool eventsInitialized = false;
-  bool storycontinues=false;
-  int j=1;
+  bool storycontinues = false;
+  int j = 1;
 
   @override
   void didChangeDependencies() async {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height / 5;
+
     if (!initialized) {
       if (!Provider.of<EventsData>(context, listen: false)
           .getOnceDownloaded()) {
         scf = Provider.of<SCF>(context, listen: false).get();
         await scf.fetchListOfEvents(context);
+
         Provider.of<EventsData>(context, listen: false).setOnceDownloaded(true);
 
         // Provider.of<EventsImages>(context, listen: false).fetchList(
@@ -1951,9 +1830,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
 
   @override
   void initState() {
-
     super.initState();
-
 
     // Load the animation file from the bundle, note that you could also
     // download this. The RiveFile just expects a list of bytes.
@@ -1978,42 +1855,34 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   void _events_page_function(bool _eventspressed) {
     if (_adding_to_app_pressed == false) {
       if (_events_pressed == true) {
-
-
         setState(() {
           _events_pressed = _eventspressed;
         });
       }
-
     }
   }
+
   void _Project_page_function(bool _projectpressed) {
     if (_adding_to_app_pressed == false) {
       if (_project_pressed == true) {
-
-
         setState(() {
           _project_pressed = _projectpressed;
         });
       }
-
     }
   }
+
   void _Internship_page_function(bool _internshippressed) {
     if (_adding_to_app_pressed == false) {
       if (_project_pressed == true) {
-
-
         setState(() {
-          _internship_pressed= _internshippressed;
+          _internship_pressed = _internshippressed;
         });
       }
-
     }
   }
 
   void _adding_page_open_function(bool _adding_page_active) {
-
     if (_plusAnimation == null) {
       _riveArtboard.addController(
         _plusAnimation = PlusAnimation('Plus'),
@@ -2022,14 +1891,10 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
 
     if (_adding_page_active == true) {
       _plusAnimation.start();
-
     } else {
       _plusAnimation.reverse();
       if (_events_pressed == true) {
-
-      } else if (_events_pressed == false) {
-
-      }
+      } else if (_events_pressed == false) {}
     }
 
     setState(() {
@@ -2045,29 +1910,20 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
 
   String owner = '';
 
-
   @override
   Widget build(BuildContext context) {
     List<List<Event>> ownersEvents = [];
 
-    List <Event>storiesFiltered=[];
-    ScreenArguments args = ModalRoute
-        .of(context)
-        .settings
-        .arguments;
-    if(j!=1){
-storycontinues=true;
-
+    List<Event> storiesFiltered = [];
+    ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    if (j != 1) {
+      storycontinues = true;
     }
     sheduledToday.forEach((element) {
-      if(element.eventType=="Society" )
-        storiesFiltered.add(element);
-
+      if (element.eventType == "Society") storiesFiltered.add(element);
     });
 
-
     for (int i = 0; i < storiesFiltered.length; i++) {
-
       if (ownersEvents.indexWhere(
               (element) => element[0].owner == storiesFiltered[i].owner) !=
           -1) {
@@ -2090,23 +1946,23 @@ storycontinues=true;
       alignment: Alignment.center,
       child: !initialized
           ? Center(
-          child:Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("Assets/LogoOTG.png"),
-                  fit: BoxFit.cover,
-                ),
-
-
-              )
-          ))
+              child: Container(
+                  decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("Assets/LogoOTG.png"),
+                fit: BoxFit.cover,
+              ),
+            )))
           : Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (_adding_to_app_pressed == false && _events_pressed == false && _project_pressed==false && _internship_pressed==false)
+                if (_adding_to_app_pressed == false &&
+                    _events_pressed == false &&
+                    _project_pressed == false &&
+                    _internship_pressed == false)
                   Container(
-                    height: 200,
+                    height: MediaQuery.of(context).size.height / 5,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: ListView.builder(
@@ -2115,32 +1971,34 @@ storycontinues=true;
                         itemCount: ownersEvents.length,
                         itemBuilder: (BuildContext context, int index) =>
                             GestureDetector(
-
                           onTap: () {
-                            j=0;
+                            j = 0;
                             j++;
 
                             Navigator.of(context).pushNamed(
                               StoryViewScreen.routeName,
                               arguments: ScreenArguments(
-                                id: !storycontinues?index:args.id,
-                                  eves: !storycontinues?ownersEvents[
-                                      index]:ownersEvents[
-                                  args.id],ownerlist:  ownersEvents), // sheduledToday[index].event_image,
+                                  id: !storycontinues ? index : args.id,
+                                  eves: !storycontinues
+                                      ? ownersEvents[index]
+                                      : ownersEvents[args.id],
+                                  ownerlist:
+                                      ownersEvents), // sheduledToday[index].event_image,
                             );
                           },
                           child: Container(
                             margin: EdgeInsets.all(3),
                             child: CircleAvatar(
-
+                              backgroundColor: Colors.purple,
                               radius: 30,
                               child: CircleAvatar(
-
+                                backgroundColor: Colors.white,
                                 radius: 27,
-                                backgroundImage: storiesFiltered.isNotEmpty?CachedNetworkImageProvider(
-
-                                    ownersEvents[index][0].owner_image,
-                                    scale: 0.5): AssetImage("Assets/newframe.png"),
+                                backgroundImage: storiesFiltered.isNotEmpty
+                                    ? CachedNetworkImageProvider(
+                                        ownersEvents[index][0].owner_image,
+                                        scale: 0.5)
+                                    : AssetImage("Assets/newframe.png"),
                               ),
                             ),
                           ),
@@ -2158,17 +2016,16 @@ storycontinues=true;
                   AddingPage()
                 else if (_events_pressed == true)
                   EventsPage()
-                  else if(_internship_pressed==true)
-                    InternshipsPage()
-                    else if(_project_pressed==true)
-                      ProjectsPage()
+                else if (_internship_pressed == true)
+                  InternshipsPage()
+                else if (_project_pressed == true)
+                  ProjectsPage()
                 else
                   HomePage(),
 
                 Container(
                   padding: EdgeInsets.all(0),
-                  width: width,
-
+                  width: MediaQuery.of(context).size.width,
                   child: _riveArtboard == null
                       ? const SizedBox()
                       : GestureDetector(
@@ -2184,9 +2041,9 @@ storycontinues=true;
                                 localtouchposition.dx < 2 * (width / 6);
                             var profiletouched = localtouchposition.dx < width;
                             var lowerblanktouched =
-                                localtouchposition.dx < 3 * (width / 6);
+                                localtouchposition.dx < 4 * (width / 6);
                             var eventstouched =
-                                localtouchposition.dx < 5 * (width / 8);
+                                localtouchposition.dx < 5 * (width / 6);
 
                             if (!tophalftouched) {
                               if (hometouched) {
@@ -2194,29 +2051,27 @@ storycontinues=true;
                                   setState(() {
                                     if (_events_pressed == true) {
                                       _events_pressed = !_events_pressed;
-
-
-
                                     }
-                                    if(_internship_pressed==true){
-                                      _internship_pressed=!_internship_pressed;
+                                    if (_internship_pressed == true) {
+                                      _internship_pressed =
+                                          !_internship_pressed;
                                     }
-                                    if(_project_pressed==true){
-                                      _project_pressed=!_project_pressed;
+                                    if (_project_pressed == true) {
+                                      _project_pressed = !_project_pressed;
                                     }
                                     _plusAnimation.isActive = false;
                                     _riveArtboard.addController(
-                                        _plusAnimation =
-                                            PlusAnimation('home'));
+                                        _plusAnimation = PlusAnimation('home'));
                                   });
                                 }
                               } else if (internshiptouched) {
                                 if (!_adding_to_app_pressed) {
                                   setState(() {
                                     _internship_pressed = !_internship_pressed;
-                                    _events_pressed=false;
-                                    _project_pressed=false;
-                                    _Internship_page_function(_internship_pressed);
+                                    _events_pressed = false;
+                                    _project_pressed = false;
+                                    _Internship_page_function(
+                                        _internship_pressed);
                                     _plusAnimation.isActive = false;
                                     _riveArtboard.addController(_plusAnimation =
                                         PlusAnimation('internship'));
@@ -2224,7 +2079,6 @@ storycontinues=true;
                                 }
                               } else if (lowerblanktouched) {
                                 setState(() {
-
                                   _adding_to_app_pressed =
                                       !_adding_to_app_pressed;
                                   _adding_page_open_function(
@@ -2234,8 +2088,8 @@ storycontinues=true;
                                 if (!_adding_to_app_pressed) {
                                   setState(() {
                                     _events_pressed = !_events_pressed;
-                                    _internship_pressed=false;
-                                    _project_pressed=false;
+                                    _internship_pressed = false;
+                                    _project_pressed = false;
                                     _events_page_function(_events_pressed);
                                     _plusAnimation.isActive = false;
                                     _riveArtboard.addController(_plusAnimation =
@@ -2245,17 +2099,15 @@ storycontinues=true;
                               } else if (profiletouched) {
                                 if (!_adding_to_app_pressed) {
                                   setState(() {
-                                    _project_pressed =!_project_pressed;
-                                    _events_pressed=false;
-                                    _internship_pressed=false;
+                                    _project_pressed = !_project_pressed;
+                                    _events_pressed = false;
+                                    _internship_pressed = false;
                                     _Project_page_function(_project_pressed);
                                     _plusAnimation.isActive = false;
                                     _riveArtboard.addController(_plusAnimation =
                                         PlusAnimation('profile'));
                                     print("Profile Touched");
                                   });
-
-
                                 }
                               }
                             } else {
@@ -2268,7 +2120,6 @@ storycontinues=true;
                             }
                           },
                           child: Container(
-
                             child: Rive(
                               artboard: _riveArtboard,
                               alignment: Alignment.bottomCenter,

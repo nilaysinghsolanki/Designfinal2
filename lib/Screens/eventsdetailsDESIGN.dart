@@ -117,6 +117,7 @@ class _EventDetailsDesignState extends State<EventDetailsDesign> {
     int eventID = args.id;
     if (!initialized) {
 
+
       var accessToken =
           Provider.of<AccessTokenData>(context, listen: false).accessToken;
       var accessTokenValue = accessToken[0];
