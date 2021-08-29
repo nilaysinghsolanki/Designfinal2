@@ -10,6 +10,7 @@ import 'package:nilay_dtuotg_2/Screens/testingScreen.dart';
 import 'package:nilay_dtuotg_2/models/lecture.dart';
 import 'package:nilay_dtuotg_2/widgets/skeleton_container.dart';
 import 'package:nilay_dtuotg_2/widgets/utils.dart';
+import 'package:url_launcher/link.dart';
 import './Screens/tabsScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
@@ -329,6 +330,7 @@ class _HomePageState extends State<HomePage> {
     scf = Provider.of<SCF>(context, listen: false).get();
     eventsedRegester =
         Provider.of<EventsData>(context, listen: false).getEvents();
+
     eventsedRegester.forEach((element) {
       if (element.eventType == "University") {
         print("/////////////////////EVENT TYPE IS HERE ${element.eventType}");
@@ -982,16 +984,132 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                 fontSize: 20)),
                       ),
                       Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                        child: Text(data['description'].toString(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontStyle: FontStyle.normal,
-                                fontFamily: 'DancingScript',
-                                fontSize: 20)),
+                        decoration: BoxDecoration(
+
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(0),
+                                topRight: Radius.circular(0))),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                alignment: Alignment.center,
+
+                                child: Column(
+                                  children: [
+
+                                    Text(
+                                      "Description",
+                                      style: TextStyle(
+
+
+                                      ),
+                                    ),
+                                    Text(data['description']
+                                        .toString()
+                                        .substring(
+                                        0,
+                                        data['description']
+                                            .toString()
+                                            .indexOf('~\$') ==
+                                            -1
+                                            ? data['description']
+                                            .toString()
+                                            .length
+                                            : data['description']
+                                            .toString()
+                                            .indexOf('~\$')))
+                                  ],
+                                ),
+                              ),
+                            ),
+
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    alignment: Alignment.center,
+
+                                    child: Link(
+                                      uri: Uri.parse(data['description']
+                                          .toString()
+                                          .substring(
+                                        data['description']
+                                            .toString()
+                                            .indexOf('\$~') ==
+                                            -1
+                                            ? 0
+                                            : data['description']
+                                            .toString()
+                                            .indexOf('\$~') +
+                                            2,
+                                      )),
+                                      target: LinkTarget.blank,
+                                      builder: (ctx, openLink) {
+                                        return TextButton.icon(
+                                          onPressed: openLink,
+                                          label: Text('linkedIn'),
+                                          icon: Icon(FontAwesomeIcons.linkedin),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    alignment: Alignment.center,
+
+                                    child: Link(
+                                      uri: Uri.parse(data['description']
+                                          .toString()
+                                          .substring(
+                                          data['description']
+                                              .toString()
+                                              .indexOf('~\$') ==
+                                              -1
+                                              ? 0
+                                              : data['description']
+                                              .toString()
+                                              .indexOf('~\$') +
+                                              2,
+                                          data['description']
+                                              .toString()
+                                              .indexOf('\$~') ==
+                                              -1
+                                              ? 0
+                                              : data['description']
+                                              .toString()
+                                              .indexOf('\$~')),
+                                        ),
+                                      target: LinkTarget.blank,
+                                      builder: (ctx, openLink) {
+                                        return TextButton.icon(
+                                          style:TextButton.styleFrom(
+                                            primary:Colors.purple,
+
+                                            )
+                                          ,
+                                          onPressed: openLink,
+                                          label: Text('instagram'),
+                                          icon: Icon(FontAwesomeIcons.instagram,color: Colors.purple,),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+
+
+                          ],
+                        ),
                       ),
 
                       Container(
@@ -1058,16 +1176,10 @@ class _InternshipsPageState extends State<InternshipsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-  @override
-
-  void didChangeDependencies() async{
     if (!Provider.of<ProjectData>(context, listen: false)
         .getOnceDownloaded()) {
       scf = Provider.of<SCF>(context, listen: false).get();
-      await scf.fetchListOfProjects(context);
+      scf.fetchListOfProjects(context);
       Provider.of<ProjectData>(context, listen: false).setOnceDownloaded(true);
 
       // Provider.of<EventsImages>(context, listen: false).fetchList(
@@ -1083,6 +1195,13 @@ class _InternshipsPageState extends State<InternshipsPage> {
     eventsedRegester.forEach((element) {
       eventfiltered.add(element);
     });
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
+
+  void didChangeDependencies() async{
+
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
@@ -1091,51 +1210,214 @@ class _InternshipsPageState extends State<InternshipsPage> {
       MaterialPageRoute(
         builder: (ctx) => Scaffold(
           appBar:AppBar(
-            title:Hero(
-              tag:"lolol",
-              child: Text(
-                projects.name,
-                style: TextStyle(
-                    fontSize: 19,
-                    fontFamily: 'DancingScript'),
-              ),
-            ),
+            iconTheme:IconThemeData(color:Colors.black),
+            elevation:0,
+            backgroundColor: Color(0xffF2EFE4),
+
 
           ),
 
-          body: Stack(
-            children: [
-              Hero(
-                tag: 'my-hero-animation-tag',
-                child: Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: CachedNetworkImageProvider(
-                            '${projects.image}',
-                          ),
-                          fit: BoxFit.fitWidth),
-                      shape: BoxShape.rectangle),
-                ),
-              ),
+          body: Container(
+            color:Color(0xffF2EFE4),
+            child: Column(
+              children: [
+                Hero(
 
-              Container(child:Text("${projects.description}")),
-              Hero(
-                tag:"lol",
-                child: CircleAvatar(
-                  radius: 30,
-                  child: CircleAvatar(
-                      radius: 28,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: CachedNetworkImageProvider(
-                                    '${projects.owner_pic.toString()}'),
-                                fit: BoxFit.fill),
-                            shape: BoxShape.circle),
-                      )),
+                  tag: 'my-hero-animation-tag',
+                  child: Container(
+
+                    width: MediaQuery.of(context).size.height*4/6,
+                    height: MediaQuery.of(context).size.height/2,
+
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: CachedNetworkImageProvider(
+                              '${projects.image}',
+                            ),
+                            fit: BoxFit.fitWidth),
+                        shape: BoxShape.rectangle),
+                  ),
                 ),
-              ),
-            ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Hero(
+                      tag:"lol",
+                      child: Container(
+                        alignment:Alignment.topLeft,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.black,
+
+                          radius: 30,
+                          child: CircleAvatar(
+                              backgroundColor: Colors.black,
+                              radius: 28,
+                              child: Container(
+
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: CachedNetworkImageProvider(
+                                            '${projects.owner_pic.toString()}'),
+                                        fit: BoxFit.fill),
+                                    shape: BoxShape.circle),
+                              )),
+                        ),
+                      ),
+                    ),
+                    Hero(
+                      tag:"lolol",
+                      child: Text(
+                        projects.name,
+                        style: TextStyle(
+                            color:Colors.black,
+                            fontSize: 19,
+                            fontFamily: 'DancingScript'),
+                      ),
+                    ),
+                  ],
+                ),
+
+                Container(
+                  decoration: BoxDecoration(
+
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(0))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          alignment: Alignment.center,
+
+                          child: Column(
+                            children: [
+
+                              Text(
+                                "Description",
+                                style: TextStyle(
+
+
+                                ),
+                              ),
+                              Text(projects.description
+                                  .toString()
+                                  .substring(
+                                  0,
+                                  projects.description
+                                      .toString()
+                                      .indexOf('~\$') ==
+                                      -1
+                                      ? projects.description
+                                      .toString()
+                                      .length
+                                      : projects.description
+                                      .toString()
+                                      .indexOf('~\$')))
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          alignment: Alignment.center,
+
+                          child: Column(
+                            children: [
+                              Text(
+                                "Incentives",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+
+
+                                ),
+                              ),
+                              Text(
+                                projects.description
+                                    .toString()
+                                    .substring(
+                                    projects.description
+                                        .toString()
+                                        .indexOf('~\$') ==
+                                        -1
+                                        ? 0
+                                        : projects.description
+                                        .toString()
+                                        .indexOf('~\$') +
+                                        2,
+                                    projects.description
+                                        .toString()
+                                        .indexOf('\$~') ==
+                                        -1
+                                        ? 0
+                                        : projects.description
+                                        .toString()
+                                        .indexOf('\$~')),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+
+
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          alignment: Alignment.center,
+
+                          child: Link(
+                            uri: Uri.parse(projects.description
+                                .toString()
+                                .substring(
+                              projects.description
+                                  .toString()
+                                  .indexOf('\$~') ==
+                                  -1
+                                  ? 0
+                                  : projects.description
+                                  .toString()
+                                  .indexOf('\$~') +
+                                  2,
+                            )),
+                            target: LinkTarget.blank,
+                            builder: (ctx, openLink) {
+                              return TextButton.icon(
+                                onPressed: openLink,
+                                label: Text('Link to Community'),
+                                icon: Icon(Icons.read_more),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          alignment: Alignment.center,
+
+                          child: Text(
+                            "Other links",
+                            style: TextStyle(
+
+
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+
+
+
+              ],
+            ),
           ),
         ),
       ),
@@ -1149,6 +1431,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
 
     return Expanded(
       child: Container(
+
         alignment: Alignment.center,
         child: ListView.builder(
           itemCount: 1,
@@ -1158,7 +1441,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
                 position: index,
                 duration: const Duration(milliseconds: 350),
                 child: SlideAnimation(
-                  verticalOffset: 100.0,
+                  horizontalOffset: 100.0,
                   child: FlipAnimation(
                     child: ListView.builder(
                         padding: EdgeInsets.all(0),
@@ -1167,84 +1450,107 @@ class _InternshipsPageState extends State<InternshipsPage> {
                         shrinkWrap: true,
                         itemCount: eventfiltered.length,
                         itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              GestureDetector(
-                                onTap: () => _showSecondPage(context,Project(
-                              image:eventfiltered[index].image.toString(),owner_pic:eventfiltered[index].owner_pic.toString(),
-owner:eventfiltered[index].owner.toString(),name:eventfiltered[index].name.toString(),description: eventfiltered[index].description.toString()
-                                )),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.height*5/6,
-                                  height: MediaQuery.of(context).size.height/2,
-                                  child: Hero(
-                                    tag: 'my-hero-animation-tag',
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: CachedNetworkImageProvider(
-                                                '${eventfiltered[index].image.toString()}',
-                                              ),
-                                              fit: BoxFit.fitHeight),
-                                          shape: BoxShape.rectangle),
-                                    ),
-                                  ),
-                                ),
+                          return ClipRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(
+                                sigmaX: 5.0,
+                                sigmaY: 5.0,
                               ),
-                              ListTile(
-                                  onTap: () {
+                              child: Container(
+
+                                  width: MediaQuery.of(context).size.width*5/6,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color:Colors.transparent,
+                                ),
 
 
 
-                                  },
-                                  subtitle: Text(
-                                      eventfiltered[index].owner.toString(),
-                                      style: TextStyle(
-                                          fontFamily: 'DancingScript')),
-
-                                  leading: TextButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        hostorprofile = true;
-                                      });
-                                      Navigator.of(context).pushNamed(
-                                          '/ProfileDetailsScreen',
-                                          arguments: ScreenArguments(
-                                              username:
-                                                  eventfiltered[index].owner,
-                                              hostpressed: hostorprofile));
-                                    },
-                                    child: Hero(
-                                      tag:"lol",
-                                      child: CircleAvatar(
-                                        radius: 22,
-                                        child: CircleAvatar(
-                                            radius: 20,
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => _showSecondPage(context,Project(
+                                    image:eventfiltered[index].image.toString(),owner_pic:eventfiltered[index].owner_pic.toString(),
+owner:eventfiltered[index].owner.toString(),name:eventfiltered[index].name.toString(),description: eventfiltered[index].description.toString()
+                                      )),
+                                      child: ClipRect(
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width*5/6,
+                                          height: MediaQuery.of(context).size.height/3,
+                                          child: Hero(
+                                            tag: 'my-hero-animation-tag',
                                             child: Container(
                                               decoration: BoxDecoration(
                                                   image: DecorationImage(
                                                       image: CachedNetworkImageProvider(
-                                                          '${eventfiltered[index].owner_pic.toString()}'),
-                                                      fit: BoxFit.fill),
-                                                  shape: BoxShape.circle),
-                                            )),
+                                                        '${eventfiltered[index].image.toString()}',
+                                                      ),
+                                                      fit: BoxFit.fitWidth),
+                                                  shape: BoxShape.rectangle),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  title: Hero(
-                                    tag:"lolol",
-                                    child: Text(
-                                      eventfiltered[index].name,
-                                      style: TextStyle(
-                                          fontSize: 19,
-                                          fontFamily: 'DancingScript'),
+                                    Container(
+
+                                     width: MediaQuery.of(context).size.width*5/6,
+                                      child: ListTile(
+                                          onTap: () {
+
+
+
+                                          },
+                                          subtitle: Text(
+                                              eventfiltered[index].owner.toString(),
+                                              style: TextStyle(
+                                                  fontFamily: 'DancingScript')),
+
+                                          leading: TextButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                hostorprofile = true;
+                                              });
+                                              Navigator.of(context).pushNamed(
+                                                  '/ProfileDetailsScreen',
+                                                  arguments: ScreenArguments(
+                                                      username:
+                                                          eventfiltered[index].owner,
+                                                      hostpressed: hostorprofile));
+                                            },
+                                            child: Hero(
+                                              tag:"lol",
+                                              child: CircleAvatar(
+                                                radius: 22,
+                                                child: CircleAvatar(
+                                                    radius: 20,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          image: DecorationImage(
+                                                              image: CachedNetworkImageProvider(
+                                                                  '${eventfiltered[index].owner_pic.toString()}'),
+                                                              fit: BoxFit.fill),
+                                                          shape: BoxShape.circle),
+                                                    )),
+                                              ),
+                                            ),
+                                          ),
+                                          title: Hero(
+                                            tag:"lolol",
+                                            child: Text(
+                                              eventfiltered[index].name,
+                                              style: TextStyle(
+                                                color:Colors.black,
+                                                  fontSize: 19,
+                                                  fontFamily: 'DancingScript'),
+                                            ),
+                                          )),
                                     ),
-                                  )),
-                              Divider(
-                                height: 20,
-                                thickness: 2,
+
+                                  ],
+                                ),
                               ),
-                            ],
+                            ),
                           );
                         }),
                   ),
@@ -1823,6 +2129,17 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
       setState(() {
         initialized = true;
       });
+      if (!Provider.of<ProjectData>(context, listen: false)
+          .getOnceDownloaded()) {
+        scf = Provider.of<SCF>(context, listen: false).get();
+        scf.fetchListOfProjects(context);
+        Provider.of<ProjectData>(context, listen: false).setOnceDownloaded(true);
+
+        // Provider.of<EventsImages>(context, listen: false).fetchList(
+        //     Provider.of<EventsData>(context, listen: false).getEvents(),
+        //     Provider.of<AccessTokenData>(context, listen: false)
+        //         .getAccessToken());
+      }
     }
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();

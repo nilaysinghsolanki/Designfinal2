@@ -1,9 +1,14 @@
+import 'dart:ui';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nilay_dtuotg_2/models/screenArguments.dart';
 import 'package:nilay_dtuotg_2/providers/info_provider.dart';
 import 'package:nilay_dtuotg_2/providers/server_connection_functions.dart';
 import 'package:provider/provider.dart';
 import 'package:progress_indicators/progress_indicators.dart';
+import 'package:url_launcher/link.dart';
 
 class ProfileDetailsScreem extends StatefulWidget {
   static const routeName = '/ProfileDetailsScreem';
@@ -46,195 +51,274 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
 
-        title: Text('Your profile',
-            style: TextStyle(
+        iconTheme:IconThemeData(color:Color(0xffF2EFE4)),
+        elevation:0,
+        backgroundColor: Colors.black,
 
-                fontStyle: FontStyle.normal,
-
-
-                fontFamily: 'DancingScript',
-                fontSize: 20)),
 
       ),
-      body: !initialized
-          ? Center(
-              child: FadingText('Loading...'),
-            )
+      body:Container(
+        color: Color(0xffF2EFE4),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+        sigmaX: 10.0,
+        sigmaY: 10.0,
+      ),
+      child: !initialized
+      ? Center(
+      child: Container(child: FadingText('Loading...')),
+      )
           : Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("Assets/newframe.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: SingleChildScrollView(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    child: Image.network(
-                      data['image'],
-                      errorBuilder: (BuildContext context, Object exception,
-                          StackTrace stackTrace) {
-                        // Appropriate logging or analytics, e.g.
-                        // myAnalytics.recordError(
-                        //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
-                        //   exception,
-                        //   stackTrace,
-                        // );
-                        return Card(
-
-                          child: Container(
-                            margin: EdgeInsets.symmetric(
-                                vertical: 11, horizontal: 4),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 11, horizontal: 44),
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.person_outline,
-                                  size: 55,
-                                ),
-                                Text('😢 Can\'t load image',
-                                    style: TextStyle(
-
-                                        fontStyle: FontStyle.normal,
+      decoration: BoxDecoration(
+      image: DecorationImage(
+      image: AssetImage("Assets/ProfileBG.png"),
+      fit: BoxFit.fitWidth,
+      ),
+      ),
+      child: SingleChildScrollView(
+      child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+      Container(
+      margin: EdgeInsets.fromLTRB(
+      0, MediaQuery.of(context).size.height / 7, 0, 0),
+      color: Colors.transparent,
+      height: MediaQuery.of(context).size.height / 5,
+      child: CircleAvatar(
+      backgroundColor: Colors.white,
+      radius: 40,
+      backgroundImage: CachedNetworkImageProvider(data['image'].toString(),),
 
 
-                                        fontFamily: 'DancingScript',
-                                        fontSize: 20)),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Card(
+      ),
+      ),
+      Container(
+      margin:
+      EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+      padding:
+      EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+      child: Text(data['name'].toString(),
+      textAlign: TextAlign.center,
+      style: TextStyle(
+      fontStyle: FontStyle.normal,
+      fontFamily: 'DancingScript',
+      fontSize: 20)),
+      ),
+      Container(
+      decoration: BoxDecoration(
 
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                      child: Text('name - ' + data['name'].toString(),
-                          style: TextStyle(
+      borderRadius: BorderRadius.only(
+      topLeft: Radius.circular(0),
+      topRight: Radius.circular(0))),
+      child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+      Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+      alignment: Alignment.center,
 
-                              fontStyle: FontStyle.normal,
+      child: Column(
+      children: [
 
-
-                              fontFamily: 'DancingScript',
-                              fontSize: 20)),
-                    ),
-                  ),
-                  Card(
-
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                      child: Text('roll no. ' + data['roll_no'].toString(),
-                          style: TextStyle(
-
-                              fontStyle: FontStyle.normal,
-
-
-                              fontFamily: 'DancingScript',
-                              fontSize: 20)),
-                    ),
-                  ),
-                  Card(
-
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                      child: Text('Branch ' + data['branch'].toString(),
-                          style: TextStyle(
-
-                              fontStyle: FontStyle.normal,
+      Text(
+      "Description",
+      style: TextStyle(
 
 
-                              fontFamily: 'DancingScript',
-                              fontSize: 20)),
-                    ),
-                  ),
+      ),
+      ),
+      Text(data['description']
+          .toString()
+          .substring(
+      0,
+      data['description']
+          .toString()
+          .indexOf('~\$') ==
+      -1
+      ? data['description']
+          .toString()
+          .length
+          : data['description']
+          .toString()
+          .indexOf('~\$')))
+      ],
+      ),
+      ),
+      ),
+      Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+      alignment: Alignment.center,
 
-                  Card(
-
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                      child: Text('Batch ' + data['batch'].toString(),
-                          style: TextStyle(
-
-                              fontStyle: FontStyle.normal,
-
-
-                              fontFamily: 'DancingScript',
-                              fontSize: 20)),
-                    ),
-                  ),
-
-                  Card(
-
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                      child: Text('year ' + data['year'].toString(),
-                          style: TextStyle(
-
-                              fontStyle: FontStyle.normal,
-
-
-                              fontFamily: 'DancingScript',
-                              fontSize: 20)),
-                    ),
-                  ),
-                  Card(
-
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                      padding:
-                      EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                      child: Text('invited by ' + data['who_sent'].toString(),
-                          style: TextStyle(
-
-                              fontStyle: FontStyle.normal,
+      child: Column(
+      children: [
+      Text(
+      "Incentives",
+      style: TextStyle(
+      fontWeight: FontWeight.bold,
 
 
-                              fontFamily: 'DancingScript',
-                              fontSize: 20)),
-                    ),
-                  ),
+      ),
+      ),
+      Text(
+      data['description']
+          .toString()
+          .substring(
+      data['description']
+          .toString()
+          .indexOf('~\$') ==
+      -1
+      ? 0
+          : data['description']
+          .toString()
+          .indexOf('~\$') +
+      2,
+      data['description']
+          .toString()
+          .indexOf('\$~') ==
+      -1
+      ? 0
+          : data['description']
+          .toString()
+          .indexOf('\$~')),
+      style: TextStyle(
+      fontWeight: FontWeight.bold,
 
-                  // Card(
-                  //
-                  //   child: Container(
-                  //     margin:
-                  //         EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                  //     padding:
-                  //         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                  //     child: Text('roll no. ' + data['roll_no'].toString(),
-                  //         style: TextStyle(
-                  //
-                  //             fontWeight: FontWeight.w900,
-                  //             fontStyle: FontStyle.italic,
-                  //             fontFamily: 'Open Sans',
-                  //             fontSize: 20)),
-                  //   ),
-                  // ),
-                  // ListTile(
-                  //   title: Text(data['who_sent'].toString()),
-                  // ),
-                ],
-              )),
-            ),
+
+      ),
+      ),
+      ],
+      ),
+      ),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+      Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+      alignment: Alignment.center,
+
+      child: Link(
+      uri: Uri.parse(data['description']
+          .toString()
+          .substring(
+      data['description']
+          .toString()
+          .indexOf('\$~') ==
+      -1
+      ? 0
+          : data['description']
+          .toString()
+          .indexOf('\$~') +
+      2,
+      )),
+      target: LinkTarget.blank,
+      builder: (ctx, openLink) {
+      return TextButton.icon(
+      onPressed: openLink,
+      label: Text('linkedIn'),
+      icon: Icon(Icons.read_more),
+      );
+      },
+      ),
+      ),
+      ),
+      Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+      alignment: Alignment.center,
+
+      child: Link(
+      uri: Uri.parse(data['description']
+          .toString()
+          .substring(
+      data['description']
+          .toString()
+          .indexOf('~\$') ==
+      -1
+      ? 0
+          : data['description']
+          .toString()
+          .indexOf('~\$') +
+      2,
+      data['description']
+          .toString()
+          .indexOf('\$~') ==
+      -1
+      ? 0
+          : data['description']
+          .toString()
+          .indexOf('\$~'))),
+      target: LinkTarget.blank,
+      builder: (ctx, openLink) {
+      return TextButton.icon(
+      onPressed: openLink,
+      label: Text('instagram'),
+      icon: Icon(FontAwesomeIcons.instagramSquare),
+      );
+      },
+      ),
+      ),
+      ),
+      ],
+      ),
+
+
+
+      ],
+      ),
+      ),
+
+      Container(
+      margin:
+      EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+      padding:
+      EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+      child: Row(
+      children: [
+      Text('invited by ',
+      style: TextStyle(
+      fontStyle: FontStyle.normal,
+      fontFamily: 'DancingScript',
+      fontSize: 20)),
+      Text(data['who_sent'].toString(),
+      style: TextStyle(
+      fontStyle: FontStyle.normal,
+      fontFamily: 'DancingScript',
+      fontSize: 20)),
+      ],
+      ),
+      ),
+
+      // Card(
+      //
+      //   child: Container(
+      //     margin:
+      //         EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+      //     padding:
+      //         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+      //     child: Text('roll no. ' + data['roll_no'].toString(),
+      //         style: TextStyle(
+      //
+      //             fontWeight: FontWeight.w900,
+      //             fontStyle: FontStyle.italic,
+      //             fontFamily: 'Open Sans',
+      //             fontSize: 20)),
+      //   ),
+      // ),
+      // ListTile(
+      //   title: Text(data['who_sent'].toString()),
+      // ),
+      ],
+      )),
+      ),
+      ),
+      )
     );
   }
 }

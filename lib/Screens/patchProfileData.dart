@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:nilay_dtuotg_2/models/screenArguments.dart';
 import 'package:nilay_dtuotg_2/providers/info_provider.dart';
+import 'package:nilay_dtuotg_2/providers/server_connection_functions.dart';
 import 'package:nilay_dtuotg_2/widgets/rollNumberPicker.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -33,7 +35,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
   void initState() {
     super.initState();
   }
-
+  Map<String, dynamic> data;
   File _image;
   final picker = ImagePicker();
 
@@ -66,6 +68,11 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
   @override
   void didChangeDependencies() async {
     if (!initialized) {
+      BuildContext ctx =
+          Provider.of<MaterialNavigatorKey>(context, listen: false)
+              .materialNavigatorKey
+              .currentContext;
+      data = await Server_Connection_Functions().getProfileData(ctx);
       await Provider.of<UsernameData>(context, listen: false).fetchAndSetData();
       username = Provider.of<UsernameData>(context, listen: false).username[0];
       var accessToken =
@@ -96,6 +103,9 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
 
   final formGlobalKey = GlobalKey<FormState>();
   final name = TextEditingController();
+  final description = TextEditingController();
+  final instagram = TextEditingController();
+  final linkedIn = TextEditingController();
   bool waiting = false;
   @override
   Widget build(BuildContext context) {
@@ -169,6 +179,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                       var dio = Dio();
                       var formdata = FormData.fromMap({
                         "name": "${name.text}",
+
                         "roll_no": "$formattedRollNum",
                         "branch":
                             "${Provider.of<ProfileData>(context, listen: false).getBranch()}",
@@ -179,7 +190,13 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                         "image": await MultipartFile.fromFile(
                           _image.path,
                           filename: _image.path,
-                        )
+                        ),
+                        "description":description.text +
+                            '~\$' +
+                      "https://www.instagram.com/${instagram.text}/" +
+                            '\$~' +
+                            linkedIn.text,
+                        "owner_id__username":username.toString()
                       });
                       responsee = await dio.patch(
                         'dtuotgbeta.azurewebsites.netauth/profile/$username',
@@ -315,6 +332,19 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(
+                            0, MediaQuery.of(context).size.height / 7, 0, 0),
+                        color: Colors.transparent,
+                        height: MediaQuery.of(context).size.height / 5,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 40,
+                          backgroundImage: CachedNetworkImageProvider(data['image'].toString(),),
+
+
+                        ),
+                      ),
                       _image == null
                           ? ListTile(
                               leading: Icon(Icons.add_a_photo),
@@ -325,30 +355,116 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                               child: Image.file(_image),
                               height: 100,
                             ),
-                      Padding(
-                        child: CupertinoTextFormFieldRow(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: BoxDecoration(
+                      Card(
+                        elevation: 0,
 
+                        child: TextField(
+                          controller: description,
+                          style: TextStyle( fontSize: 30),
+
+                          cursorHeight: 35,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide( width: 4),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide( width: 3),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            labelText: "link to more details/website/meeting",
+
+
+                            labelStyle:
+                            TextStyle( fontSize: 20),
                           ),
-                          padding:
-                              EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                          controller: name,
-                          //   restorationId: 'email',
-                          placeholder: 'official name',
-                          keyboardType: TextInputType.name,
-                          // clearButtonMode: OverlayVisibilityMode.editing,
-                          obscureText: false,
-                          autocorrect: false,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'enter name';
-                            }
-                          },
                         ),
-                        padding: EdgeInsets.only(
-                            left: 22, top: 0, bottom: 20, right: 22),
                       ),
+                      Card(
+                        elevation: 0,
+
+                        child: TextField(
+                          controller: instagram,
+                          style: TextStyle( fontSize: 30),
+
+                          cursorHeight: 35,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide( width: 4),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide( width: 3),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            labelText: "instagram",
+
+
+                            labelStyle:
+                            TextStyle( fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      Card(
+                        elevation: 0,
+
+                        child: TextField(
+                          controller: linkedIn,
+                          style: TextStyle( fontSize: 30),
+
+                          cursorHeight: 35,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide( width: 4),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide( width: 3),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            labelText: "linkedIn",
+
+
+                            labelStyle:
+                            TextStyle( fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      Card(
+                        elevation: 0,
+
+                        child: TextField(
+                          controller: name,
+                          style: TextStyle( fontSize: 30),
+
+                          cursorHeight: 35,
+                          decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide( width: 4),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide( width: 3),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            labelText: "Name(You would like others see)",
+
+
+                            labelStyle:
+                            TextStyle( fontSize: 20),
+                          ),
+                        ),
+                      ),
+
+
                       ListTile(
                         onTap: () {
                           showDialog(
