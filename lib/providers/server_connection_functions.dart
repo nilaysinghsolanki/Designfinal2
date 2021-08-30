@@ -231,7 +231,7 @@ class Server_Connection_Functions {
       "latitude": "27.204600000",
       "longitude": "77.497700000",
       "type_event": "${type.toString()}",
-      "user_registered": true,
+
       "image": await MultipartFile.fromFile(
         image.path,
         filename: image.path,
@@ -319,7 +319,7 @@ class Server_Connection_Functions {
       )
     });
     response = await dio.post(
-      'http://dtuotgbeta.azurewebsites.net/events/create/',
+      'http://dtuotgbeta.azurewebsites.net/projects/create/',
       data: formdata,
       options: Options(
         headers: headersCreateEvent,

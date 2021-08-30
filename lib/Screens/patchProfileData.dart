@@ -196,9 +196,9 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                       "https://www.instagram.com/${instagram.text}/" +
                             '\$~' +
                             linkedIn.text,
-                        "owner_id__username":username.toString()
+                        "owner_id__username":username
                       });
-                      responsee = await dio.patch(
+                      responsee = await dio.put(
                         'dtuotgbeta.azurewebsites.netauth/profile/$username',
                         data: formdata,
                         options: Options(
