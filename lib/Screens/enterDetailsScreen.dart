@@ -193,7 +193,7 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
                   )
                 });
                 responsee = await dio.patch(
-                  'http://dtuotgbeta.azurewebsites.net/auth/profile/$username',
+                  'https://dtuotgbeta.azurewebsites.net/auth/profile/$username',
                   data: formdata,
                   options: Options(
                     headers: headersProfile,

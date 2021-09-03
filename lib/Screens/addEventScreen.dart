@@ -225,9 +225,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
         title: Text(type == 1
             ? 'add event 🙂'
-            : type == 2
-                ? 'projects +'
-                : '+ jobs/internships'),
+            :
+                 'projects +'
+                ),
       ),
       body: Container(
 
@@ -463,8 +463,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 waiting = true;
 
               });
-              if (dateTime != null &&
-                  timeOfDay != null &&
+              if (
                   name != null &&
                   description != null &&
                   type != null) {
@@ -517,11 +516,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
       ],
       appBar: AppBar(
 
-        title: Text(type == 1
-            ? 'add event 🙂'
-            : type == 2
-            ? 'projects +'
-            : '+ jobs/internships'),
+        title: Text( '+ jobs/internships'),
       ),
       body: Container(
 

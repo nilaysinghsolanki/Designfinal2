@@ -238,7 +238,7 @@ class Server_Connection_Functions {
       )
     });
     response = await dio.post(
-      'http://dtuotgbeta.azurewebsites.net/events/create/',
+      'https://dtuotgbeta.azurewebsites.net/events/create/',
       data: formdata,
       options: Options(
         headers: headersCreateEvent,
@@ -319,7 +319,7 @@ class Server_Connection_Functions {
       )
     });
     response = await dio.post(
-      'http://dtuotgbeta.azurewebsites.net/projects/create/',
+      'https://dtuotgbeta.azurewebsites.net/projects/create/',
       data: formdata,
       options: Options(
         headers: headersCreateEvent,

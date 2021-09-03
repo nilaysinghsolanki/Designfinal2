@@ -515,7 +515,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             //     path: 'https://dtu-otg.herokuapp.com/auth/register/');
 
                             String url =
-                                'http://dtuotgbeta.azurewebsites.net/auth/register/';
+                                'https://dtuotgbeta.azurewebsites.net/auth/register/';
                             setState(() {
                               waiting = true;
                             });
