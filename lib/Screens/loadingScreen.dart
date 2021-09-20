@@ -147,12 +147,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     return  Scaffold(
 
       body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("Assets/LogoOTG.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
+        child: RiveAnimation.asset('Assets/OTG_Animation.riv',fit:BoxFit.contain,animations: ["Animation 1"],),
       ),
     );
   }

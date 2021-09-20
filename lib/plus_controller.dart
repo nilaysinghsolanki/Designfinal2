@@ -10,9 +10,9 @@ class PlusAnimation extends SimpleAnimation {
     isActive=true;
 
 
-     instance.animation.loop=Loop.oneShot;
+    instance.animation.loop=Loop.oneShot;
 
-     instance.direction=1;
+    instance.direction=1;
     //instance!.animation.duration=10;
     //instance!.animation.workStart=0;
 

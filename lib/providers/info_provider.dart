@@ -264,7 +264,7 @@ class ProfileData with ChangeNotifier {
       'name': name[0],
       'rollNumber': rollNumber.toString(),
       'branch': branch[0],
-      'year': year.toString(),
+      'year': year,
       'batch': batch[0]
     });
     notifyListeners();

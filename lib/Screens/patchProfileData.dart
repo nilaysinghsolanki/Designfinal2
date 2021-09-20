@@ -178,15 +178,14 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                       Response responsee;
                       var dio = Dio();
                       var formdata = FormData.fromMap({
-                        "name": "${name.text}",
+                        "name": name.text.toString(),
 
-                        "roll_no": "$formattedRollNum",
+                        "roll_no": "041",
                         "branch":
-                            "${Provider.of<ProfileData>(context, listen: false).getBranch()}",
-                        "year": Provider.of<ProfileData>(context, listen: false)
-                            .getYear(),
+                            "ep",
+                        "year": "2019",
                         "batch":
-                            "${Provider.of<ProfileData>(context, listen: false).getBatch()}",
+                            "a1",
                         "image": await MultipartFile.fromFile(
                           _image.path,
                           filename: _image.path,
@@ -199,7 +198,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                         "owner_id__username":username
                       });
                       responsee = await dio.put(
-                        'dtuotgbeta.azurewebsites.netauth/profile/$username',
+                        'https://dtuotgbeta.azurewebsites.net/auth/profile/$username',
                         data: formdata,
                         options: Options(
                           headers: headersProfile,
@@ -374,7 +373,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                               BorderSide( width: 3),
                               borderRadius: BorderRadius.circular(25.0),
                             ),
-                            labelText: "link to more details/website/meeting",
+                            labelText: "Description",
 
 
                             labelStyle:

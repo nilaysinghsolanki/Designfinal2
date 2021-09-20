@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  rive: ^0.7.2
+  rive: ^0.7.18
   image_picker: ^0.8.0+3
   animations: ^2.0.0
   table_calendar: ^3.0.0
@@ -101,9 +101,11 @@ flutter:
     - Assets/Frame 4.png
     - Assets/newframe.png
     - Assets/BT_animation.riv
+    - Assets/OTG_Animation.riv
     - Assets/Registration_animation.riv
     - Assets/LogoOTG.png
     - Assets/ProfileBG.png
+    - Assets/settingscrazy.riv
 
 
   # To add assets to your application, add an assets section, like this:

@@ -157,6 +157,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
     var data = Provider.of<AddEventScreenData>(context, listen: true);
     return type!=3?Scaffold(
 
+
       persistentFooterButtons: [
 
         ElevatedButton.icon(
@@ -465,8 +466,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
               });
               if (
                   name != null &&
-                  description != null &&
-                  type != null) {
+                  description != null
+                  ) {
+                //////////////////////////////////////////////////////////////////////
                 print('2');
                 var scf = Provider.of<SCF>(context, listen: false).get();
                 int resp = await scf.createProject(
@@ -477,11 +479,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         whatsInItForYou.text +
                         '\$~' +
                         link.text,
-                    type,
-                    dateTime,
-                    timeOfDay,
+
+
                     _image);
-                scf.fetchListOfEvents(context);
+                scf.fetchListOfProjects(context);
 
                 print('3');
                 showDialog(
@@ -495,9 +496,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       );
                     });
 
-                if (resp <= 205) {
+
                   Navigator.of(context).pop();
-                }
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Creating Project"),duration: Duration(milliseconds: 1000),));
+
               }
               setState(() {
                 waiting = false;

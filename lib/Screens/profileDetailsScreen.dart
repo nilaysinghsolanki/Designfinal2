@@ -52,9 +52,10 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
     return Scaffold(
       appBar: AppBar(
 
+
         iconTheme:IconThemeData(color:Color(0xffF2EFE4)),
         elevation:0,
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xff2b2b2b),
 
 
       ),
@@ -257,9 +258,14 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
       target: LinkTarget.blank,
       builder: (ctx, openLink) {
       return TextButton.icon(
+        style:TextButton.styleFrom(
+          primary:Colors.purple,
+
+        ),
       onPressed: openLink,
-      label: Text('instagram'),
-      icon: Icon(FontAwesomeIcons.instagramSquare),
+        label: Text('instagram'),
+        icon: Icon(FontAwesomeIcons.instagram,color: Colors.purple,),
+
       );
       },
       ),

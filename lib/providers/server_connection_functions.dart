@@ -277,8 +277,6 @@ class Server_Connection_Functions {
   Future<int> createProject(BuildContext context, String name, String description, File image,
 
 
-  String owner,
-
 
 
 
@@ -312,11 +310,12 @@ class Server_Connection_Functions {
 
 
 
-
       "image": await MultipartFile.fromFile(
         image.path,
         filename: image.path,
-      )
+
+      ),
+      "discord": "LOLOLOL",
     });
     response = await dio.post(
       'https://dtuotgbeta.azurewebsites.net/projects/create/',

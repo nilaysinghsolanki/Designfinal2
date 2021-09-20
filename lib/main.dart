@@ -136,6 +136,139 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0;
+  List<Widget> _children=[];
+
+  double width;
+  double height;
+
+  bool initialized = false;
+
+  var scf;
+  List<Event> sheduledToday = [];
+
+  bool eventsInitialized = false;
+  bool storycontinues = false;
+  int j = 1;
+  @override
+  void didChangeDependencies() async {
+    if (!initialized) {
+      if (!Provider.of<EventsData>(context, listen: false)
+          .getOnceDownloaded()) {
+        scf = Provider.of<SCF>(context, listen: false).get();
+        await scf.fetchListOfEvents(context);
+
+        Provider.of<EventsData>(context, listen: false).setOnceDownloaded(true);
+
+        // Provider.of<EventsImages>(context, listen: false).fetchList(
+        //     Provider.of<EventsData>(context, listen: false).getEvents(),
+        //     Provider.of<AccessTokenData>(context, listen: false)
+        //         .getAccessToken());
+      }
+      sheduledToday =
+          Provider.of<EventsData>(context, listen: false).getEvents();
+
+      setState(() {
+        initialized = true;
+      });
+      if (!Provider.of<ProjectData>(context, listen: false)
+          .getOnceDownloaded()) {
+        scf = Provider.of<SCF>(context, listen: false).get();
+        scf.fetchListOfProjects(context);
+        Provider.of<ProjectData>(context, listen: false).setOnceDownloaded(true);
+
+        // Provider.of<EventsImages>(context, listen: false).fetchList(
+        //     Provider.of<EventsData>(context, listen: false).getEvents(),
+        //     Provider.of<AccessTokenData>(context, listen: false)
+        //         .getAccessToken());
+      }
+    }
+    List<List<Event>> ownersEvents = [];
+
+    List<Event> storiesFiltered = [];
+    ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    if (j != 1) {
+      storycontinues = true;
+    }
+    sheduledToday.forEach((element) {
+      if (element.eventType == "Society") storiesFiltered.add(element);
+    });
+
+    for (int i = 0; i < storiesFiltered.length; i++) {
+      if (ownersEvents.indexWhere(
+              (element) => element[0].owner == storiesFiltered[i].owner) !=
+          -1) {
+        ownersEvents[ownersEvents.indexWhere(
+                (element) => element[0].owner == storiesFiltered[i].owner)]
+            .add(storiesFiltered[i]);
+      } else {
+        ownersEvents.add([storiesFiltered[i]]);
+      }
+    }
+    _children = [
+      Column(
+        children: [
+          Container(
+            margin:EdgeInsets.fromLTRB(10, 25, 0, 0),
+
+            alignment: Alignment.topLeft,
+
+            height: MediaQuery.of(context).size.height / 7,
+            child: SingleChildScrollView(
+
+              scrollDirection: Axis.horizontal,
+              child: ListView.builder(
+
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: ownersEvents.length,
+                itemBuilder: (BuildContext context, int index) =>
+                    GestureDetector(
+                      onTap: () {
+                        j = 0;
+                        j++;
+
+                        Navigator.of(context).pushNamed(
+                          StoryViewScreen.routeName,
+                          arguments: ScreenArguments(
+                              id: !storycontinues ? index : args.id,
+                              eves: !storycontinues
+                                  ? ownersEvents[index]
+                                  : ownersEvents[args.id],
+                              ownerlist:
+                              ownersEvents), // sheduledToday[index].event_image,
+                        );
+                      },
+                      child: Container(
+                        alignment: Alignment.topLeft,
+                        margin: EdgeInsets.all(3),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.purple,
+                          radius: 30,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 27,
+                            backgroundImage: storiesFiltered.isNotEmpty
+                                ? CachedNetworkImageProvider(
+                                ownersEvents[index][0].owner_image,
+                                scale: 0.5)
+                                : AssetImage("Assets/newframe.png"),
+                          ),
+                        ),
+                      ),
+                    ),
+              ),
+            ),
+          ),
+              HomePage()
+        ],
+      ),
+      InternshipsPage(),AddingPage(),EventsPage(),ProjectsPage()
+    ];
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
   List<Widget> ScatteredListtiles = [
     Container(
       decoration: BoxDecoration(
@@ -277,10 +410,138 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     )
   ];
+
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
   @override
   Widget build(BuildContext context) {
+    List<List<Event>> ownersEvents = [];
+
+    List<Event> storiesFiltered = [];
+    ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    if (j != 1) {
+      storycontinues = true;
+    }
+    sheduledToday.forEach((element) {
+      if (element.eventType == "Society") storiesFiltered.add(element);
+    });
+
+    for (int i = 0; i < storiesFiltered.length; i++) {
+      if (ownersEvents.indexWhere(
+              (element) => element[0].owner == storiesFiltered[i].owner) !=
+          -1) {
+        ownersEvents[ownersEvents.indexWhere(
+                (element) => element[0].owner == storiesFiltered[i].owner)]
+            .add(storiesFiltered[i]);
+      } else {
+        ownersEvents.add([storiesFiltered[i]]);
+      }
+    }
+    _children = [
+      Column(
+        children: [
+          Container(
+            margin:EdgeInsets.fromLTRB(10, 25, 0, 0),
+
+            alignment: Alignment.topLeft,
+
+            height: MediaQuery.of(context).size.height / 7,
+            child: SingleChildScrollView(
+
+              scrollDirection: Axis.horizontal,
+              child: ListView.builder(
+
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: ownersEvents.length,
+                itemBuilder: (BuildContext context, int index) =>
+                    GestureDetector(
+                      onTap: () {
+                        j = 0;
+                        j++;
+
+                        Navigator.of(context).pushNamed(
+                          StoryViewScreen.routeName,
+                          arguments: ScreenArguments(
+                              id: !storycontinues ? index : args.id,
+                              eves: !storycontinues
+                                  ? ownersEvents[index]
+                                  : ownersEvents[args.id],
+                              ownerlist:
+                              ownersEvents), // sheduledToday[index].event_image,
+                        );
+                      },
+                      child: Container(
+                        alignment: Alignment.topLeft,
+                        margin: EdgeInsets.all(3),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.purple,
+                          radius: 30,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 27,
+                            backgroundImage: storiesFiltered.isNotEmpty
+                                ? CachedNetworkImageProvider(
+                                ownersEvents[index][0].owner_image,
+                                scale: 0.5)
+                                : AssetImage("Assets/newframe.png"),
+                          ),
+                        ),
+                      ),
+                    ),
+              ),
+            ),
+          ),
+          HomePage()
+        ],
+      ),
+      InternshipsPage(),AddingPage(),EventsPage(),ProjectsPage()
+    ];
     return Container(
       child: Scaffold(
+
+        bottomNavigationBar: BottomNavigationBar(
+          fixedColor: Colors.black,
+          backgroundColor: Color(0xffF2EFE4),
+          type:BottomNavigationBarType.fixed ,
+          onTap: onTabTapped, // new
+          currentIndex: _currentIndex,  // this will be set when a new tab is tapped
+          items: [
+            BottomNavigationBarItem(
+              activeIcon:new Icon(Icons.home,color: Colors.black,) ,
+              backgroundColor: Color(0xffF2EFE4),
+              icon: new Icon(Icons.home_outlined,color: Colors.black,),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              activeIcon:new Icon(Icons.photo_size_select_actual,color: Colors.black,),
+              backgroundColor: Color(0xffF2EFE4),
+              icon: new Icon(Icons.photo_size_select_actual_outlined,color: Colors.black,),
+                label:'Posts',
+            ),
+            BottomNavigationBarItem(
+                activeIcon:new Icon(Icons.add_circle,color: Colors.black,),
+                backgroundColor: Color(0xffF2EFE4),
+                icon: Icon(Icons.add,color: Colors.black,),
+                label:'Add'
+            ),
+            BottomNavigationBarItem(
+                activeIcon:new Icon(Icons.star,color: Colors.black,),
+                backgroundColor: Color(0xffF2EFE4),
+                icon: Icon(Icons.star_border,color: Colors.black,),
+                label:'Events'
+            ),
+            BottomNavigationBarItem(
+                activeIcon:new Icon(Icons.person,color: Colors.black,),
+                backgroundColor: Color(0xffF2EFE4),
+                icon: Icon(Icons.person_outline_sharp,color: Colors.black),
+                label:'Profile'
+            )
+          ],
+        ),
         drawer: Drawer(
           child: Container(
             decoration: BoxDecoration(
@@ -295,7 +556,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ), // Populate the Drawer in the next step.
         ),
-        body: MyRiveAnimation(),
+         body: Container(decoration: BoxDecoration(
+           image: DecorationImage(
+               image: AssetImage("Assets/newframe.png",),
+               fit: BoxFit.fitHeight),),child: _children[_currentIndex]),
       ),
     );
   }
@@ -468,7 +732,7 @@ class _HomePageState extends State<HomePage> {
     return Flexible(
       child: StaggeredGridView.countBuilder(
         physics: NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
         crossAxisCount: 4,
         itemCount: 4,
         itemBuilder: (BuildContext context, int index) =>
@@ -593,308 +857,12 @@ class _TimeTableHomeScreenListTileState
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////ADDEVENTSPAGE
-class AddEventsPage extends StatefulWidget {
-  const AddEventsPage({Key key}) : super(key: key);
-
-  @override
-  _AddEventsPageState createState() => _AddEventsPageState();
-}
-
-class _AddEventsPageState extends State<AddEventsPage> {
-  var event_description_channged;
-  var event_name_changed;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'new Event',
-          style: TextStyle(fontSize: 30),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                elevation: 0,
-                child: TextField(
-                    style: TextStyle(fontSize: 30),
-                    cursorHeight: 35,
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 4),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 3),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      labelText: "Name of the event",
-                      helperText: 'Keep it short, this is just a beta.',
-                      labelStyle: TextStyle(fontSize: 30),
-                    ),
-                    onChanged: (NameOfEvent) {
-                      print("The value entered is : $NameOfEvent");
-                      event_name_changed = "$NameOfEvent";
-                    }),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                elevation: 0,
-                child: TextField(
-                    style: TextStyle(fontSize: 30),
-                    cursorHeight: 35,
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 4),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 3),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      labelText: "Description",
-                      helperText: 'Keep it short, this is just a beta.',
-                      labelStyle: TextStyle(fontSize: 30),
-                    ),
-                    onChanged: (DescriptionOfEvent) {
-                      print("The value entered is : $DescriptionOfEvent");
-                      event_description_channged = "$DescriptionOfEvent";
-                    }),
-              ),
-            ),
-            FloatingActionButton(onPressed: () {
-              event_description = event_description_channged;
-              event_name = event_name_changed;
-
-              Events.add(Card(
-                child: ListTile(
-                  leading: Icon(
-                    FontAwesomeIcons.star,
-                  ),
-                  title: Text(event_name),
-                  subtitle: Text(event_description),
-                ),
-              ));
-            }),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 //////////////////////////ADDTOSCHEDULEPAGE
-class AddToSchedulePage extends StatefulWidget {
-  const AddToSchedulePage({Key key}) : super(key: key);
 
-  @override
-  _AddToSchedulePageState createState() => _AddToSchedulePageState();
-}
-
-class _AddToSchedulePageState extends State<AddToSchedulePage> {
-  var event_description_channged;
-  var event_name_changed;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(
-          "Add Event Details",
-          style: TextStyle(),
-        ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("Assets/newframe.png"), fit: BoxFit.cover),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 0,
-                  child: TextField(
-                      style: TextStyle(fontSize: 30),
-                      cursorHeight: 35,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 4),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 3),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        labelText: "Name of the event",
-                        helperText: 'Keep it short, this is just a beta.',
-                        labelStyle: TextStyle(fontSize: 30),
-                      ),
-                      onChanged: (NameOfEvent) {
-                        print("The value entered is : $NameOfEvent");
-                        event_name_changed = "$NameOfEvent";
-                      }),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 0,
-                  child: TextField(
-                      style: TextStyle(fontSize: 30),
-                      cursorHeight: 35,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 4),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 3),
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        labelText: "Description",
-                        helperText: 'Keep it short, this is just a beta.',
-                        labelStyle: TextStyle(fontSize: 30),
-                      ),
-                      onChanged: (DescriptionOfEvent) {
-                        print("The value entered is : $DescriptionOfEvent");
-                        event_description_channged = "$DescriptionOfEvent";
-                      }),
-                ),
-              ),
-              FloatingActionButton(onPressed: () {
-                event_description = event_description_channged;
-                event_name = event_name_changed;
-
-                Events.add(Card(
-                  child: ListTile(
-                    leading: Icon(
-                      FontAwesomeIcons.star,
-                    ),
-                    title: Text(event_name),
-                    subtitle: Text(event_description),
-                  ),
-                ));
-              }),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////ADDPROJECTPAGE
-class AddProjectPage extends StatefulWidget {
-  const AddProjectPage({Key key}) : super(key: key);
 
-  @override
-  _AddProjectPageState createState() => _AddProjectPageState();
-}
-
-class _AddProjectPageState extends State<AddProjectPage> {
-  var event_description_channged;
-  var event_name_changed;
-  @override
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                elevation: 0,
-                child: TextField(
-                    style: TextStyle(fontSize: 30),
-                    cursorHeight: 35,
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 4),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 3),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      labelText: "Name of the event",
-                      helperText: 'Keep it short, this is just a beta.',
-                      labelStyle: TextStyle(fontSize: 30),
-                    ),
-                    onChanged: (NameOfEvent) {
-                      print("The value entered is : $NameOfEvent");
-                      event_name_changed = "$NameOfEvent";
-                    }),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                elevation: 0,
-                child: TextField(
-                    style: TextStyle(fontSize: 30),
-                    cursorHeight: 35,
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 4),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 3),
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      labelText: "Description",
-                      helperText: 'Keep it short, this is just a beta.',
-                      labelStyle: TextStyle(fontSize: 30),
-                    ),
-                    onChanged: (DescriptionOfEvent) {
-                      print("The value entered is : $DescriptionOfEvent");
-                      event_description_channged = "$DescriptionOfEvent";
-                    }),
-              ),
-            ),
-            FloatingActionButton(
-                child: Icon(
-                  Icons.check,
-                ),
-                onPressed: () {
-                  event_description = event_description_channged;
-                  event_name = event_name_changed;
-
-                  if (event_description_channged == null ||
-                      event_name_changed == null) {
-                    Events.add(Card(
-                      child: ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.star,
-                        ),
-                        title: Text(event_name),
-                        subtitle: Text(event_description),
-                      ),
-                    ));
-                  }
-                }),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 /////////////////////////////////////////PROJECTPAGE
 class ProjectsPage extends StatefulWidget {
@@ -906,14 +874,38 @@ class ProjectsPage extends StatefulWidget {
 
 class _ProjectsPageState extends State<ProjectsPage> {
   List<Event> eventsedRegester;
+  PlusAnimation _plusAnimation;
+  Artboard _riveArtboard;
   List<String> imagesstring = [];
   List<Event> eventfiltered = [];
   bool initialized = false;
   Map<String, dynamic> data;
   ScreenArguments args;
   bool host_pressed = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    rootBundle.load('Assets/BT_animation.riv').then(
+          (data) async {
+        // Load the RiveFile from the binary data.
+        final file = RiveFile.import(data);
+
+        // The artboard is the root of the animation and gets drawn in the
+        // Rive widget.
+        final artboard = file.mainArtboard;
+
+        // Add a controller to play back a known animation on the main/default
+        // artboard. We store a reference to it so we can toggle playback.
+
+        setState(() => _riveArtboard = artboard);
+        _riveArtboard.addController(_plusAnimation = PlusAnimation('Animation 1'));
+      },
+    );
+  }
 
   @override
+
   void didChangeDependencies() async {
     if (!initialized) {
       BuildContext ctx =
@@ -936,109 +928,145 @@ class _ProjectsPageState extends State<ProjectsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 10.0,
-            sigmaY: 10.0,
-          ),
-          child: !initialized
-              ? Center(
-                  child: Container(child: FadingText('Loading...')),
-                )
-              : Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("Assets/ProfileBG.png"),
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                  child: SingleChildScrollView(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(
-                            0, MediaQuery.of(context).size.height / 7, 0, 0),
-                        color: Colors.transparent,
-                        height: MediaQuery.of(context).size.height / 5,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 40,
-                          backgroundImage: CachedNetworkImageProvider(data['image'].toString(),),
+    return Container(
+
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: 10.0,
+          sigmaY: 10.0,
+        ),
+        child: !initialized
+            ? Center(
+                child: Container(
+                    child: RiveAnimation.asset('Assets/BT_animation.riv',fit:BoxFit.contain)
+                ),
+              )
+            : Container(
+    height: MediaQuery.of(context).size.height,
+    decoration: BoxDecoration(
+    image: DecorationImage(
+    image: AssetImage("Assets/ProfileBG.png"),
+    fit: BoxFit.cover,
+    ),),
+
+                child: SingleChildScrollView(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(
+                          0, MediaQuery.of(context).size.height / 6, 0, 0),
+                      color: Colors.transparent,
+                      height: MediaQuery.of(context).size.height / 5,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 40,
+                        backgroundImage: CachedNetworkImageProvider(data['image'].toString(),),
 
 
-                          ),
                         ),
-                      Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                        child: Text(data['name'].toString(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontStyle: FontStyle.normal,
-                                fontFamily: 'DancingScript',
-                                fontSize: 20)),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
+                    Container(
+                      margin:
+                          EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                      child: Text(data['name'].toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontFamily: 'DancingScript',
+                              fontSize: 20)),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
 
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(0),
-                                topRight: Radius.circular(0))),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                alignment: Alignment.center,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(0),
+                              topRight: Radius.circular(0))),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              alignment: Alignment.center,
 
-                                child: Column(
-                                  children: [
-
-                                    Text(
-                                      "Description",
-                                      style: TextStyle(
+                              child: Column(
+                                children: [
 
 
-                                      ),
-                                    ),
-                                    Text(data['description']
+                                  Text(data['description']
+                                      .toString()
+                                      .substring(
+                                      0,
+                                      data['description']
+                                          .toString()
+                                          .indexOf('~\$') ==
+                                          -1
+                                          ? data['description']
+                                          .toString()
+                                          .length
+                                          : data['description']
+                                          .toString()
+                                          .indexOf('~\$')))
+                                ],
+                              ),
+                            ),
+                          ),
+
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  alignment: Alignment.center,
+
+                                  child: Link(
+                                    uri: Uri.parse(data['description']
                                         .toString()
                                         .substring(
-                                        0,
+                                      data['description']
+                                          .toString()
+                                          .indexOf('\$~') ==
+                                          -1
+                                          ? 0
+                                          : data['description']
+                                          .toString()
+                                          .indexOf('\$~') +
+                                          2,
+                                    )),
+                                    target: LinkTarget.blank,
+                                    builder: (ctx, openLink) {
+                                      return TextButton.icon(
+                                        onPressed: openLink,
+                                        label: Text('linkedIn'),
+                                        icon: Icon(FontAwesomeIcons.linkedin),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  alignment: Alignment.center,
+
+                                  child: Link(
+                                    uri: Uri.parse(data['description']
+                                        .toString()
+                                        .substring(
                                         data['description']
                                             .toString()
                                             .indexOf('~\$') ==
                                             -1
-                                            ? data['description']
-                                            .toString()
-                                            .length
+                                            ? 0
                                             : data['description']
                                             .toString()
-                                            .indexOf('~\$')))
-                                  ],
-                                ),
-                              ),
-                            ),
-
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    alignment: Alignment.center,
-
-                                    child: Link(
-                                      uri: Uri.parse(data['description']
-                                          .toString()
-                                          .substring(
+                                            .indexOf('~\$') +
+                                            2,
                                         data['description']
                                             .toString()
                                             .indexOf('\$~') ==
@@ -1046,116 +1074,77 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                             ? 0
                                             : data['description']
                                             .toString()
-                                            .indexOf('\$~') +
-                                            2,
-                                      )),
-                                      target: LinkTarget.blank,
-                                      builder: (ctx, openLink) {
-                                        return TextButton.icon(
-                                          onPressed: openLink,
-                                          label: Text('linkedIn'),
-                                          icon: Icon(FontAwesomeIcons.linkedin),
-                                        );
-                                      },
-                                    ),
+                                            .indexOf('\$~')),
+                                      ),
+                                    target: LinkTarget.blank,
+                                    builder: (ctx, openLink) {
+                                      return TextButton.icon(
+                                        style:TextButton.styleFrom(
+                                          primary:Colors.purple,
+
+                                          )
+                                        ,
+                                        onPressed: openLink,
+                                        label: Text('instagram'),
+                                        icon: Icon(FontAwesomeIcons.instagram,color: Colors.purple,),
+                                      );
+                                    },
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    alignment: Alignment.center,
-
-                                    child: Link(
-                                      uri: Uri.parse(data['description']
-                                          .toString()
-                                          .substring(
-                                          data['description']
-                                              .toString()
-                                              .indexOf('~\$') ==
-                                              -1
-                                              ? 0
-                                              : data['description']
-                                              .toString()
-                                              .indexOf('~\$') +
-                                              2,
-                                          data['description']
-                                              .toString()
-                                              .indexOf('\$~') ==
-                                              -1
-                                              ? 0
-                                              : data['description']
-                                              .toString()
-                                              .indexOf('\$~')),
-                                        ),
-                                      target: LinkTarget.blank,
-                                      builder: (ctx, openLink) {
-                                        return TextButton.icon(
-                                          style:TextButton.styleFrom(
-                                            primary:Colors.purple,
-
-                                            )
-                                          ,
-                                          onPressed: openLink,
-                                          label: Text('instagram'),
-                                          icon: Icon(FontAwesomeIcons.instagram,color: Colors.purple,),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
+                          ),
 
 
 
-                          ],
-                        ),
+                        ],
                       ),
+                    ),
 
-                      Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                        child: Row(
-                          children: [
-                            Text('invited by ',
-                                style: TextStyle(
-                                    fontStyle: FontStyle.normal,
-                                    fontFamily: 'DancingScript',
-                                    fontSize: 20)),
-                            Text(data['who_sent'].toString(),
-                                style: TextStyle(
-                                    fontStyle: FontStyle.normal,
-                                    fontFamily: 'DancingScript',
-                                    fontSize: 20)),
-                          ],
-                        ),
+
+                    Container(
+                      margin:
+                          EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                      child: Row(
+                        children: [
+                          Text('invited by ',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.normal,
+                                  fontFamily: 'DancingScript',
+                                  fontSize: 20)),
+                          Text(data['who_sent'].toString(),
+                              style: TextStyle(
+                                  fontStyle: FontStyle.normal,
+                                  fontFamily: 'DancingScript',
+                                  fontSize: 20)),
+                        ],
                       ),
+                    ),
 
-                      // Card(
-                      //
-                      //   child: Container(
-                      //     margin:
-                      //         EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                      //     padding:
-                      //         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                      //     child: Text('roll no. ' + data['roll_no'].toString(),
-                      //         style: TextStyle(
-                      //
-                      //             fontWeight: FontWeight.w900,
-                      //             fontStyle: FontStyle.italic,
-                      //             fontFamily: 'Open Sans',
-                      //             fontSize: 20)),
-                      //   ),
-                      // ),
-                      // ListTile(
-                      //   title: Text(data['who_sent'].toString()),
-                      // ),
-                    ],
-                  )),
-                ),
-        ),
+                    // Card(
+                    //
+                    //   child: Container(
+                    //     margin:
+                    //         EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                    //     padding:
+                    //         EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                    //     child: Text('roll no. ' + data['roll_no'].toString(),
+                    //         style: TextStyle(
+                    //
+                    //             fontWeight: FontWeight.w900,
+                    //             fontStyle: FontStyle.italic,
+                    //             fontFamily: 'Open Sans',
+                    //             fontSize: 20)),
+                    //   ),
+                    // ),
+                    // ListTile(
+                    //   title: Text(data['who_sent'].toString()),
+                    // ),
+                  ],
+                )),
+              ),
       ),
     );
   }
@@ -1223,7 +1212,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
               children: [
                 Hero(
 
-                  tag: 'my-hero-animation-tag',
+                  tag: 'my-hero-animation-tag${projects.id}',
                   child: Container(
 
                     width: MediaQuery.of(context).size.height*4/6,
@@ -1242,7 +1231,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Hero(
-                      tag:"lol",
+                      tag:"lol${projects.id}",
                       child: Container(
                         alignment:Alignment.topLeft,
                         child: CircleAvatar(
@@ -1264,15 +1253,12 @@ class _InternshipsPageState extends State<InternshipsPage> {
                         ),
                       ),
                     ),
-                    Hero(
-                      tag:"lolol",
-                      child: Text(
-                        projects.name,
-                        style: TextStyle(
-                            color:Colors.black,
-                            fontSize: 19,
-                            fontFamily: 'DancingScript'),
-                      ),
+                    Text(
+                      projects.name,
+                      style: TextStyle(
+                          color:Colors.black,
+                          fontSize: 19,
+                          fontFamily: 'DancingScript'),
                     ),
                   ],
                 ),
@@ -1429,136 +1415,133 @@ class _InternshipsPageState extends State<InternshipsPage> {
   Widget build(BuildContext context) {
 
 
-    return Expanded(
-      child: Container(
+    return Container(
 
-        alignment: Alignment.center,
-        child: ListView.builder(
-          itemCount: 1,
-          itemBuilder: (BuildContext context, int index) {
-            return SingleChildScrollView(
-              child: AnimationConfiguration.staggeredList(
-                position: index,
-                duration: const Duration(milliseconds: 350),
-                child: SlideAnimation(
-                  horizontalOffset: 100.0,
-                  child: FlipAnimation(
-                    child: ListView.builder(
-                        padding: EdgeInsets.all(0),
-                        physics: ClampingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: eventfiltered.length,
-                        itemBuilder: (context, index) {
-                          return ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(
-                                sigmaX: 5.0,
-                                sigmaY: 5.0,
+      alignment: Alignment.center,
+      child: ListView.builder(
+        itemCount: 1,
+        itemBuilder: (BuildContext context, int index) {
+          return SingleChildScrollView(
+            child: AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 350),
+              child: SlideAnimation(
+                horizontalOffset: 50.0,
+                child: ListView.builder(
+                    padding: EdgeInsets.all(0),
+                    physics: ClampingScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: eventfiltered.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin:EdgeInsets.all(10),
+                        child: ClipRect(
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                              sigmaX: 5.0,
+                              sigmaY: 5.0,
+                            ),
+                            child: Container(
+
+
+                                width: MediaQuery.of(context).size.width*5/6,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color:Colors.transparent,
                               ),
-                              child: Container(
-
-                                  width: MediaQuery.of(context).size.width*5/6,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color:Colors.transparent,
-                                ),
 
 
 
-                                child: Column(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () => _showSecondPage(context,Project(
+                              child: Column(
+                                children: [
+                                  ClipRect(
+                                    child: GestureDetector(
+                                      onTap: () => _showSecondPage(context,Project(id: eventfiltered[index].id,
                                     image:eventfiltered[index].image.toString(),owner_pic:eventfiltered[index].owner_pic.toString(),
 owner:eventfiltered[index].owner.toString(),name:eventfiltered[index].name.toString(),description: eventfiltered[index].description.toString()
                                       )),
-                                      child: ClipRect(
-                                        child: Container(
-                                          width: MediaQuery.of(context).size.width*5/6,
-                                          height: MediaQuery.of(context).size.height/3,
-                                          child: Hero(
-                                            tag: 'my-hero-animation-tag',
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                      image: CachedNetworkImageProvider(
-                                                        '${eventfiltered[index].image.toString()}',
-                                                      ),
-                                                      fit: BoxFit.fitWidth),
-                                                  shape: BoxShape.rectangle),
-                                            ),
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width*5/6,
+                                        height: MediaQuery.of(context).size.height/3,
+                                        child: Hero(
+                                          tag: 'my-hero-animation-tag${eventfiltered[index].id}',
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: CachedNetworkImageProvider(
+                                                      '${eventfiltered[index].image.toString()}',
+                                                    ),
+                                                    fit: BoxFit.fitWidth),
+                                                shape: BoxShape.rectangle),
                                           ),
                                         ),
                                       ),
                                     ),
-                                    Container(
+                                  ),
+                                  Container(
 
-                                     width: MediaQuery.of(context).size.width*5/6,
-                                      child: ListTile(
-                                          onTap: () {
+                                   width: MediaQuery.of(context).size.width*5/6,
+                                    child: ListTile(
+                                        onTap: () {
 
 
 
+                                        },
+                                        subtitle: Text(
+                                            eventfiltered[index].owner.toString(),
+                                            style: TextStyle(
+                                                fontFamily: 'DancingScript')),
+
+                                        leading: TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              hostorprofile = true;
+                                            });
+                                            Navigator.of(context).pushNamed(
+                                                '/ProfileDetailsScreen',
+                                                arguments: ScreenArguments(
+                                                    username:
+                                                        eventfiltered[index].owner,
+                                                    hostpressed: hostorprofile));
                                           },
-                                          subtitle: Text(
-                                              eventfiltered[index].owner.toString(),
-                                              style: TextStyle(
-                                                  fontFamily: 'DancingScript')),
-
-                                          leading: TextButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                hostorprofile = true;
-                                              });
-                                              Navigator.of(context).pushNamed(
-                                                  '/ProfileDetailsScreen',
-                                                  arguments: ScreenArguments(
-                                                      username:
-                                                          eventfiltered[index].owner,
-                                                      hostpressed: hostorprofile));
-                                            },
-                                            child: Hero(
-                                              tag:"lol",
+                                          child: Hero(
+                                            tag:"lol${eventfiltered[index].id}",
+                                            child: CircleAvatar(
+                                              radius: 22,
                                               child: CircleAvatar(
-                                                radius: 22,
-                                                child: CircleAvatar(
-                                                    radius: 20,
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          image: DecorationImage(
-                                                              image: CachedNetworkImageProvider(
-                                                                  '${eventfiltered[index].owner_pic.toString()}'),
-                                                              fit: BoxFit.fill),
-                                                          shape: BoxShape.circle),
-                                                    )),
-                                              ),
+                                                  radius: 20,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                            image: CachedNetworkImageProvider(
+                                                                '${eventfiltered[index].owner_pic.toString()}'),
+                                                            fit: BoxFit.fill),
+                                                        shape: BoxShape.circle),
+                                                  )),
                                             ),
                                           ),
-                                          title: Hero(
-                                            tag:"lolol",
-                                            child: Text(
-                                              eventfiltered[index].name,
-                                              style: TextStyle(
-                                                color:Colors.black,
-                                                  fontSize: 19,
-                                                  fontFamily: 'DancingScript'),
-                                            ),
-                                          )),
-                                    ),
+                                        ),
+                                        title: Text(
+                                          eventfiltered[index].name,
+                                          style: TextStyle(
+                                            color:Colors.black,
+                                              fontSize: 19,
+                                              fontFamily: 'DancingScript'),
+                                        )),
+                                  ),
 
-                                  ],
-                                ),
+                                ],
                               ),
                             ),
-                          );
-                        }),
-                  ),
-                ),
+                          ),
+                        ),
+                      );
+                    }),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -1618,144 +1601,141 @@ class _EventsPageState extends State<EventsPage> {
   Widget build(BuildContext context) {
     print("//////////////////////////////BUILDING");
 
-    return Expanded(
-      child: Container(
-        alignment: Alignment.center,
-        child: ListView.builder(
-          itemCount: 1,
-          itemBuilder: (BuildContext context, int index) {
-            return SingleChildScrollView(
-              child: AnimationConfiguration.staggeredList(
-                position: index,
-                duration: const Duration(milliseconds: 350),
-                child: SlideAnimation(
-                  verticalOffset: 100.0,
-                  child: FlipAnimation(
-                    child: ListView.builder(
-                        physics: ClampingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: eventfiltered.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              Center(
-                                child: loading
-                                    ? SkeletonContainer.square(
-                                        width: 22,
-                                        height: 22,
-                                      )
-                                    : TextButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            hostorprofile = true;
-                                          });
-                                          Navigator.of(context).pushNamed(
-                                              '/ProfileDetailsScreen',
-                                              arguments: ScreenArguments(
-                                                  username: eventfiltered[index]
-                                                      .owner,
-                                                  hostpressed: hostorprofile));
-                                        },
-                                        child: CircleAvatar(
-                                          radius: 22,
-                                          child: CircleAvatar(
-                                              radius: 20,
-                                              child: !loading
-                                                  ? Container(
-                                                      decoration: BoxDecoration(
-                                                          image: DecorationImage(
-                                                              image: CachedNetworkImageProvider(
-                                                                  '${eventfiltered[index].owner_image.toString()}'),
-                                                              fit: BoxFit.fill),
-                                                          shape:
-                                                              BoxShape.circle),
-                                                    )
-                                                  : SkeletonContainer.square(
-                                                      width: 100,
-                                                      height: 20,
-                                                    )),
-                                        ),
+    return Container(
+      alignment: Alignment.center,
+      child: ListView.builder(
+        itemCount: 1,
+        itemBuilder: (BuildContext context, int index) {
+          return SingleChildScrollView(
+            child: AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 350),
+              child: SlideAnimation(
+                verticalOffset: 50.0,
+                child: ListView.builder(
+                  physics:BouncingScrollPhysics(),
+
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: eventfiltered.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Center(
+                            child: loading
+                                ? SkeletonContainer.square(
+                                    width: 22,
+                                    height: 22,
+                                  )
+                                : TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        hostorprofile = true;
+                                      });
+                                      Navigator.of(context).pushNamed(
+                                          '/ProfileDetailsScreen',
+                                          arguments: ScreenArguments(
+                                              username: eventfiltered[index]
+                                                  .owner,
+                                              hostpressed: hostorprofile));
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 22,
+                                      child: CircleAvatar(
+                                          radius: 20,
+                                          child: !loading
+                                              ? Container(
+                                                  decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                          image: CachedNetworkImageProvider(
+                                                              '${eventfiltered[index].owner_image.toString()}'),
+                                                          fit: BoxFit.fill),
+                                                      shape:
+                                                          BoxShape.circle),
+                                                )
+                                              : SkeletonContainer.square(
+                                                  width: 100,
+                                                  height: 20,
+                                                )),
+                                    ),
+                                  ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                  '/eventdetailsdesign',
+                                  arguments: ScreenArguments(
+                                      id: eventfiltered[index].id,
+                                      scf: scf,
+                                      context: context));
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              height: 400,
+                              child: loading
+                                  ? SkeletonContainer.square(
+                                      width: 400,
+                                      height: 400,
+                                    )
+                                  : Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: CachedNetworkImageProvider(
+                                                '${eventfiltered[index].event_image.toString()}',
+                                                errorListener: () {}),
+                                            fit: BoxFit.fitHeight),
                                       ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                      '/eventdetailsdesign',
-                                      arguments: ScreenArguments(
-                                          id: eventfiltered[index].id,
-                                          scf: scf,
-                                          context: context));
-                                },
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 400,
-                                  child: loading
-                                      ? SkeletonContainer.square(
-                                          width: 400,
-                                          height: 400,
+                                    ),
+                            ),
+                          ),
+                          ListTile(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                    '/eventdetailsdesign',
+                                    arguments: ScreenArguments(
+                                        id: eventfiltered[index].id,
+                                        scf: scf,
+                                        context: context));
+                              },
+                              subtitle: loading
+                                  ? SkeletonContainer.square(
+                                      width: 10,
+                                      height: 10,
+                                    )
+                                  : Text(
+                                      "${eventfiltered[index].dateime.day.toString()} .${eventfiltered[index].dateime.month.toString()}",
+                                      style: TextStyle(
+                                          fontFamily: 'DancingScript')),
+                              trailing: loading
+                                  ? SkeletonContainer.square(
+                                      width: 10,
+                                      height: 10,
+                                    )
+                                  : eventfiltered[index].favorite
+                                      ? Icon(
+                                          FontAwesomeIcons.solidStar,
                                         )
-                                      : Container(
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: CachedNetworkImageProvider(
-                                                    '${eventfiltered[index].event_image.toString()}',
-                                                    errorListener: () {}),
-                                                fit: BoxFit.fitHeight),
-                                          ),
+                                      : Icon(
+                                          FontAwesomeIcons.star,
                                         ),
-                                ),
-                              ),
-                              ListTile(
-                                  onTap: () {
-                                    Navigator.of(context).pushNamed(
-                                        '/eventdetailsdesign',
-                                        arguments: ScreenArguments(
-                                            id: eventfiltered[index].id,
-                                            scf: scf,
-                                            context: context));
-                                  },
-                                  subtitle: loading
-                                      ? SkeletonContainer.square(
-                                          width: 10,
-                                          height: 10,
-                                        )
-                                      : Text(
-                                          "${eventfiltered[index].dateime.day.toString()} .${eventfiltered[index].dateime.month.toString()}",
-                                          style: TextStyle(
-                                              fontFamily: 'DancingScript')),
-                                  trailing: loading
-                                      ? SkeletonContainer.square(
-                                          width: 10,
-                                          height: 10,
-                                        )
-                                      : eventfiltered[index].favorite
-                                          ? Icon(
-                                              FontAwesomeIcons.solidStar,
-                                            )
-                                          : Icon(
-                                              FontAwesomeIcons.star,
-                                            ),
-                                  title: loading
-                                      ? SkeletonContainer.square(
-                                          width: 10,
-                                          height: 10,
-                                        )
-                                      : Text(
-                                          eventfiltered[index].name,
-                                          style: TextStyle(
-                                              fontSize: 19,
-                                              fontFamily: 'DancingScript'),
-                                        )),
-                            ],
-                          );
-                        }),
-                  ),
-                ),
+                              title: loading
+                                  ? SkeletonContainer.square(
+                                      width: 10,
+                                      height: 10,
+                                    )
+                                  : Text(
+                                      eventfiltered[index].name,
+                                      style: TextStyle(
+                                          fontSize: 19,
+                                          fontFamily: 'DancingScript'),
+                                    )),
+                        ],
+                      );
+                    }),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -1934,29 +1914,7 @@ class _AddingPageState extends State<AddingPage> {
     }
   }
 
-  void _adding_page_open_function(bool _adding_page_active) {
-    if (_plusAnimation == null) {
-      _riveArtboard.addController(
-        _plusAnimation = PlusAnimation('Plus'),
-      );
-    }
 
-    if (_adding_page_active == true) {
-      _plusAnimation.start();
-    } else {
-      _plusAnimation.reverse();
-    }
-
-    setState(() {
-      if (_adding_page_active == true) {
-        _plusAnimation.isActive = false;
-        _riveArtboard.addController(_plusAnimation = PlusAnimation('Plus'));
-
-        print("_adding_page_active");
-      }
-      _adding_to_app_pressed = _adding_page_active;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -1986,11 +1944,14 @@ class _AddingPageState extends State<AddingPage> {
     ];
     List<Card> AddingButtons = [
       Card(
+
         elevation: 0,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
             onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Creating"),duration: Duration(milliseconds: 1000),));
+
               //  Navigator.push(context,
               //     MaterialPageRoute(builder: (context) => CustomPage()));
               Navigator.of(context).pushNamed('AddEventScreen', arguments: 1);
@@ -2010,6 +1971,7 @@ class _AddingPageState extends State<AddingPage> {
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
             onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Creating"),duration: Duration(milliseconds: 1000),));
               //  Navigator.push(context,
               //     MaterialPageRoute(builder: (context) => CustomPage()));
               Navigator.of(context).pushNamed('AddEventScreen', arguments: 2);
@@ -2029,6 +1991,7 @@ class _AddingPageState extends State<AddingPage> {
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
             onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Creating"),duration: Duration(milliseconds: 1000),));
               //  Navigator.push(context,
               //     MaterialPageRoute(builder: (context) => CustomPage()));
               Navigator.of(context).pushNamed('AddEventScreen', arguments: 3);
@@ -2063,23 +2026,24 @@ class _AddingPageState extends State<AddingPage> {
       // ),
     ];
 
-    return Expanded(
-      child: Container(
-        alignment: Alignment.center,
-        child: ListView.builder(
-          physics: BouncingScrollPhysics(),
-          itemCount: 3,
-          itemBuilder: (BuildContext context, int index) {
-            return AnimationConfiguration.staggeredList(
-              position: index,
-              duration: const Duration(milliseconds: 350),
-              child: SlideAnimation(
-                verticalOffset: 100.0,
-                child: FlipAnimation(child: AddingButtons[index]),
-              ),
-            );
-          },
-        ),
+    return Container(
+      margin:EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/4, 0, 0),
+        width :MediaQuery.of(context).size.width,
+        height:MediaQuery.of(context).size.height ,
+      alignment: Alignment.center,
+      child: ListView.builder(
+        physics: BouncingScrollPhysics(),
+        itemCount: 3,
+        itemBuilder: (BuildContext context, int index) {
+          return AnimationConfiguration.staggeredList(
+            position: index,
+            duration: const Duration(milliseconds: 350),
+            child: SlideAnimation(
+              verticalOffset: 100.0,
+              child: FlipAnimation(child: AddingButtons[index]),
+            ),
+          );
+        },
       ),
     );
   }
@@ -2104,6 +2068,29 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
   bool eventsInitialized = false;
   bool storycontinues = false;
   int j = 1;
+  @override
+  void initState() {
+    super.initState();
+
+    // Load the animation file from the bundle, note that you could also
+    // download this. The RiveFile just expects a list of bytes.
+    rootBundle.load('Assets/appbar.riv').then(
+          (data) async {
+        // Load the RiveFile from the binary data.
+        final file = RiveFile.import(data);
+
+        // The artboard is the root of the animation and gets drawn in the
+        // Riv widget.
+        final artboard = file.mainArtboard;
+
+        // Add a controller to play back a known animation on the main/default
+        // artboard. We store a reference to it so we can toggle playback.
+
+        setState(() => _riveArtboard = artboard);
+        _riveArtboard.addController(_plusAnimation = PlusAnimation('Idle'));
+      },
+    );
+  }
 
   @override
   void didChangeDependencies() async {
@@ -2145,29 +2132,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
     super.didChangeDependencies();
   }
 
-  @override
-  void initState() {
-    super.initState();
 
-    // Load the animation file from the bundle, note that you could also
-    // download this. The RiveFile just expects a list of bytes.
-    rootBundle.load('Assets/appbar.riv').then(
-      (data) async {
-        // Load the RiveFile from the binary data.
-        final file = RiveFile.import(data);
-
-        // The artboard is the root of the animation and gets drawn in the
-        // Riv widget.
-        final artboard = file.mainArtboard;
-
-        // Add a controller to play back a known animation on the main/default
-        // artboard. We store a reference to it so we can toggle playback.
-
-        setState(() => _riveArtboard = artboard);
-        _riveArtboard.addController(_plusAnimation = PlusAnimation('Idle'));
-      },
-    );
-  }
 
   void _events_page_function(bool _eventspressed) {
     if (_adding_to_app_pressed == false) {
@@ -2199,6 +2164,8 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
     }
   }
 
+
+
   void _adding_page_open_function(bool _adding_page_active) {
     if (_plusAnimation == null) {
       _riveArtboard.addController(
@@ -2206,24 +2173,31 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
       );
     }
 
-    if (_adding_page_active == true) {
-      _plusAnimation.start();
-    } else {
-      _plusAnimation.reverse();
-      if (_events_pressed == true) {
-      } else if (_events_pressed == false) {}
-    }
-
-    setState(() {
+   setState(() {
       if (_adding_page_active == true) {
-        _plusAnimation.isActive = false;
-        _riveArtboard.addController(_plusAnimation = PlusAnimation('Plus'));
+_plusAnimation.start();
 
-        print("_adding_page_active");
+
+        print("_adding_page_active1");
       }
+      if (_adding_page_active == false) {
+        _plusAnimation.reverse();
+
+
+
+
+
+
+
+
+
+        print("_adding_page_inactive1");
+      }
+
       _adding_to_app_pressed = _adding_page_active;
     });
   }
+
 
   String owner = '';
 
@@ -2340,112 +2314,7 @@ class _MyRiveAnimationState extends State<MyRiveAnimation> {
                 else
                   HomePage(),
 
-                Container(
-                  padding: EdgeInsets.all(0),
-                  width: MediaQuery.of(context).size.width,
-                  child: _riveArtboard == null
-                      ? const SizedBox()
-                      : GestureDetector(
-                          onTapUp: (tapinfo) {
-                            var localtouchposition =
-                                (context.findRenderObject() as RenderBox)
-                                    .globalToLocal(tapinfo.globalPosition);
 
-                            var tophalftouched =
-                                localtouchposition.dy < height / 2;
-                            var hometouched = localtouchposition.dx < width / 6;
-                            var internshiptouched =
-                                localtouchposition.dx < 2 * (width / 6);
-                            var profiletouched = localtouchposition.dx < width;
-                            var lowerblanktouched =
-                                localtouchposition.dx < 4 * (width / 6);
-                            var eventstouched =
-                                localtouchposition.dx < 5 * (width / 6);
-
-                            if (!tophalftouched) {
-                              if (hometouched) {
-                                if (!_adding_to_app_pressed) {
-                                  setState(() {
-                                    if (_events_pressed == true) {
-                                      _events_pressed = !_events_pressed;
-                                    }
-                                    if (_internship_pressed == true) {
-                                      _internship_pressed =
-                                          !_internship_pressed;
-                                    }
-                                    if (_project_pressed == true) {
-                                      _project_pressed = !_project_pressed;
-                                    }
-                                    _plusAnimation.isActive = false;
-                                    _riveArtboard.addController(
-                                        _plusAnimation = PlusAnimation('home'));
-                                  });
-                                }
-                              } else if (internshiptouched) {
-                                if (!_adding_to_app_pressed) {
-                                  setState(() {
-                                    _internship_pressed = !_internship_pressed;
-                                    _events_pressed = false;
-                                    _project_pressed = false;
-                                    _Internship_page_function(
-                                        _internship_pressed);
-                                    _plusAnimation.isActive = false;
-                                    _riveArtboard.addController(_plusAnimation =
-                                        PlusAnimation('internship'));
-                                  });
-                                }
-                              } else if (lowerblanktouched) {
-                                setState(() {
-                                  _adding_to_app_pressed =
-                                      !_adding_to_app_pressed;
-                                  _adding_page_open_function(
-                                      _adding_to_app_pressed);
-                                });
-                              } else if (eventstouched) {
-                                if (!_adding_to_app_pressed) {
-                                  setState(() {
-                                    _events_pressed = !_events_pressed;
-                                    _internship_pressed = false;
-                                    _project_pressed = false;
-                                    _events_page_function(_events_pressed);
-                                    _plusAnimation.isActive = false;
-                                    _riveArtboard.addController(_plusAnimation =
-                                        PlusAnimation('events'));
-                                  });
-                                }
-                              } else if (profiletouched) {
-                                if (!_adding_to_app_pressed) {
-                                  setState(() {
-                                    _project_pressed = !_project_pressed;
-                                    _events_pressed = false;
-                                    _internship_pressed = false;
-                                    _Project_page_function(_project_pressed);
-                                    _plusAnimation.isActive = false;
-                                    _riveArtboard.addController(_plusAnimation =
-                                        PlusAnimation('profile'));
-                                    print("Profile Touched");
-                                  });
-                                }
-                              }
-                            } else {
-                              setState(() {
-                                _adding_to_app_pressed =
-                                    !_adding_to_app_pressed;
-                                _adding_page_open_function(
-                                    _adding_to_app_pressed);
-                              });
-                            }
-                          },
-                          child: Container(
-                            child: Rive(
-                              artboard: _riveArtboard,
-                              alignment: Alignment.bottomCenter,
-                              useArtboardSize: true,
-                              fit: BoxFit.fitHeight,
-                            ),
-                          ),
-                        ),
-                ),
               ],
             ),
     );
