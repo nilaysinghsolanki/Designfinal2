@@ -1,7 +1,11 @@
+
 import 'dart:ui';
+
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nilay_dtuotg_2/Screens/galleryView.dart';
 import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
 import 'package:nilay_dtuotg_2/Screens/patchProfileData.dart';
@@ -418,88 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    List<List<Event>> ownersEvents = [];
 
-    List<Event> storiesFiltered = [];
-    ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    if (j != 1) {
-      storycontinues = true;
-    }
-    sheduledToday.forEach((element) {
-      if (element.eventType == "Society") storiesFiltered.add(element);
-    });
-
-    for (int i = 0; i < storiesFiltered.length; i++) {
-      if (ownersEvents.indexWhere(
-              (element) => element[0].owner == storiesFiltered[i].owner) !=
-          -1) {
-        ownersEvents[ownersEvents.indexWhere(
-                (element) => element[0].owner == storiesFiltered[i].owner)]
-            .add(storiesFiltered[i]);
-      } else {
-        ownersEvents.add([storiesFiltered[i]]);
-      }
-    }
-    _children = [
-      Column(
-        children: [
-          Container(
-            margin:EdgeInsets.fromLTRB(10, 25, 0, 0),
-
-            alignment: Alignment.topLeft,
-
-            height: MediaQuery.of(context).size.height / 7,
-            child: SingleChildScrollView(
-
-              scrollDirection: Axis.horizontal,
-              child: ListView.builder(
-
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: ownersEvents.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    GestureDetector(
-                      onTap: () {
-                        j = 0;
-                        j++;
-
-                        Navigator.of(context).pushNamed(
-                          StoryViewScreen.routeName,
-                          arguments: ScreenArguments(
-                              id: !storycontinues ? index : args.id,
-                              eves: !storycontinues
-                                  ? ownersEvents[index]
-                                  : ownersEvents[args.id],
-                              ownerlist:
-                              ownersEvents), // sheduledToday[index].event_image,
-                        );
-                      },
-                      child: Container(
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.all(3),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.purple,
-                          radius: 30,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 27,
-                            backgroundImage: storiesFiltered.isNotEmpty
-                                ? CachedNetworkImageProvider(
-                                ownersEvents[index][0].owner_image,
-                                scale: 0.5)
-                                : AssetImage("Assets/newframe.png"),
-                          ),
-                        ),
-                      ),
-                    ),
-              ),
-            ),
-          ),
-          HomePage()
-        ],
-      ),
-      InternshipsPage(),AddingPage(),EventsPage(),ProjectsPage()
-    ];
     return Container(
       child: Scaffold(
 
@@ -875,34 +798,34 @@ class ProjectsPage extends StatefulWidget {
 class _ProjectsPageState extends State<ProjectsPage> {
   List<Event> eventsedRegester;
   PlusAnimation _plusAnimation;
+  int rollNum;
+  int year;
+  String _myBranch;
+  String _myBatch;
+  String username = 'dtuotg';
+  bool initialized = false;
+  @override
+  void initState() {
+    super.initState();
+  }
+  Map<String, dynamic> data;
+
+  final picker = ImagePicker();
   Artboard _riveArtboard;
   List<String> imagesstring = [];
   List<Event> eventfiltered = [];
-  bool initialized = false;
-  Map<String, dynamic> data;
+
+  final formGlobalKey = GlobalKey<FormState>();
+  final name = TextEditingController();
+  final description = TextEditingController();
+  final instagram = TextEditingController();
+  final linkedIn = TextEditingController();
+  bool waiting = false;
+
   ScreenArguments args;
   bool host_pressed = false;
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    rootBundle.load('Assets/BT_animation.riv').then(
-          (data) async {
-        // Load the RiveFile from the binary data.
-        final file = RiveFile.import(data);
 
-        // The artboard is the root of the animation and gets drawn in the
-        // Rive widget.
-        final artboard = file.mainArtboard;
-
-        // Add a controller to play back a known animation on the main/default
-        // artboard. We store a reference to it so we can toggle playback.
-
-        setState(() => _riveArtboard = artboard);
-        _riveArtboard.addController(_plusAnimation = PlusAnimation('Animation 1'));
-      },
-    );
-  }
 
   @override
 
@@ -966,18 +889,66 @@ class _ProjectsPageState extends State<ProjectsPage> {
 
                         ),
                       ),
-                    Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-                      child: Text(data['name'].toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontStyle: FontStyle.normal,
-                              fontFamily: 'DancingScript',
-                              fontSize: 20)),
+                    TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                        foregroundColor: MaterialStateProperty.all(Colors.transparent),overlayColor:MaterialStateProperty.all(Colors.transparent) ,shadowColor: MaterialStateProperty.all(Colors.transparent)
+                      ),
+                      onPressed: () {
+                        // Or: showModalBottomSheet(), with model bottom sheet, clicking
+                        // anywhere will dismiss the bottom sheet.
+                        showBottomSheet<String>(
+                          context: context,
+                          builder: (BuildContext context) => Container(
+
+                            decoration: const BoxDecoration(color: Color(0xffF2EFE4),
+
+                              border: Border(top: BorderSide(color: Colors.black12)),
+                            ),
+                            child: ListView(
+                              shrinkWrap: true,
+                              primary: false,
+                              children: <Widget>[
+                                const ListTile(
+                                  dense: true,
+                                  title: Text('This is a bottom sheet'),
+                                ),
+                                const ListTile(
+                                  dense: true,
+                                  title: Text('Click OK to dismiss'),
+                                ),
+                                ButtonBar(
+                                  children: <Widget>[
+                                    FlatButton(
+                                      onPressed: () {
+
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                        
+                      },                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+                        child: Text(data['name'].toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color:Colors.black,
+                                fontStyle: FontStyle.normal,
+                                fontFamily: 'DancingScript',
+                                fontSize: 20)),
+                      ),
                     ),
+
                     Container(
                       decoration: BoxDecoration(
 
