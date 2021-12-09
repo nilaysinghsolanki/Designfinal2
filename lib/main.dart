@@ -15,6 +15,7 @@ import 'package:nilay_dtuotg_2/models/lecture.dart';
 import 'package:nilay_dtuotg_2/widgets/skeleton_container.dart';
 import 'package:nilay_dtuotg_2/widgets/utils.dart';
 import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 import './Screens/tabsScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
@@ -141,7 +142,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-  List<Widget> _children=[];
+  List<Widget> _children=[Text("1")];
 
   double width;
   double height;
@@ -154,6 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool eventsInitialized = false;
   bool storycontinues = false;
   int j = 1;
+
   @override
   void didChangeDependencies() async {
     if (!initialized) {
@@ -848,7 +850,78 @@ class _ProjectsPageState extends State<ProjectsPage> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
-
+  void _launchURL() async {
+    if (!await launch(data['description']
+        .toString()
+        .substring(
+        data['description']
+            .toString()
+            .indexOf('~\$') ==
+            -1
+            ? 0
+            : data['description']
+            .toString()
+            .indexOf('~\$') +
+            2,
+        data['description']
+            .toString()
+            .indexOf('\$~') ==
+            -1
+            ? 0
+            : data['description']
+            .toString()
+            .indexOf('\$~')),
+    )) throw 'Could not launch ${data['description']
+        .toString()
+        .substring(
+        data['description']
+            .toString()
+            .indexOf('~\$') ==
+            -1
+            ? 0
+            : data['description']
+            .toString()
+            .indexOf('~\$') +
+            2,
+        data['description']
+            .toString()
+            .indexOf('\$~') ==
+            -1
+            ? 0
+            : data['description']
+            .toString()
+            .indexOf('\$~'))
+    }';
+  }
+  void _launchURL1() async {
+    if (!await launch(data['description']
+        .toString()
+        .substring(
+      data['description']
+          .toString()
+          .indexOf('\$~') ==
+          -1
+          ? 0
+          : data['description']
+          .toString()
+          .indexOf('\$~') +
+          2,
+    )
+    )) throw 'Could not launch ${data['description']
+        .toString()
+        .substring(
+      data['description']
+          .toString()
+          .indexOf('\$~') ==
+          -1
+          ? 0
+          : data['description']
+          .toString()
+          .indexOf('\$~') +
+          2,
+    )
+    }';
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -995,28 +1068,40 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                 child: Container(
                                   alignment: Alignment.center,
 
-                                  child: Link(
-                                    uri: Uri.parse(data['description']
-                                        .toString()
-                                        .substring(
-                                      data['description']
-                                          .toString()
-                                          .indexOf('\$~') ==
-                                          -1
-                                          ? 0
-                                          : data['description']
-                                          .toString()
-                                          .indexOf('\$~') +
-                                          2,
-                                    )),
-                                    target: LinkTarget.blank,
-                                    builder: (ctx, openLink) {
-                                      return TextButton.icon(
-                                        onPressed: openLink,
-                                        label: Text('linkedIn'),
-                                        icon: Icon(FontAwesomeIcons.linkedin),
-                                      );
-                                    },
+                                  child: Column(
+                                    children: [
+                                      TextButton(
+                                        onPressed:_launchURL1,
+                                        child: TextButton.icon(
+                                          onPressed: _launchURL1,
+                                          label: Text('linkedIn'),
+                                          icon: Icon(FontAwesomeIcons.linkedin),
+                                        )
+                                      ),
+                                      Link(
+                                        uri: Uri.parse(data['description']
+                                            .toString()
+                                            .substring(
+                                          data['description']
+                                              .toString()
+                                              .indexOf('\$~') ==
+                                              -1
+                                              ? 0
+                                              : data['description']
+                                              .toString()
+                                              .indexOf('\$~') +
+                                              2,
+                                        )),
+                                        target: LinkTarget.blank,
+                                        builder: (ctx, openLink) {
+                                          return TextButton.icon(
+                                            onPressed: openLink,
+                                            label: Text('linkedIn'),
+                                            icon: Icon(FontAwesomeIcons.linkedin),
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -1025,41 +1110,58 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                 child: Container(
                                   alignment: Alignment.center,
 
-                                  child: Link(
-                                    uri: Uri.parse(data['description']
-                                        .toString()
-                                        .substring(
-                                        data['description']
-                                            .toString()
-                                            .indexOf('~\$') ==
-                                            -1
-                                            ? 0
-                                            : data['description']
-                                            .toString()
-                                            .indexOf('~\$') +
-                                            2,
-                                        data['description']
-                                            .toString()
-                                            .indexOf('\$~') ==
-                                            -1
-                                            ? 0
-                                            : data['description']
-                                            .toString()
-                                            .indexOf('\$~')),
-                                      ),
-                                    target: LinkTarget.blank,
-                                    builder: (ctx, openLink) {
-                                      return TextButton.icon(
-                                        style:TextButton.styleFrom(
-                                          primary:Colors.purple,
+                                  child: Column(
+                                    children: [
+                                      TextButton(
+                                        onPressed:_launchURL,
+                                        child: TextButton.icon(
+                                          style:TextButton.styleFrom(
+                                            primary:Colors.purple,
 
                                           )
-                                        ,
-                                        onPressed: openLink,
-                                        label: Text('instagram'),
-                                        icon: Icon(FontAwesomeIcons.instagram,color: Colors.purple,),
-                                      );
-                                    },
+                                          ,
+                                          onPressed: _launchURL,
+                                          label: Text('instagram'),
+                                          icon: Icon(FontAwesomeIcons.instagram,color: Colors.purple,),
+                                        ),
+                                      ),
+                                      Link(
+                                        uri: Uri.parse(data['description']
+                                            .toString()
+                                            .substring(
+                                            data['description']
+                                                .toString()
+                                                .indexOf('~\$') ==
+                                                -1
+                                                ? 0
+                                                : data['description']
+                                                .toString()
+                                                .indexOf('~\$') +
+                                                2,
+                                            data['description']
+                                                .toString()
+                                                .indexOf('\$~') ==
+                                                -1
+                                                ? 0
+                                                : data['description']
+                                                .toString()
+                                                .indexOf('\$~')),
+                                          ),
+                                        target: LinkTarget.blank,
+                                        builder: (ctx, openLink) {
+                                          return TextButton.icon(
+                                            style:TextButton.styleFrom(
+                                              primary:Colors.purple,
+
+                                              )
+                                            ,
+                                            onPressed: openLink,
+                                            label: Text('instagram'),
+                                            icon: Icon(FontAwesomeIcons.instagram,color: Colors.purple,),
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -1085,11 +1187,24 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                   fontStyle: FontStyle.normal,
                                   fontFamily: 'DancingScript',
                                   fontSize: 20)),
-                          Text(data['who_sent'].toString(),
-                              style: TextStyle(
-                                  fontStyle: FontStyle.normal,
-                                  fontFamily: 'DancingScript',
-                                  fontSize: 20)),
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                hostorprofile = true;
+                              });
+                              Navigator.of(context).pushNamed(
+                                  '/ProfileDetailsScreen',
+                                  arguments: ScreenArguments(
+                                      username:data['who_sent'].toString()
+                                      ,
+                                      hostpressed: hostorprofile));
+                            },
+                            child: Text(data['who_sent'].toString(),
+                                style: TextStyle(
+                                    fontStyle: FontStyle.normal,
+                                    fontFamily: 'DancingScript',
+                                    fontSize: 20)),
+                          ),
                         ],
                       ),
                     ),
@@ -1186,50 +1301,51 @@ class _InternshipsPageState extends State<InternshipsPage> {
                   tag: 'my-hero-animation-tag${projects.id}',
                   child: Container(
 
-                    width: MediaQuery.of(context).size.height*4/6,
-                    height: MediaQuery.of(context).size.height/2,
+                    child: Image(image: CachedNetworkImageProvider(
+                      '${projects.image.toString()}',
+                    ),),
 
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: CachedNetworkImageProvider(
-                              '${projects.image}',
-                            ),
-                            fit: BoxFit.fitWidth),
-                        shape: BoxShape.rectangle),
+
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Hero(
                       tag:"lol${projects.id}",
-                      child: Container(
-                        alignment:Alignment.topLeft,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.black,
-
-                          radius: 30,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Container(
+                          alignment:Alignment.topLeft,
                           child: CircleAvatar(
-                              backgroundColor: Colors.black,
-                              radius: 28,
-                              child: Container(
+                            backgroundColor: Colors.black,
 
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: CachedNetworkImageProvider(
-                                            '${projects.owner_pic.toString()}'),
-                                        fit: BoxFit.fill),
-                                    shape: BoxShape.circle),
-                              )),
+                            radius: 30,
+                            child: CircleAvatar(
+                                backgroundColor: Colors.black,
+                                radius: 28,
+                                child: Container(
+
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: CachedNetworkImageProvider(
+                                              '${projects.owner_pic.toString()}'),
+                                          fit: BoxFit.fill),
+                                      shape: BoxShape.circle),
+                                )),
+                          ),
                         ),
                       ),
                     ),
-                    Text(
-                      projects.name,
-                      style: TextStyle(
-                          color:Colors.black,
-                          fontSize: 19,
-                          fontFamily: 'DancingScript'),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        projects.name,
+                        style: TextStyle(
+                            color:Colors.black,
+                            fontSize: 19,
+                            fontFamily: 'DancingScript'),
+                      ),
                     ),
                   ],
                 ),
@@ -1433,18 +1549,14 @@ class _InternshipsPageState extends State<InternshipsPage> {
 owner:eventfiltered[index].owner.toString(),name:eventfiltered[index].name.toString(),description: eventfiltered[index].description.toString()
                                       )),
                                       child: Container(
-                                        width: MediaQuery.of(context).size.width*5/6,
-                                        height: MediaQuery.of(context).size.height/3,
+
                                         child: Hero(
                                           tag: 'my-hero-animation-tag${eventfiltered[index].id}',
                                           child: Container(
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: CachedNetworkImageProvider(
-                                                      '${eventfiltered[index].image.toString()}',
-                                                    ),
-                                                    fit: BoxFit.fitWidth),
-                                                shape: BoxShape.rectangle),
+                                            child: Image(image: CachedNetworkImageProvider(
+                                              '${eventfiltered[index].image.toString()}',
+                                            ),),
+
                                           ),
                                         ),
                                       ),
@@ -1452,7 +1564,7 @@ owner:eventfiltered[index].owner.toString(),name:eventfiltered[index].name.toStr
                                   ),
                                   Container(
 
-                                   width: MediaQuery.of(context).size.width*5/6,
+
                                     child: ListTile(
                                         onTap: () {
 
@@ -1567,12 +1679,167 @@ class _EventsPageState extends State<EventsPage> {
     // TODO: implement dispose
     super.dispose();
   }
+  void _showSecondPage(BuildContext context,Event projects) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => Scaffold(
+          appBar:AppBar(
+            iconTheme:IconThemeData(color:Colors.black),
+            elevation:0,
+            backgroundColor: Color(0xffF2EFE4),
+
+
+          ),
+
+          body: Container(
+            color:Color(0xffF2EFE4),
+            child: Column(
+              children: [
+                Hero(
+
+                  tag: 'my-hero-animation-tag${projects.id}',
+                  child: Container(
+
+                    width: MediaQuery.of(context).size.height*4/6,
+                    height: MediaQuery.of(context).size.height/2,
+
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: CachedNetworkImageProvider(
+                              '${projects.event_image}',
+                            ),
+                            fit: BoxFit.fitWidth),
+                        shape: BoxShape.rectangle),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Hero(
+                      tag:"lol${projects.id}",
+                      child: Container(
+                        alignment:Alignment.topLeft,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.black,
+
+                          radius: 30,
+                          child: CircleAvatar(
+                              backgroundColor: Colors.black,
+                              radius: 28,
+                              child: Container(
+
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: CachedNetworkImageProvider(
+                                            '${projects.owner_image.toString()}'),
+                                        fit: BoxFit.fill),
+                                    shape: BoxShape.circle),
+                              )),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      projects.name,
+                      style: TextStyle(
+                          color:Colors.black,
+                          fontSize: 19,
+                          fontFamily: 'DancingScript'),
+                    ),
+                  ],
+                ),
+
+                Container(
+                  decoration: BoxDecoration(
+
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(0))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          alignment: Alignment.center,
+
+                          child: Column(
+                            children: [
+
+                              Text(
+                                "Description",
+                                style: TextStyle(
+
+
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          alignment: Alignment.center,
+
+                          child: Column(
+                            children: [
+                              Text(
+                                "Incentives",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+
+
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          alignment: Alignment.center,
+
+
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          alignment: Alignment.center,
+
+                          child: Text(
+                            "Other links",
+                            style: TextStyle(
+
+
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+
+
+
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     print("//////////////////////////////BUILDING");
 
     return Container(
+
       alignment: Alignment.center,
       child: ListView.builder(
         itemCount: 1,
@@ -1582,125 +1849,110 @@ class _EventsPageState extends State<EventsPage> {
               position: index,
               duration: const Duration(milliseconds: 350),
               child: SlideAnimation(
-                verticalOffset: 50.0,
+                horizontalOffset: 50.0,
                 child: ListView.builder(
-                  physics:BouncingScrollPhysics(),
-
+                    padding: EdgeInsets.all(0),
+                    physics: ClampingScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemCount: eventfiltered.length,
                     itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Center(
-                            child: loading
-                                ? SkeletonContainer.square(
-                                    width: 22,
-                                    height: 22,
-                                  )
-                                : TextButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        hostorprofile = true;
-                                      });
-                                      Navigator.of(context).pushNamed(
-                                          '/ProfileDetailsScreen',
-                                          arguments: ScreenArguments(
-                                              username: eventfiltered[index]
-                                                  .owner,
-                                              hostpressed: hostorprofile));
-                                    },
-                                    child: CircleAvatar(
-                                      radius: 22,
-                                      child: CircleAvatar(
-                                          radius: 20,
-                                          child: !loading
-                                              ? Container(
-                                                  decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                          image: CachedNetworkImageProvider(
-                                                              '${eventfiltered[index].owner_image.toString()}'),
-                                                          fit: BoxFit.fill),
-                                                      shape:
-                                                          BoxShape.circle),
-                                                )
-                                              : SkeletonContainer.square(
-                                                  width: 100,
-                                                  height: 20,
-                                                )),
-                                    ),
-                                  ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                  '/eventdetailsdesign',
-                                  arguments: ScreenArguments(
-                                      id: eventfiltered[index].id,
-                                      scf: scf,
-                                      context: context));
-                            },
+                      return Container(
+                        margin:EdgeInsets.all(0),
+                        child: ClipRect(
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                              sigmaX: 5.0,
+                              sigmaY: 5.0,
+                            ),
                             child: Container(
-                              width: double.infinity,
-                              height: 400,
-                              child: loading
-                                  ? SkeletonContainer.square(
-                                      width: 400,
-                                      height: 400,
-                                    )
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: CachedNetworkImageProvider(
-                                                '${eventfiltered[index].event_image.toString()}',
-                                                errorListener: () {}),
-                                            fit: BoxFit.fitHeight),
+
+
+                              width: MediaQuery.of(context).size.width*6/6,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color:Colors.transparent,
+                              ),
+
+
+
+                              child: Column(
+                                children: [
+                                  ClipRect(
+                                    child: GestureDetector(
+                                      onTap: () => _showSecondPage(context,Event(id: eventfiltered[index].id,
+                                          event_image:eventfiltered[index].event_image.toString(),owner_image:eventfiltered[index].owner_image.toString(),
+                                          owner:eventfiltered[index].owner.toString(),name:eventfiltered[index].name.toString()
+                                      )),
+                                      child: Container(
+
+
+                                        child: Hero(
+                                          tag: 'my-hero-animation-tag${eventfiltered[index].id}',
+                                          child: Image(image: CachedNetworkImageProvider(
+                                            '${eventfiltered[index].event_image.toString()}',
+                                          ),)
+                                        ),
                                       ),
                                     ),
+                                  ),
+                                  Container(
+
+                                    width: MediaQuery.of(context).size.width*5/6,
+                                    child: ListTile(
+                                        onTap: () {
+
+
+
+                                        },
+                                        subtitle: Text(
+                                            eventfiltered[index].owner.toString(),
+                                            style: TextStyle(
+                                                fontFamily: 'DancingScript')),
+
+                                        leading: TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              hostorprofile = true;
+                                            });
+                                            Navigator.of(context).pushNamed(
+                                                '/ProfileDetailsScreen',
+                                                arguments: ScreenArguments(
+                                                    username:
+                                                    eventfiltered[index].owner,
+                                                    hostpressed: hostorprofile));
+                                          },
+                                          child: Hero(
+                                            tag:"lol${eventfiltered[index].id}",
+                                            child: CircleAvatar(
+                                              radius: 22,
+                                              child: CircleAvatar(
+                                                  radius: 20,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                            image: CachedNetworkImageProvider(
+                                                                '${eventfiltered[index].owner_image.toString()}'),
+                                                            fit: BoxFit.fill),
+                                                        shape: BoxShape.circle),
+                                                  )),
+                                            ),
+                                          ),
+                                        ),
+                                        title: Text(
+                                          eventfiltered[index].name,
+                                          style: TextStyle(
+                                              color:Colors.black,
+                                              fontSize: 19,
+                                              fontFamily: 'DancingScript'),
+                                        )),
+                                  ),
+
+                                ],
+                              ),
                             ),
                           ),
-                          ListTile(
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
-                                    '/eventdetailsdesign',
-                                    arguments: ScreenArguments(
-                                        id: eventfiltered[index].id,
-                                        scf: scf,
-                                        context: context));
-                              },
-                              subtitle: loading
-                                  ? SkeletonContainer.square(
-                                      width: 10,
-                                      height: 10,
-                                    )
-                                  : Text(
-                                      "${eventfiltered[index].dateime.day.toString()} .${eventfiltered[index].dateime.month.toString()}",
-                                      style: TextStyle(
-                                          fontFamily: 'DancingScript')),
-                              trailing: loading
-                                  ? SkeletonContainer.square(
-                                      width: 10,
-                                      height: 10,
-                                    )
-                                  : eventfiltered[index].favorite
-                                      ? Icon(
-                                          FontAwesomeIcons.solidStar,
-                                        )
-                                      : Icon(
-                                          FontAwesomeIcons.star,
-                                        ),
-                              title: loading
-                                  ? SkeletonContainer.square(
-                                      width: 10,
-                                      height: 10,
-                                    )
-                                  : Text(
-                                      eventfiltered[index].name,
-                                      style: TextStyle(
-                                          fontSize: 19,
-                                          fontFamily: 'DancingScript'),
-                                    )),
-                        ],
+                        ),
                       );
                     }),
               ),

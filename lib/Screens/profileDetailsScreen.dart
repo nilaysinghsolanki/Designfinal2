@@ -280,26 +280,44 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
       ),
       ),
 
-      Container(
-      margin:
-      EdgeInsets.symmetric(vertical: 11, horizontal: 4),
-      padding:
-      EdgeInsets.symmetric(vertical: 11, horizontal: 44),
-      child: Row(
-      children: [
-      Text('invited by ',
-      style: TextStyle(
-      fontStyle: FontStyle.normal,
-      fontFamily: 'DancingScript',
-      fontSize: 20)),
-      Text(data['who_sent'].toString(),
-      style: TextStyle(
-      fontStyle: FontStyle.normal,
-      fontFamily: 'DancingScript',
-      fontSize: 20)),
-      ],
-      ),
-      ),
+        Container(
+          margin:
+          EdgeInsets.symmetric(vertical: 11, horizontal: 4),
+          padding:
+          EdgeInsets.symmetric(vertical: 11, horizontal: 44),
+          child: Row(
+            children: [
+             if (data['who_sent'].toString()=="admin") Text('invited by ',
+                  style: TextStyle(
+                      fontStyle: FontStyle.normal,
+                      fontFamily: 'DancingScript',
+                      fontSize: 20)),
+              TextButton(style: ButtonStyle(
+                foregroundColor:MaterialStateProperty.all<Color>(Colors.black),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
+              ),
+                onPressed: () {
+                  setState(() {
+
+                  });
+                  Navigator.of(context).pushNamed(
+                      '/ProfileDetailsScreen',
+                      arguments: ScreenArguments(
+                          username:data['who_sent'].toString()
+                          ,
+                          hostpressed: false));
+                },
+                child: Text(data['who_sent'].toString(),
+                    style: TextStyle(
+                        fontStyle: FontStyle.normal,
+                        fontFamily: 'DancingScript',
+                        fontSize: 20)),
+              ),
+            ],
+          ),
+        ),
 
       // Card(
       //
