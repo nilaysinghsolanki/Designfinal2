@@ -190,9 +190,9 @@ class _ScheduleTabState extends State<ScheduleTab> {
                 },
                 labels: ['events', 'schedule'],
                 activeBgColor: Colors.brown,
-                activeFgColor: Colors.white,
+                activeFgColor: Color(0xffF2EFE4),
                 inactiveFgColor: Colors.brown,
-                inactiveBgColor: Colors.white,
+                inactiveBgColor: Color(0xffF2EFE4),
               ),
               SizedBox(
                 height: 0,
@@ -225,7 +225,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                   width: double.infinity,
                                   height: 300,
                                   child: Card(
-                                      color: Colors.white,
+                                      color: Color(0xffF2EFE4),
                                       semanticContainer: true,
                                       clipBehavior:
                                       Clip.antiAliasWithSaveLayer,
@@ -263,7 +263,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                     },
                                     tileColor:
                                     eventsedRegester[index].favorite
-                                        ? Colors.white
+                                        ? Color(0xffF2EFE4)
                                         : Colors.blue,
                                     subtitle: Text(
                                       eventsedRegester[index]
@@ -301,7 +301,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                         }),
                   ),
               if (!initialized) Center(child
-                  : CircularProgressIndicator(backgroundColor: Colors.white,)),
+                  : CircularProgressIndicator(backgroundColor: Color(0xffF2EFE4),)),
               if (initialized)
                 if (events0Schedule1 == 1)
                   if (lectures.isEmpty)
@@ -402,10 +402,10 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                             ),
                                             subtitle: Text('AP102'),
                                             tileColor: lectures[index].free
-                                                ? Colors.white
+                                                ? Color(0xffF2EFE4)
                                                 : happeningNow
-                                                ? Colors.white
-                                                : Colors.white,
+                                                ? Color(0xffF2EFE4)
+                                                : Color(0xffF2EFE4),
                                             title: lectures[index].free
                                                 ? Text(
                                               'FREE',
@@ -543,14 +543,14 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                   todayStyle: TextStyle(
 //                       fontWeight: FontWeight.bold,
 //                       fontSize: 18.0,
-//                       color: Colors.white)),
+//                       color: Color(0xffF2EFE4))),
 //               headerStyle: HeaderStyle(
 //                 centerHeaderTitle: true,
 //                 formatButtonDecoration: BoxDecoration(
 //                   color: Colors.orange,
 //                   borderRadius: BorderRadius.circular(20.0),
 //                 ),
-//                 formatButtonTextStyle: TextStyle(color: Colors.white),
+//                 formatButtonTextStyle: TextStyle(color: Color(0xffF2EFE4)),
 //                 formatButtonShowsNext: false,
 //               ),
 //               startingDayOfWeek: StartingDayOfWeek.monday,
@@ -568,7 +568,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                         borderRadius: BorderRadius.circular(10.0)),
 //                     child: Text(
 //                       date.day.toString(),
-//                       style: TextStyle(color: Colors.white),
+//                       style: TextStyle(color: Color(0xffF2EFE4)),
 //                     )),
 //                 todayDayBuilder: (context, date, events) => Container(
 //                     margin: const EdgeInsets.all(4.0),
@@ -578,7 +578,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                         borderRadius: BorderRadius.circular(10.0)),
 //                     child: Text(
 //                       date.day.toString(),
-//                       style: TextStyle(color: Colors.white),
+//                       style: TextStyle(color: Color(0xffF2EFE4)),
 //                     )),
 //               ),
 //               calendarController: _controller,
@@ -590,7 +590,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                 width: MediaQuery.of(context).size.width/2,
 //                 decoration: BoxDecoration(
 //                     borderRadius: BorderRadius.circular(30),
-//                     color: Colors.white,
+//                     color: Color(0xffF2EFE4),
 //                     border: Border.all(color: Colors.grey)
 //                 ),
 //                 child: Center(
@@ -615,7 +615,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //     await showDialog(
 //         context: context,
 //         builder: (context) => AlertDialog(
-//           backgroundColor: Colors.white70,
+//           backgroundColor: Color(0xffF2EFE4)70,
 //           title: Text("Add Events"),
 //           content: TextField(
 //             controller: _eventController,
@@ -663,7 +663,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
 //                                       context: context));
 //                             },
 //                             tileColor: eventsedRegester[index].favorite
-//                                 ? Colors.white70
+//                                 ? Color(0xffF2EFE4)70
 //                                 : Colors.blue,
 //                             subtitle: Text(
 //                               eventsedRegester[index].owner.toString(),

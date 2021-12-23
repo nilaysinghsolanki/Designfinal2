@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:ui';
 
 
@@ -49,6 +50,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
+import 'Designs/Projectlist.dart';
 import 'Screens/eventsdetailsDESIGN.dart';
 
 void main() => runApp(MyApp());
@@ -252,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           backgroundColor: Colors.purple,
                           radius: 30,
                           child: CircleAvatar(
-                            backgroundColor: Colors.white,
+                            backgroundColor: Color(0xffF2EFE4),
                             radius: 27,
                             backgroundImage: storiesFiltered.isNotEmpty
                                 ? CachedNetworkImageProvider(
@@ -422,69 +424,94 @@ class _HomeScreenState extends State<HomeScreen> {
       _currentIndex = index;
     });
   }
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        backgroundColor: Color(0xffF2EFE4),
+        title: new Text('Are you sure?'),
+        content: new Text('Do you want to exit an App'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () => Navigator.of(context).pop(false),
+            child: Text("NO"),
+          ),
+          SizedBox(height: 16),
+          new GestureDetector(
+            onTap: () => Navigator.of(context).pop(true),
+            child: Text("YES"),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      child: Scaffold(
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Container(
+        child: Scaffold(
 
-        bottomNavigationBar: BottomNavigationBar(
-          fixedColor: Colors.black,
-          backgroundColor: Color(0xffF2EFE4),
-          type:BottomNavigationBarType.fixed ,
-          onTap: onTabTapped, // new
-          currentIndex: _currentIndex,  // this will be set when a new tab is tapped
-          items: [
-            BottomNavigationBarItem(
-              activeIcon:new Icon(Icons.home,color: Colors.black,) ,
-              backgroundColor: Color(0xffF2EFE4),
-              icon: new Icon(Icons.home_outlined,color: Colors.black,),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              activeIcon:new Icon(Icons.photo_size_select_actual,color: Colors.black,),
-              backgroundColor: Color(0xffF2EFE4),
-              icon: new Icon(Icons.photo_size_select_actual_outlined,color: Colors.black,),
-                label:'Posts',
-            ),
-            BottomNavigationBarItem(
-                activeIcon:new Icon(Icons.add_circle,color: Colors.black,),
+          bottomNavigationBar: BottomNavigationBar(
+            fixedColor: Colors.black,
+            backgroundColor: Color(0xffF2EFE4),
+            type:BottomNavigationBarType.fixed ,
+            onTap: onTabTapped, // new
+            currentIndex: _currentIndex,  // this will be set when a new tab is tapped
+            items: [
+              BottomNavigationBarItem(
+                activeIcon:new Icon(Icons.home,color: Colors.black,) ,
                 backgroundColor: Color(0xffF2EFE4),
-                icon: Icon(Icons.add,color: Colors.black,),
-                label:'Add'
-            ),
-            BottomNavigationBarItem(
-                activeIcon:new Icon(Icons.star,color: Colors.black,),
-                backgroundColor: Color(0xffF2EFE4),
-                icon: Icon(Icons.star_border,color: Colors.black,),
-                label:'Events'
-            ),
-            BottomNavigationBarItem(
-                activeIcon:new Icon(Icons.person,color: Colors.black,),
-                backgroundColor: Color(0xffF2EFE4),
-                icon: Icon(Icons.person_outline_sharp,color: Colors.black),
-                label:'Profile'
-            )
-          ],
-        ),
-        drawer: Drawer(
-          child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("Assets/newframe.png"),
-                    fit: BoxFit.cover),
-                borderRadius: BorderRadius.circular(20)),
-            child: Center(
-              child: ListView(
-                children: ScatteredListtiles,
+                icon: new Icon(Icons.home_outlined,color: Colors.black,),
+                label: 'Home',
               ),
-            ),
-          ), // Populate the Drawer in the next step.
+              BottomNavigationBarItem(
+                activeIcon:new Icon(Icons.photo_size_select_actual,color: Colors.black,),
+                backgroundColor: Color(0xffF2EFE4),
+                icon: new Icon(Icons.photo_size_select_actual_outlined,color: Colors.black,),
+                  label:'Posts',
+              ),
+              BottomNavigationBarItem(
+                  activeIcon:new Icon(Icons.add_circle,color: Colors.black,),
+                  backgroundColor: Color(0xffF2EFE4),
+                  icon: Icon(Icons.add,color: Colors.black,),
+                  label:'Add'
+              ),
+              BottomNavigationBarItem(
+                  activeIcon:new Icon(Icons.star,color: Colors.black,),
+                  backgroundColor: Color(0xffF2EFE4),
+                  icon: Icon(Icons.star_border,color: Colors.black,),
+                  label:'Events'
+              ),
+              BottomNavigationBarItem(
+                  activeIcon:new Icon(Icons.person,color: Colors.black,),
+                  backgroundColor: Color(0xffF2EFE4),
+                  icon: Icon(Icons.person_outline_sharp,color: Colors.black),
+                  label:'Profile'
+              )
+            ],
+          ),
+          drawer: Drawer(
+            child: Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("Assets/newframe.png"),
+                      fit: BoxFit.cover),
+                  borderRadius: BorderRadius.circular(20)),
+              child: Center(
+                child: ListView(
+                  children: ScatteredListtiles,
+                ),
+              ),
+            ), // Populate the Drawer in the next step.
+          ),
+           body: Container(decoration: BoxDecoration(
+             image: DecorationImage(
+                 image: AssetImage("Assets/newframe.png",),
+                 fit: BoxFit.fitHeight),),child: _children[_currentIndex]),
         ),
-         body: Container(decoration: BoxDecoration(
-           image: DecorationImage(
-               image: AssetImage("Assets/newframe.png",),
-               fit: BoxFit.fitHeight),),child: _children[_currentIndex]),
       ),
     );
   }
@@ -671,7 +698,7 @@ class _HomePageState extends State<HomePage> {
               flipAxis: FlipAxis.y,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xffF2EFE4),
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 child: Center(child: ScatteredListtiles[index]),
@@ -822,6 +849,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
   final description = TextEditingController();
   final instagram = TextEditingController();
   final linkedIn = TextEditingController();
+  List<Project> personalprojects;
   bool waiting = false;
 
   ScreenArguments args;
@@ -922,8 +950,219 @@ class _ProjectsPageState extends State<ProjectsPage> {
     )
     }';
   }
+  void _showSecondPage(BuildContext context,Project projects) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => Scaffold(
+          appBar:AppBar(
+            iconTheme:IconThemeData(color:Colors.black),
+            elevation:0,
+            backgroundColor: Color(0xffF2EFE4),
+
+
+          ),
+
+          body: Container(
+            color:Color(0xffF2EFE4),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Hero(
+
+                    tag: 'my-hero-animation-tag${projects.id}',
+                    child: SingleChildScrollView
+                      (
+                      child: Container(
+
+                        child: Image(fit:BoxFit.fitHeight,image: CachedNetworkImageProvider(
+                          '${projects.image.toString()}',
+                        ),),
+
+
+                      ),
+                    ),
+                  ),
+
+
+                  Container(
+                    decoration: BoxDecoration(
+
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(0))),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+
+                            child: Column(
+                              children: [
+
+                                Text(
+                                  "Description",
+                                  style: TextStyle(
+
+
+                                  ),
+                                ),
+                                Text(projects.description
+                                    .toString()
+                                    .substring(
+                                    0,
+                                    projects.description
+                                        .toString()
+                                        .indexOf('~\$') ==
+                                        -1
+                                        ? projects.description
+                                        .toString()
+                                        .length
+                                        : projects.description
+                                        .toString()
+                                        .indexOf('~\$')))
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Incentives",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+
+
+                                  ),
+                                ),
+                                Text(
+                                  projects.description
+                                      .toString()
+                                      .substring(
+                                      projects.description
+                                          .toString()
+                                          .indexOf('~\$') ==
+                                          -1
+                                          ? 0
+                                          : projects.description
+                                          .toString()
+                                          .indexOf('~\$') +
+                                          2,
+                                      projects.description
+                                          .toString()
+                                          .indexOf('\$~') ==
+                                          -1
+                                          ? 0
+                                          : projects.description
+                                          .toString()
+                                          .indexOf('\$~')),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+
+
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+
+                            child: Link(
+                              uri: Uri.parse(projects.description
+                                  .toString()
+                                  .substring(
+                                projects.description
+                                    .toString()
+                                    .indexOf('\$~') ==
+                                    -1
+                                    ? 0
+                                    : projects.description
+                                    .toString()
+                                    .indexOf('\$~') +
+                                    2,
+                              )),
+                              target: LinkTarget.blank,
+                              builder: (ctx, openLink) {
+                                return TextButton.icon(
+                                  onPressed: openLink,
+                                  label: Text('Link to Community'),
+                                  icon: Icon(Icons.read_more),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+
+                            child: Text(
+                              "Other links",
+                              style: TextStyle(
+
+
+                              ),
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+
+
+
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
+    print(data);
+    print(data['projects'].toString());
+    String projectstring=data['projects'].toString();
+    final resp=json.decode(projectstring);
+    personalprojects=resp[0];
+
+
+
+
+/*
+print(data);
+    List<dynamic> resp = data['projects'][1];
+    personalprojects = resp.map<Project>((e) {
+      return Project(
+
+          description: e['description'],
+
+
+
+          name: e['name'],
+
+          id: e['id'],
+
+
+
+          image: e['image']);
+    }).toList();
+*/
+
+
     return Container(
 
       child: BackdropFilter(
@@ -955,7 +1194,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                       color: Colors.transparent,
                       height: MediaQuery.of(context).size.height / 5,
                       child: CircleAvatar(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Color(0xffF2EFE4),
                         radius: 40,
                         backgroundImage: CachedNetworkImageProvider(data['image'].toString(),),
 
@@ -1078,29 +1317,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                           icon: Icon(FontAwesomeIcons.linkedin),
                                         )
                                       ),
-                                      Link(
-                                        uri: Uri.parse(data['description']
-                                            .toString()
-                                            .substring(
-                                          data['description']
-                                              .toString()
-                                              .indexOf('\$~') ==
-                                              -1
-                                              ? 0
-                                              : data['description']
-                                              .toString()
-                                              .indexOf('\$~') +
-                                              2,
-                                        )),
-                                        target: LinkTarget.blank,
-                                        builder: (ctx, openLink) {
-                                          return TextButton.icon(
-                                            onPressed: openLink,
-                                            label: Text('linkedIn'),
-                                            icon: Icon(FontAwesomeIcons.linkedin),
-                                          );
-                                        },
-                                      ),
+
                                     ],
                                   ),
                                 ),
@@ -1125,42 +1342,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                                           icon: Icon(FontAwesomeIcons.instagram,color: Colors.purple,),
                                         ),
                                       ),
-                                      Link(
-                                        uri: Uri.parse(data['description']
-                                            .toString()
-                                            .substring(
-                                            data['description']
-                                                .toString()
-                                                .indexOf('~\$') ==
-                                                -1
-                                                ? 0
-                                                : data['description']
-                                                .toString()
-                                                .indexOf('~\$') +
-                                                2,
-                                            data['description']
-                                                .toString()
-                                                .indexOf('\$~') ==
-                                                -1
-                                                ? 0
-                                                : data['description']
-                                                .toString()
-                                                .indexOf('\$~')),
-                                          ),
-                                        target: LinkTarget.blank,
-                                        builder: (ctx, openLink) {
-                                          return TextButton.icon(
-                                            style:TextButton.styleFrom(
-                                              primary:Colors.purple,
 
-                                              )
-                                            ,
-                                            onPressed: openLink,
-                                            label: Text('instagram'),
-                                            icon: Icon(FontAwesomeIcons.instagram,color: Colors.purple,),
-                                          );
-                                        },
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -1182,11 +1364,11 @@ class _ProjectsPageState extends State<ProjectsPage> {
                           EdgeInsets.symmetric(vertical: 11, horizontal: 44),
                       child: Row(
                         children: [
-                          Text('invited by ',
+                          data['who_sent'].toString()!=" "?Text('invited by ',
                               style: TextStyle(
                                   fontStyle: FontStyle.normal,
                                   fontFamily: 'DancingScript',
-                                  fontSize: 20)),
+                                  fontSize: 20)):SizedBox(),
                           TextButton(
                             onPressed: () {
                               setState(() {
@@ -1208,6 +1390,81 @@ class _ProjectsPageState extends State<ProjectsPage> {
                         ],
                       ),
                     ),
+          Container(
+
+            alignment: Alignment.center,
+            child: ListView.builder(
+              itemCount: 1,
+              itemBuilder: (BuildContext context, int index) {
+                return SingleChildScrollView(
+                  child: AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 350),
+                    child: SlideAnimation(
+                      horizontalOffset: 50.0,
+                      child: ListView.builder(
+                          padding: EdgeInsets.all(0),
+                          physics: ClampingScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: personalprojects.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin:EdgeInsets.all(10),
+                              child: ClipRect(
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                    sigmaX: 5.0,
+                                    sigmaY: 5.0,
+                                  ),
+                                  child: Container(
+
+
+                                    width: MediaQuery.of(context).size.width*5/6,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color:Colors.transparent,
+                                    ),
+
+
+
+                                    child: Column(
+                                      children: [
+                                        ClipRect(
+                                          child: GestureDetector(
+                                            onTap: () => _showSecondPage(context,Project(id: personalprojects[index].id,
+                                                image:personalprojects[index].image.toString(),
+                                                name:personalprojects[index].name.toString(),description: personalprojects[index].description.toString()
+                                            )),
+                                            child: Container(
+
+                                              child: Hero(
+                                                tag: 'my-hero-animation-tag${personalprojects[index].id}',
+                                                child: Container(
+                                                  child: Image(image: CachedNetworkImageProvider(
+                                                    '${personalprojects[index].image.toString()}',
+                                                  ),),
+
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
 
                     // Card(
                     //
@@ -1294,202 +1551,207 @@ class _InternshipsPageState extends State<InternshipsPage> {
 
           body: Container(
             color:Color(0xffF2EFE4),
-            child: Column(
-              children: [
-                Hero(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Hero(
 
-                  tag: 'my-hero-animation-tag${projects.id}',
-                  child: Container(
+                    tag: 'my-hero-animation-tag${projects.id}',
+                    child: SingleChildScrollView
+                      (
+                      child: Container(
 
-                    child: Image(image: CachedNetworkImageProvider(
-                      '${projects.image.toString()}',
-                    ),),
+                        child: Image(fit:BoxFit.fitHeight,image: CachedNetworkImageProvider(
+                          '${projects.image.toString()}',
+                        ),),
 
 
+                      ),
+                    ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Hero(
-                      tag:"lol${projects.id}",
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Container(
-                          alignment:Alignment.topLeft,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.black,
-
-                            radius: 30,
-                            child: CircleAvatar(
-                                backgroundColor: Colors.black,
-                                radius: 28,
-                                child: Container(
-
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: CachedNetworkImageProvider(
-                                              '${projects.owner_pic.toString()}'),
-                                          fit: BoxFit.fill),
-                                      shape: BoxShape.circle),
-                                )),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        projects.name,
-                        style: TextStyle(
-                            color:Colors.black,
-                            fontSize: 19,
-                            fontFamily: 'DancingScript'),
-                      ),
-                    ),
-                  ],
-                ),
-
-                Container(
-                  decoration: BoxDecoration(
-
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(0),
-                          topRight: Radius.circular(0))),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          alignment: Alignment.center,
+                      Hero(
+                        tag:"lol${projects.id}",
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Container(
+                            alignment:Alignment.topLeft,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.black,
 
-                          child: Column(
-                            children: [
+                              radius: 30,
+                              child: CircleAvatar(
+                                  backgroundColor: Colors.black,
+                                  radius: 28,
+                                  child: Container(
 
-                              Text(
-                                "Description",
-                                style: TextStyle(
-
-
-                                ),
-                              ),
-                              Text(projects.description
-                                  .toString()
-                                  .substring(
-                                  0,
-                                  projects.description
-                                      .toString()
-                                      .indexOf('~\$') ==
-                                      -1
-                                      ? projects.description
-                                      .toString()
-                                      .length
-                                      : projects.description
-                                      .toString()
-                                      .indexOf('~\$')))
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          alignment: Alignment.center,
-
-                          child: Column(
-                            children: [
-                              Text(
-                                "Incentives",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-
-
-                                ),
-                              ),
-                              Text(
-                                projects.description
-                                    .toString()
-                                    .substring(
-                                    projects.description
-                                        .toString()
-                                        .indexOf('~\$') ==
-                                        -1
-                                        ? 0
-                                        : projects.description
-                                        .toString()
-                                        .indexOf('~\$') +
-                                        2,
-                                    projects.description
-                                        .toString()
-                                        .indexOf('\$~') ==
-                                        -1
-                                        ? 0
-                                        : projects.description
-                                        .toString()
-                                        .indexOf('\$~')),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-
-
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          alignment: Alignment.center,
-
-                          child: Link(
-                            uri: Uri.parse(projects.description
-                                .toString()
-                                .substring(
-                              projects.description
-                                  .toString()
-                                  .indexOf('\$~') ==
-                                  -1
-                                  ? 0
-                                  : projects.description
-                                  .toString()
-                                  .indexOf('\$~') +
-                                  2,
-                            )),
-                            target: LinkTarget.blank,
-                            builder: (ctx, openLink) {
-                              return TextButton.icon(
-                                onPressed: openLink,
-                                label: Text('Link to Community'),
-                                icon: Icon(Icons.read_more),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          alignment: Alignment.center,
-
-                          child: Text(
-                            "Other links",
-                            style: TextStyle(
-
-
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: CachedNetworkImageProvider(
+                                                '${projects.owner_pic.toString()}'),
+                                            fit: BoxFit.fill),
+                                        shape: BoxShape.circle),
+                                  )),
                             ),
                           ),
                         ),
                       ),
-
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          projects.name,
+                          style: TextStyle(
+                              color:Colors.black,
+                              fontSize: 19,
+                              fontFamily: 'DancingScript'),
+                        ),
+                      ),
                     ],
                   ),
-                ),
+
+                  Container(
+                    decoration: BoxDecoration(
+
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(0))),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+
+                            child: Column(
+                              children: [
+
+                                Text(
+                                  "Description",
+                                  style: TextStyle(
+
+
+                                  ),
+                                ),
+                                Text(projects.description
+                                    .toString()
+                                    .substring(
+                                    0,
+                                    projects.description
+                                        .toString()
+                                        .indexOf('~\$') ==
+                                        -1
+                                        ? projects.description
+                                        .toString()
+                                        .length
+                                        : projects.description
+                                        .toString()
+                                        .indexOf('~\$')))
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Incentives",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+
+
+                                  ),
+                                ),
+                                Text(
+                                  projects.description
+                                      .toString()
+                                      .substring(
+                                      projects.description
+                                          .toString()
+                                          .indexOf('~\$') ==
+                                          -1
+                                          ? 0
+                                          : projects.description
+                                          .toString()
+                                          .indexOf('~\$') +
+                                          2,
+                                      projects.description
+                                          .toString()
+                                          .indexOf('\$~') ==
+                                          -1
+                                          ? 0
+                                          : projects.description
+                                          .toString()
+                                          .indexOf('\$~')),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+
+
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+
+                            child: Link(
+                              uri: Uri.parse(projects.description
+                                  .toString()
+                                  .substring(
+                                projects.description
+                                    .toString()
+                                    .indexOf('\$~') ==
+                                    -1
+                                    ? 0
+                                    : projects.description
+                                    .toString()
+                                    .indexOf('\$~') +
+                                    2,
+                              )),
+                              target: LinkTarget.blank,
+                              builder: (ctx, openLink) {
+                                return TextButton.icon(
+                                  onPressed: openLink,
+                                  label: Text('Link to Community'),
+                                  icon: Icon(Icons.read_more),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            alignment: Alignment.center,
+
+                            child: Text(
+                              "Other links",
+                              style: TextStyle(
+
+
+                              ),
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
 
 
 
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -2506,7 +2768,7 @@ _plusAnimation.start();
                               backgroundColor: Colors.purple,
                               radius: 30,
                               child: CircleAvatar(
-                                backgroundColor: Colors.white,
+                                backgroundColor: Color(0xffF2EFE4),
                                 radius: 27,
                                 backgroundImage: storiesFiltered.isNotEmpty
                                     ? CachedNetworkImageProvider(

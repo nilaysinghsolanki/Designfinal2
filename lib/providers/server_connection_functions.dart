@@ -193,6 +193,47 @@ class Server_Connection_Functions {
     print(resp);
     return true;
   }
+  Future<bool> fetchListOfUserProjects(BuildContext context) async {
+    String username =
+    Provider.of<UsernameData>(context, listen: false).username[0];
+    print(username);
+    List<Project> eves = [];
+    var accessToken =
+        Provider.of<AccessTokenData>(context, listen: false).accessToken;
+    print('///////access token event fetch 🙂');
+    var accessTokenValue = accessToken[0];
+    Map<String, String> headersEvents = {
+      "Content-type": "application/json",
+      "accept": "application/json",
+      "Authorization": "Bearer $accessTokenValue"
+    };
+    http.Response response = await http.get(
+      Uri.https('dtuotgbeta.azurewebsites.net', '/auth/profile/view/$username'),
+      headers: headersEvents,
+    );
+    int statusCode = response.statusCode;
+
+    List<dynamic> resp = json.decode(response.body);
+    eves = resp.map<Project>((e) {
+      return Project(
+
+          description: e['description'],
+
+
+
+          name: e['name'],
+
+          id: e['id'],
+
+
+
+          image: e['image']);
+    }).toList();
+
+    Provider.of<ProjectData>(context, listen: false).setEvents(eves);
+    print(resp);
+    return true;
+  }
   Future<int> createEvent(BuildContext context, String name, String description,
       int type, DateTime dateTime, TimeOfDay timeOfDay, File image) async {
     var accessToken =

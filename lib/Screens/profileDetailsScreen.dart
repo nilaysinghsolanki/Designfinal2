@@ -89,7 +89,7 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
       color: Colors.transparent,
       height: MediaQuery.of(context).size.height / 5,
       child: CircleAvatar(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xffF2EFE4),
       radius: 40,
       backgroundImage: CachedNetworkImageProvider(data['image'].toString(),),
 

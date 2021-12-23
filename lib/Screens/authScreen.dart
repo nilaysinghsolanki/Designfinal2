@@ -80,7 +80,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 Padding(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Color(0xffF2EFE4),
                       borderRadius: BorderRadius.circular(25.0)
                     ),
 
@@ -93,7 +93,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       cursorHeight: 35,
                       decoration: InputDecoration(
 
-                        fillColor: Colors.white,
+                        fillColor: Color(0xffF2EFE4),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                           BorderSide( width: 4),
@@ -119,7 +119,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Color(0xffF2EFE4),
                       borderRadius: BorderRadius.circular(25.0)
                   ),
                   child: TextField(
@@ -131,7 +131,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     cursorHeight: 35,
                     decoration: InputDecoration(
 
-                      fillColor: Colors.white,
+                      fillColor: Color(0xffF2EFE4),
                       focusedBorder: OutlineInputBorder(
                         borderSide:
                         BorderSide( width: 4),
@@ -157,7 +157,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 Padding(
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Color(0xffF2EFE4),
                         borderRadius: BorderRadius.circular(25.0)
                     ),
                     child: TextField(
@@ -170,7 +170,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       cursorHeight: 35,
                       decoration: InputDecoration(
 
-                        fillColor: Colors.white,
+                        fillColor: Color(0xffF2EFE4),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                           BorderSide( width: 4),
@@ -198,7 +198,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 Padding(
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Color(0xffF2EFE4),
                         borderRadius: BorderRadius.circular(25.0)
                     ),
 
@@ -213,7 +213,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       cursorHeight: 35,
                       decoration: InputDecoration(
 
-                        fillColor: Colors.white,
+                        fillColor: Color(0xffF2EFE4),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                           BorderSide( width: 4),
@@ -243,7 +243,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 Padding(
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Color(0xffF2EFE4),
                         borderRadius: BorderRadius.circular(25.0)
                     ),
                     child: TextField(
@@ -254,7 +254,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       cursorHeight: 35,
                       decoration: InputDecoration(
 
-                        fillColor: Colors.white,
+                        fillColor: Color(0xffF2EFE4),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                           BorderSide( width: 4),

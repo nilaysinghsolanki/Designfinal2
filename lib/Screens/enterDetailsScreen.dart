@@ -248,7 +248,7 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
             },
             child:
             waiting?CircularProgressIndicator.adaptive(
-              backgroundColor: Colors.white,
+              backgroundColor: Color(0xffF2EFE4),
             ):Icon(
               FontAwesomeIcons.save
             )),
