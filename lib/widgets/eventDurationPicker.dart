@@ -19,16 +19,19 @@ class _DurationPickerState extends State<DurationPicker> {
   Widget build(BuildContext context) {
     _initializeNumberPickers();
     return Container(
+
       decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage("Assets/newframe.png"), fit: BoxFit.cover),
-          borderRadius: BorderRadius.circular(20)),
+        color: Color(0xffF2EFE4),
+        border: Border.all(color: Colors.black,style: BorderStyle.solid,width: 2),
+
+          ),
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Text('${currentHours}h ${currentMinutes}min'),
+
             Row(
               mainAxisSize: MainAxisSize.min,
-              children: [Text('Set Hour'), hours],
+              children: [Text('Set hours'), hours],
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -36,6 +39,7 @@ class _DurationPickerState extends State<DurationPicker> {
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  primary: Color(0xffF2EFE4),
                     elevation: 0,
 
                     side: BorderSide(width: 2)
@@ -51,7 +55,7 @@ class _DurationPickerState extends State<DurationPicker> {
 
                   Navigator.of(context).pop();
                 },
-                child: Text('ok',style: TextStyle(),))
+                child: Text('ok',style: TextStyle(color: Colors.black),))
           ],
         ),
       ),
@@ -65,7 +69,7 @@ class _DurationPickerState extends State<DurationPicker> {
       initialValue: currentHours,
       minValue: 1,
       step: 1,
-      maxValue: 240,
+      maxValue: 12,
       onChanged: (v) {
         setState(() {
           currentHours = v;

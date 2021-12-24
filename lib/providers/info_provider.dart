@@ -121,12 +121,19 @@ class EventsData with ChangeNotifier {
 }
 
 class ProjectData with ChangeNotifier {
+  DateTime lastRefreshed = DateTime(2000);
+  setLastRefreshed() {
+    lastRefreshed = DateTime.now();
+  }
   bool onceDownloaded = false;
   setOnceDownloaded(bool _) {
     onceDownloaded = _;
   }
 
   bool getOnceDownloaded() => onceDownloaded;
+  DateTime getLastRefreshed() {
+    return lastRefreshed;
+  }
 
   List<Project> events = [
 

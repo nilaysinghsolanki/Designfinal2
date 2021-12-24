@@ -95,6 +95,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   new ListTile(
                     leading: new Icon(
                       Icons.photo_camera,
+                      color: Colors.black,
 
                     ),
                     title: new Text('Camera',
@@ -180,6 +181,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
     //     Provider.of<TabsScreenContext>(context, listen: false).get();
     var data = Provider.of<AddEventScreenData>(context, listen: true);
     return type!=3?Scaffold(
+      backgroundColor: Color(0xffF2EFE4),
+
 
 
       persistentFooterButtons: [
@@ -247,12 +250,15 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   ))
       ],
       appBar: AppBar(
+        backgroundColor: Color(0xffF2EFE4),
 
         title: Text(type == 1
             ? 'add event 🙂'
-            :
+            :type==2?'stories':
                  'projects +'
-                ),
+                ,style: TextStyle(
+            color: Colors.black
+          ),),
       ),
       body: Container(
 
@@ -348,12 +354,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
             child: Card(
               elevation: 0,
 
-              child: TextField(
+              child: TextFormField(
                 onChanged:(value){
                   Somerandomtext=value;
                 },
                 controller: name,
-                  style: TextStyle( fontSize: 30),
+                  style: TextStyle( fontSize: 15),
 
                   cursorHeight: 35,
                   decoration: InputDecoration(
@@ -371,7 +377,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       helperText: 'Keep it short, this is just a beta.',
 
                       labelStyle:
-                      TextStyle( fontSize: 30),
+                      TextStyle( fontSize:15),
                       ),
                   ),
             ),
@@ -381,9 +387,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
             child: Card(
               elevation: 0,
 
-              child: TextField(
+              child: TextFormField(
                 controller: description,
-                  style: TextStyle( fontSize: 30),
+                  style: TextStyle( fontSize: 15),
+                maxLines: 5,
 
                   cursorHeight: 35,
                   decoration: InputDecoration(
@@ -401,7 +408,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       helperText: 'Whats it about?',
 
                       labelStyle:
-                      TextStyle( fontSize: 30),
+                      TextStyle( fontSize: 15),
                      ),
 
               ),
@@ -413,9 +420,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
             child: Card(
               elevation: 0,
 
-              child: TextField(
+              child: TextFormField(
+
                 controller: whatsInItForYou,
-                  style: TextStyle( fontSize: 30),
+                  style: TextStyle( fontSize: 15),
 
                   cursorHeight: 35,
                   decoration: InputDecoration(
@@ -433,7 +441,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       helperText: "What's in it for students",
 
                       labelStyle:
-                      TextStyle( fontSize: 30),
+                      TextStyle( fontSize: 15),
                      ),
 
                   ),
@@ -445,9 +453,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
             child: Card(
               elevation: 0,
 
-              child: TextField(
+              child: TextFormField(
                 controller: link,
-                  style: TextStyle( fontSize: 30),
+                  style: TextStyle( fontSize: 10),
 
                   cursorHeight: 35,
                   decoration: InputDecoration(
@@ -475,6 +483,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
         ),
       ),
     ):Scaffold(
+      backgroundColor: Color(0xffF2EFE4),
 
       persistentFooterButtons: [
 
@@ -541,8 +550,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
             ))
       ],
       appBar: AppBar(
+        foregroundColor: Colors.black,
+        backgroundColor: Color(0xffF2EFE4),
 
-        title: Text( '+ jobs/internships'),
+        title: Text( '+ Projects',style: TextStyle(color: Colors.black),),
       ),
       body: Container(
 
@@ -550,11 +561,14 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
         child: SingleChildScrollView(
           child: Column(
+
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(Somerandomtext),
+
               _image == null
                   ? ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width/4),
+
                 leading: Icon(Icons.add_a_photo),
                 title: Text('No image selected.'),
                 onTap: () => _showPicker(context, ratio),
@@ -565,11 +579,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  primary: Color(0xffF2EFE4),
                     elevation: 0,
 
                     side: BorderSide( width: 2)),
                 child: Text(
-                  'Pick A Date',
+                  'Pick A Date',style: TextStyle(color: Colors.black),
 
                 ),
                 autofocus: true,
@@ -584,7 +599,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 },
               ),
               ElevatedButton(
+
                 style: ElevatedButton.styleFrom(
+                  primary: Color(0xffF2EFE4),
+
                     elevation: 0,
 
                     side: BorderSide( width: 2)),
@@ -596,16 +614,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   print('$timeOfDay');
                 },
                 child: Text(
-                  "startingTime?",
+                  "startingTime?",style: TextStyle(color: Colors.black),
 
                 ),
               ),
               Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("Assets/newframe.png"),
-                      fit: BoxFit.cover),
-                ),
+
                 child: ListTile(
                   leading: Icon(Icons.timelapse),
 
@@ -636,14 +650,16 @@ class _AddEventScreenState extends State<AddEventScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Card(
+                  color: Color(0xffF2EFE4),
                   elevation: 0,
 
                   child: TextField(
+
                     onChanged:(value){
                       Somerandomtext=value;
                     },
                     controller: name,
-                    style: TextStyle( fontSize: 30),
+                    style: TextStyle( fontSize: 15),
 
                     cursorHeight: 35,
                     decoration: InputDecoration(
@@ -661,7 +677,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       helperText: 'Keep it short, this is just a beta.',
 
                       labelStyle:
-                      TextStyle( fontSize: 30),
+                      TextStyle( fontSize: 15),
                     ),
                   ),
                 ),
@@ -669,11 +685,14 @@ class _AddEventScreenState extends State<AddEventScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Card(
+                  color: Color(0xffF2EFE4),
+
                   elevation: 0,
 
                   child: TextField(
+                    maxLines: 5,
                     controller: description,
-                    style: TextStyle( fontSize: 30),
+                    style: TextStyle( fontSize: 15),
 
                     cursorHeight: 35,
                     decoration: InputDecoration(
@@ -691,7 +710,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       helperText: 'Whats it about?',
 
                       labelStyle:
-                      TextStyle( fontSize: 30),
+                      TextStyle( fontSize: 15),
                     ),
 
                   ),
@@ -701,11 +720,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Card(
+                  color: Color(0xffF2EFE4),
                   elevation: 0,
 
                   child: TextField(
                     controller: whatsInItForYou,
-                    style: TextStyle( fontSize: 30),
+                    style: TextStyle( fontSize: 15),
 
                     cursorHeight: 35,
                     decoration: InputDecoration(
@@ -723,7 +743,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       helperText: "What's in it for students",
 
                       labelStyle:
-                      TextStyle( fontSize: 30),
+                      TextStyle( fontSize: 15),
                     ),
 
                   ),
@@ -733,11 +753,17 @@ class _AddEventScreenState extends State<AddEventScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Card(
+                  color: Color(0xffF2EFE4),
                   elevation: 0,
 
                   child: TextField(
+                    textAlignVertical: TextAlignVertical.top,
+
+                    textAlign: TextAlign.start,
+
+                    maxLines: 5,
                     controller: link,
-                    style: TextStyle( fontSize: 30),
+                    style: TextStyle( fontSize: 15,),
 
                     cursorHeight: 35,
                     decoration: InputDecoration(
@@ -754,8 +780,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       labelText: "link to more details/website/meeting",
 
 
+
                       labelStyle:
-                      TextStyle( fontSize: 20),
+                      TextStyle( fontSize: 15),
                     ),
                   ),
                 ),

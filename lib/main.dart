@@ -950,7 +950,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
     )
     }';
   }
-  void _showSecondPage(BuildContext context,Project projects) {
+  /*void _showSecondPage(BuildContext context,Project projects) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => Scaffold(
@@ -1130,14 +1130,22 @@ class _ProjectsPageState extends State<ProjectsPage> {
         ),
       ),
     );
-  }
+  }*/
   @override
   Widget build(BuildContext context) {
-    print(data);
-    print(data['projects'].toString());
-    String projectstring=data['projects'].toString();
+
+
+
+    /*String projectstring=data['projects'].toString();
+
+    
     final resp=json.decode(projectstring);
-    personalprojects=resp[0];
+
+
+
+    List<Project> personalprojects=json.decode(projectstring.replaceFirst('[', '').replaceFirst("]", ''));
+    print(personalprojects);*/
+
 
 
 
@@ -1390,7 +1398,7 @@ print(data);
                         ],
                       ),
                     ),
-          Container(
+          /*Container(
 
             alignment: Alignment.center,
             child: ListView.builder(
@@ -1464,7 +1472,7 @@ print(data);
                 );
               },
             ),
-          ),
+          ),*/
 
                     // Card(
                     //
@@ -1532,15 +1540,38 @@ class _InternshipsPageState extends State<InternshipsPage> {
   }
   @override
 
+
   void didChangeDependencies() async{
 
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
   void _showSecondPage(BuildContext context,Project projects) {
+
+    void _launchURL() async {
+      String urllinkfinal=projects.description
+          .toString()
+          .substring(
+        projects.description
+            .toString()
+            .indexOf('\$~') ==
+            -1
+            ? 0
+            : projects.description
+            .toString()
+            .indexOf('\$~') +
+            2,
+      );
+
+      urllinkfinal.contains(' ')?urllinkfinal='https://'+urllinkfinal.split( ' ')[urllinkfinal.split(' ').length-1].split('https://')[urllinkfinal.split( ' ')[urllinkfinal.split(' ').length-1].split('https://').length-1]:urllinkfinal=urllinkfinal;
+
+      if (!await launch(urllinkfinal)) throw 'Could not launch ${urllinkfinal
+      }';
+    }
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => Scaffold(
+          backgroundColor: Color(0xffF2EFE4),
           appBar:AppBar(
             iconTheme:IconThemeData(color:Colors.black),
             elevation:0,
@@ -1699,36 +1730,41 @@ class _InternshipsPageState extends State<InternshipsPage> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            alignment: Alignment.center,
+                        TextButton(
+                          onPressed:_launchURL,
+                          child: projects.description
+                              .toString()
+                              .substring(
+                            projects.description
+                                .toString()
+                                .indexOf('\$~') ==
+                                -1
+                                ? 0
+                                : projects.description
+                                .toString()
+                                .indexOf('\$~') +
+                                2,
+                          ).contains('maps.app.goo')?TextButton.icon(
+                            style:TextButton.styleFrom(
+                              primary:Colors.purple,
 
-                            child: Link(
-                              uri: Uri.parse(projects.description
-                                  .toString()
-                                  .substring(
-                                projects.description
-                                    .toString()
-                                    .indexOf('\$~') ==
-                                    -1
-                                    ? 0
-                                    : projects.description
-                                    .toString()
-                                    .indexOf('\$~') +
-                                    2,
-                              )),
-                              target: LinkTarget.blank,
-                              builder: (ctx, openLink) {
-                                return TextButton.icon(
-                                  onPressed: openLink,
-                                  label: Text('Link to Community'),
-                                  icon: Icon(Icons.read_more),
-                                );
-                              },
-                            ),
+                            )
+                            ,
+                            onPressed: _launchURL,
+                            label: Text('Location to Visit'),
+                            icon: Icon(FontAwesomeIcons.mapMarked,color: Colors.purple,),
+                          ):TextButton.icon(
+                            style:TextButton.styleFrom(
+                              primary:Colors.purple,
+
+                            )
+                            ,
+                            onPressed: _launchURL,
+                            label: Text('Important link'),
+                            icon: Icon(FontAwesomeIcons.link,color: Colors.purple,),
                           ),
                         ),
+
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
