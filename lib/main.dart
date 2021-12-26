@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 import 'dart:ui';
+import 'package:http/http.dart' as http;
 
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -1514,6 +1515,9 @@ class _InternshipsPageState extends State<InternshipsPage> {
   List<String> imagesstring = [];
   List<Project> eventfiltered = [];
 
+  Response response;
+  var dio = Dio();
+
   @override
   void initState() {
     if (!Provider.of<ProjectData>(context, listen: false)
@@ -1542,11 +1546,20 @@ class _InternshipsPageState extends State<InternshipsPage> {
 
 
   void didChangeDependencies() async{
-
+    var accessToken =
+        Provider.of<AccessTokenData>(context, listen: false).accessToken;
+    var accessTokenValue = accessToken[0];
+    Map<String, String> headersEventDetails = {
+      "Content-type": "application/json",
+      "accept": "application/json",
+      "Authorization": "Bearer $accessTokenValue"
+    };
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
   void _showSecondPage(BuildContext context,Project projects) {
+
+
 
     void _launchURL() async {
       String urllinkfinal=projects.description
@@ -1569,6 +1582,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
       }';
     }
     Navigator.of(context).push(
+
       MaterialPageRoute(
         builder: (ctx) => Scaffold(
           backgroundColor: Color(0xffF2EFE4),
@@ -1639,6 +1653,25 @@ class _InternshipsPageState extends State<InternshipsPage> {
                               fontFamily: 'DancingScript'),
                         ),
                       ),
+                      IconButton(
+                        onPressed: () async {
+
+
+
+                          await http.delete(
+                            Uri.https('dtuotgbeta.azurewebsites.net', 'projects/delete/$projects.id'),
+
+                          );
+                          Navigator.of(context).pop();
+
+
+                      },
+                        color: Colors.black,
+                        icon:Icon(Icons.delete),
+
+                      )
+
+
                     ],
                   ),
 
@@ -1692,7 +1725,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
                             child: Column(
                               children: [
                                 Text(
-                                  "Incentives",
+                                  "Benefits",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
 
@@ -1746,13 +1779,34 @@ class _InternshipsPageState extends State<InternshipsPage> {
                                 2,
                           ).contains('maps.app.goo')?TextButton.icon(
                             style:TextButton.styleFrom(
-                              primary:Colors.purple,
+                              primary:Colors.blue,
 
                             )
                             ,
                             onPressed: _launchURL,
-                            label: Text('Location to Visit'),
-                            icon: Icon(FontAwesomeIcons.mapMarked,color: Colors.purple,),
+                            label: Text('Location'),
+                            icon: Icon(FontAwesomeIcons.mapMarked,color: Colors.blue,),
+                          ):projects.description
+                              .toString()
+                              .substring(
+                            projects.description
+                                .toString()
+                                .indexOf('\$~') ==
+                                -1
+                                ? 0
+                                : projects.description
+                                .toString()
+                                .indexOf('\$~') +
+                                2,
+                          ).contains('chat.whatsapp.com')?TextButton.icon(
+                            style:TextButton.styleFrom(
+                              primary:Colors.green,
+
+                            )
+                            ,
+                            onPressed: _launchURL,
+                            label: Text('Whatsapp Group Link'),
+                            icon: Icon(FontAwesomeIcons.whatsapp,color: Colors.green,),
                           ):TextButton.icon(
                             style:TextButton.styleFrom(
                               primary:Colors.purple,
@@ -1864,6 +1918,7 @@ owner:eventfiltered[index].owner.toString(),name:eventfiltered[index].name.toStr
 
 
                                     child: ListTile(
+
                                         onTap: () {
 
 
@@ -1873,6 +1928,7 @@ owner:eventfiltered[index].owner.toString(),name:eventfiltered[index].name.toStr
                                             eventfiltered[index].owner.toString(),
                                             style: TextStyle(
                                                 fontFamily: 'DancingScript')),
+
 
                                         leading: TextButton(
                                           onPressed: () {
