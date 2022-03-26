@@ -32,7 +32,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
     // Load the animation file from the bundle, note that you could also
     // download this. The RiveFile just expects a list of bytes.
-    rootBundle.load('Assets/BT_animation.riv').then(
+    rootBundle.load('Assets/ecell_logo.riv').then(
       (data) async {
         // Load the RiveFile from the binary data.
         final file = RiveFile.import(data);
@@ -59,7 +59,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
     // TODO: implement didChangeDependencies
     if (!initialized) {
-      rootBundle.load('Assets/BT_animation.riv').then(
+      rootBundle.load('Assets/ecell_logo.riv').then(
             (data) async {
           // Load the RiveFile from the binary data.
           final file = RiveFile.import(data);
@@ -147,7 +147,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     return  Scaffold(
 
       body: Container(
-        child: RiveAnimation.asset('Assets/OTG_Animation.riv',fit:BoxFit.contain,animations: ["Animation 1"],),
+        child: RiveAnimation.asset('Assets/ecell_logo.riv',fit:BoxFit.contain,animations: ["Animation 2"],),
       ),
     );
   }

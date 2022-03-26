@@ -314,6 +314,187 @@ class Server_Connection_Functions {
     return response.statusCode;
     //
   }
+  Future<int> editEvent(BuildContext context, String name, String description,
+      int type, DateTime dateTime, TimeOfDay timeOfDay, File image,int id,) async {
+    bool edited;
+    var accessToken =
+    await Provider.of<AccessTokenData>(context, listen: false).accessToken;
+
+    var hours =
+    await Provider.of<AddEventScreenData>(context, listen: false).hours;
+    print('$hours');
+    int minutes =
+    await Provider.of<AddEventScreenData>(context, listen: false).minutes;
+    print('$minutes');
+
+    var accessTokenValue = accessToken[0];
+    print('1');
+    int owner1 = Provider.of<OwnerIdData>(context, listen: false).ownerID[0];
+
+    Map<String, String> headersCreateEvent = {
+      "Content-type": "multipart/form-data",
+      "accept": "application/json",
+      "Authorization": "Bearer $accessTokenValue"
+    };
+    print('1');
+    DateTime date_time = DateTime(dateTime.year, dateTime.month, dateTime.day,
+        timeOfDay.hour, timeOfDay.minute);
+    print('1');
+
+    ///
+    Response response;
+    var dio = Dio();
+    var formdata = FormData.fromMap({
+     "owner": owner1,
+      "name": "$name",
+      "description": "$description",
+      "date_time": "${date_time.toIso8601String()}",
+      "duration": "$hours:$minutes:00",
+      "latitude": "27.204600000",
+      "longitude": "77.497700000",
+      "type_event": "${type.toString()}",
+
+      "image": await MultipartFile.fromFile(
+        image.path,
+        filename: image.path,
+      )
+    });
+    response = await dio.patch(
+      'https://dtuotgbeta.azurewebsites.net/events/edit/${id}',
+      data: formdata,
+      options: Options(
+        headers: headersCreateEvent,
+      ),
+      onSendProgress: (int sent, int total) {
+        print('$sent $total');
+      },
+    );
+
+    ///
+    //   Map mapjsonBody = {
+    //     "owner": owner1,
+    //     "name": "$name",
+    //     "description": "$description",
+    //     "date_time": "${date_time.toIso8601String()}",
+    //     "duration": "$hours:$minutes:00",
+    //     "latitude": "27.204600000",
+    //     "longitude": "77.497700000",
+    //     "type_event": "${type.toString()}",
+    //     "user_registered": true,
+    //     "image": image.readAsBytesSync()
+    //   };
+    //   print('1');
+
+    //   http.Response response = await http.post(
+    //       Uri.https('dtuotgbeta.azurewebsites.net', 'events/create/'),
+    //       headers: headersCreateEvent,
+    //       body: json.encode(mapjsonBody));
+    //   print('///////resp CREATE EVENT  ${response.body}');
+    //   print('1');
+    //   Map<String, dynamic> resp = json.decode(response.body);
+    return response.statusCode;
+    //
+  }
+  Future<dynamic> deleteevent(int id, BuildContext context) async {
+    String accessToken =
+    Provider.of<AccessTokenData>(context, listen: false).getAccessToken();
+    Map<String, String> headersInvite = {
+      "Content-type": "application/json",
+      "accept": "application/json",
+      "Authorization": "Bearer $accessToken"
+    };
+    Map mapjsonBody = {"id": "${id}"};
+    http.Response response = await http.delete(
+        Uri.https('dtuotgbeta.azurewebsites.net', '/events/delete/${id}'),
+        headers: headersInvite,
+        body: json.encode(mapjsonBody));
+    print(json.encode(mapjsonBody));
+    int statusCode = response.statusCode;
+    print('//////status code deleted event $statusCode');
+    print("deleted boiiiiii");
+
+    return Text("deleted boiiiiii");
+  }
+  Future<int> editProject(BuildContext context, String name, String description, File image,int id
+
+
+
+
+
+
+      ) async {
+    var accessToken =
+    await Provider.of<AccessTokenData>(context, listen: false).accessToken;
+
+
+
+    var accessTokenValue = accessToken[0];
+    print('1');
+    int owner1 = Provider.of<OwnerIdData>(context, listen: false).ownerID[0];
+
+    Map<String, String> headersCreateEvent = {
+      "Content-type": "multipart/form-data",
+      "accept": "application/json",
+      "Authorization": "Bearer $accessTokenValue"
+    };
+    print('1');
+
+    print('1');
+
+    ///
+    Response response;
+    var dio = Dio();
+    var formdata = FormData.fromMap({
+      "owner": owner1,
+      "name": "$name",
+      "description": "$description",
+      "id":'$id',
+
+
+
+      "image": await MultipartFile.fromFile(
+        image.path,
+        filename: image.path,
+
+      ),
+      "discord": "LOLOLOL",
+    });
+    response = await dio.post(
+      'https://dtuotgbeta.azurewebsites.net/projects/create/',
+      data: formdata,
+      options: Options(
+        headers: headersCreateEvent,
+      ),
+      onSendProgress: (int sent, int total) {
+        print('$sent $total');
+      },
+    );
+
+    ///
+    //   Map mapjsonBody = {
+    //     "owner": owner1,
+    //     "name": "$name",
+    //     "description": "$description",
+    //     "date_time": "${date_time.toIso8601String()}",
+    //     "duration": "$hours:$minutes:00",
+    //     "latitude": "27.204600000",
+    //     "longitude": "77.497700000",
+    //     "type_event": "${type.toString()}",
+    //     "user_registered": true,
+    //     "image": image.readAsBytesSync()
+    //   };
+    //   print('1');
+
+    //   http.Response response = await http.post(
+    //       Uri.https('dtuotgbeta.azurewebsites.net', 'events/create/'),
+    //       headers: headersCreateEvent,
+    //       body: json.encode(mapjsonBody));
+    //   print('///////resp CREATE EVENT  ${response.body}');
+    //   print('1');
+    //   Map<String, dynamic> resp = json.decode(response.body);
+    return response.statusCode;
+    //
+  }
 
   Future<int> createProject(BuildContext context, String name, String description, File image,
 
@@ -413,6 +594,25 @@ class Server_Connection_Functions {
     print('//////status code register event $statusCode');
     Map<String, dynamic> resp = json.decode(response.body);
     return resp;
+  }
+  Future<dynamic> deleteproject(int id, BuildContext context) async {
+    String accessToken =
+    Provider.of<AccessTokenData>(context, listen: false).getAccessToken();
+    Map<String, String> headersInvite = {
+      "Content-type": "application/json",
+      "accept": "application/json",
+      "Authorization": "Bearer $accessToken"
+    };
+    Map mapjsonBody = {"id": "${id}"};
+    http.Response response = await http.delete(
+        Uri.https('dtuotgbeta.azurewebsites.net', '/projects/${id}'),
+        headers: headersInvite,
+        body: json.encode(mapjsonBody));
+    print(json.encode(mapjsonBody));
+    int statusCode = response.statusCode;
+    print('//////status code register event $statusCode');
+
+    return Text("deleted boiiiiii");
   }
 
   // //

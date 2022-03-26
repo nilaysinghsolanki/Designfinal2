@@ -55,6 +55,8 @@ dependencies:
   shimmer: ^2.0.0
   skeleton_text: ^3.0.0
   cached_network_image: ^3.1.0
+  timelines: ^0.1.0
+
 
 
 
@@ -66,6 +68,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   image_cropper: ^1.4.1
+  flutter_local_notifications: ^9.2.0
+
 
 dev_dependencies:
   flutter_test:
@@ -102,12 +106,28 @@ flutter:
     - Assets/appbar.riv
     - Assets/Frame 4.png
     - Assets/newframe.png
-    - Assets/BT_animation.riv
-    - Assets/OTG_Animation.riv
+    - Assets/ecell_logo.riv
+    - Assets/ecell_logo.riv
     - Assets/Registration_animation.riv
     - Assets/LogoOTG.png
     - Assets/ProfileBG.png
     - Assets/settingscrazy.riv
+    - Assets/adcom.jpg
+    - Assets/duexpress.webp
+    - Assets/expertrons.jpg
+    - Assets/finotize.png
+    - Assets/Finstreet.png
+    - Assets/icreate.jpg
+    - Assets/inmo.png
+    - Assets/jetbrains.png
+    - Assets/Learning_While_Travelling_TM_png.png
+    - Assets/myways.png
+    - Assets/niyo.png
+    - Assets/animated_icon_set_-_1_color.riv
+    - Assets/home_animation.riv
+    - Assets/start_animation.riv
+    - Assets/SIJF_ICON.riv
+
 
 
   # To add assets to your application, add an assets section, like this:

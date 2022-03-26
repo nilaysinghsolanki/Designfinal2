@@ -148,7 +148,7 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
 
 
         FloatingActionButton(
-         backgroundColor: Colors.black,
+         backgroundColor: Colors.white,
           
           ////////TOKEN?save, BATCH,RESPONSE CHECK,IF OK THEN SAVE IN DATA BASE
             onPressed: () async {
@@ -248,13 +248,13 @@ class _EnterDetailsScreenState extends State<EnterDetailsScreen> {
             },
             child:
             waiting?CircularProgressIndicator.adaptive(
-              backgroundColor: Color(0xffF2EFE4),
+              backgroundColor: Color(0xff6F6E6E),
             ):Icon(
               FontAwesomeIcons.save
             )),
 
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         title: Text('ENTER DETAILS 1st time'),
       ),
       body: SingleChildScrollView(

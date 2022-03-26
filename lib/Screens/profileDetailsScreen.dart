@@ -53,14 +53,14 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
       appBar: AppBar(
 
 
-        iconTheme:IconThemeData(color:Color(0xffF2EFE4)),
+        iconTheme:IconThemeData(color:Color(0xff6F6E6E)),
         elevation:0,
         backgroundColor: Color(0xff2b2b2b),
 
 
       ),
       body:Container(
-        color: Color(0xffF2EFE4),
+        color: Color(0xff6F6E6E),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
       child: BackdropFilter(
@@ -89,7 +89,7 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
       color: Colors.transparent,
       height: MediaQuery.of(context).size.height / 5,
       child: CircleAvatar(
-      backgroundColor: Color(0xffF2EFE4),
+      backgroundColor: Color(0xff6F6E6E),
       radius: 40,
       backgroundImage: CachedNetworkImageProvider(data['image'].toString(),),
 
@@ -293,7 +293,7 @@ class _ProfileDetailsScreemState extends State<ProfileDetailsScreem> {
                       fontFamily: 'DancingScript',
                       fontSize: 20)),
               TextButton(style: ButtonStyle(
-                foregroundColor:MaterialStateProperty.all<Color>(Colors.black),
+                foregroundColor:MaterialStateProperty.all<Color>(Colors.white),
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
                 overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
                 shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),

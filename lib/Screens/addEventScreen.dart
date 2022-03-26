@@ -1,3 +1,7 @@
+import 'dart:math';
+import 'package:http/http.dart' as http;
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:nilay_dtuotg_2/models/screenArguments.dart';
 import 'package:nilay_dtuotg_2/providers/info_provider.dart';
@@ -9,6 +13,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'dart:io';
@@ -24,6 +29,7 @@ class AddEventScreen extends StatefulWidget {
 }
 
 class _AddEventScreenState extends State<AddEventScreen> {
+
   final name = TextEditingController();
   final description = TextEditingController();
   final whatsInItForYou = TextEditingController();
@@ -49,6 +55,23 @@ class _AddEventScreenState extends State<AddEventScreen> {
   File _image;
   final picker = ImagePicker();
   var _imageDataList = <Uint8List>[];
+  Future<File> urlToFile(Uri imageUrl) async {
+// generate random number.
+    var rng = new Random();
+// get temporary directory of device.
+    Directory tempDir = await getTemporaryDirectory();
+// get temporary path from temporary directory.
+    String tempPath = tempDir.path;
+// create a new file in temporary path with random file name.
+    File file = new File('$tempPath'+ (rng.nextInt(100)).toString() +'.png');
+// call http.get method and pass imageUrl into it to get response.
+    http.Response response = await http.get(imageUrl);
+// write bodyBytes received in response to file.
+    await file.writeAsBytes(response.bodyBytes);
+// now return the file which is created with random name in
+// temporary directory and image bytes from response is written to // that file.
+    return file;
+  }
 
   void _showPicker(BuildContext context, num ratio) {
     showModalBottomSheet(
@@ -95,7 +118,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   new ListTile(
                     leading: new Icon(
                       Icons.photo_camera,
-                      color: Colors.black,
+                      color: Colors.white,
 
                     ),
                     title: new Text('Camera',
@@ -141,8 +164,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
         ],
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Cropper',
-            toolbarColor:Colors.black,
-            toolbarWidgetColor: Color(0xffF2EFE4),
+            toolbarColor:Colors.white,
+            toolbarWidgetColor: Color(0xff6F6E6E),
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
@@ -173,15 +196,313 @@ class _AddEventScreenState extends State<AddEventScreen> {
   Duration _duration = Duration(hours: 0, minutes: 0);
   @override
   Widget build(BuildContext context) {
-    int type = ModalRoute.of(context).settings.arguments;
+    ScreenArguments args = ModalRoute.of(context).settings.arguments;
+    print(args);
+
+    int type = args.id;
 
     double ratio = MediaQuery.of(context).size.height / 896;
 
     // BuildContext bc =
     //     Provider.of<TabsScreenContext>(context, listen: false).get();
     var data = Provider.of<AddEventScreenData>(context, listen: true);
-    return type!=3?Scaffold(
-      backgroundColor: Color(0xffF2EFE4),
+    return type!=3?args.editing==true?
+    /////////////////EDITINGEVENT
+    Scaffold(
+      backgroundColor: Color(0xff6F6E6E),
+
+
+
+      persistentFooterButtons: [
+
+        ElevatedButton.icon(
+            style:
+            ElevatedButton.styleFrom( elevation: 0),
+            onPressed: () async {
+
+              print('1');
+              setState(() {
+                waiting = true;
+
+              });
+              if (dateTime != null &&
+                  timeOfDay != null &&
+                  name != null &&
+                  description != null &&
+                  type != null) {
+                print('2');
+                var scf = Provider.of<SCF>(context, listen: false).get();
+                int resp = await scf.editEvent(
+
+                    context,
+                    name.text,
+                    description.text +
+                        '~\$' +
+                        whatsInItForYou.text +
+                        '\$~' +
+                        link.text,
+                    type,
+                    dateTime,
+                    timeOfDay,
+                    _image!=null?_image:urlToFile(Uri.parse(args.event.event_image)),args.event.id);
+
+
+                print('3');
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        child: Padding(
+                          padding: EdgeInsets.all(50),
+                          child: Text(resp.toString()),
+                        ),
+                      );
+                    });
+                Navigator.of(context).pushReplacementNamed('/loading');
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Creating Event"),duration: Duration(milliseconds: 1000),));
+
+
+                if (resp <= 205) {
+                  Navigator.of(context).pop();
+                }
+              }
+              setState(() {
+                waiting = false;
+              });
+            },
+            icon: Icon(
+              Icons.save,
+
+            ),
+            label: waiting
+                ? CircularProgressIndicator()
+                : Text(
+              'save',
+
+            ))
+      ],
+      appBar: AppBar(
+        backgroundColor: Color(0xff6F6E6E),
+
+        title: Text(type == 1
+            ? 'add event 🙂'
+            :type==2?'stories':
+        'projects +'
+          ,style: TextStyle(
+              color: Colors.white
+          ),),
+      ),
+      body: Container(
+
+
+
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(Somerandomtext),
+               Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.add_a_photo_outlined),
+                    title: Text('Replace Selected Image?'),
+                    onTap: () => _showPicker(context, ratio),
+                  ),
+                  Container(
+                    child: _image!=null ?Image.file(_image):CachedNetworkImage(imageUrl: args.event.event_image),
+                    height: 400,
+                  ),
+                ],
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    elevation: 0,
+
+                    side: BorderSide( width: 2)),
+                child: Text(
+                  'Pick A Date',
+
+                ),
+                autofocus: true,
+                clipBehavior: Clip.hardEdge,
+                onPressed: () async {
+                  dateTime = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime(2021),
+                      firstDate: DateTime(2021),
+                      lastDate: DateTime(2050));
+                  print('$dateTime');
+                },
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    elevation: 0,
+
+                    side: BorderSide( width: 2)),
+                onPressed: () async {
+                  timeOfDay = await showTimePicker(
+
+
+                    context: context,
+                    initialTime: TimeOfDay(hour: 1, minute:1),
+                  );
+                  print('$timeOfDay');
+                },
+                child: Text(
+                  "startingTime?",
+
+                ),
+              ),
+
+              // ListTile(
+              //   leading: Icon(Icons.people),
+              //   tile: s.blue[200],
+              //   title: Text('owners'),
+              //   trailing: Text('${data.getOwners()}'),
+              //   onTap: () {
+              //     showDialog(
+              //         context: context,
+              //         builder: (context) {
+              //           return Dialog(child: OwnerPicker());
+              //         });
+              //   },
+              // ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Card(
+                  elevation: 0,
+
+                  child: TextFormField(
+                    onChanged:(value){
+                      Somerandomtext=value;
+                    },
+                    controller: name,
+                    style: TextStyle( fontSize: 15),
+
+                    cursorHeight: 35,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: args.event.name,
+                      helperText: 'Keep it short, this is just a beta.',
+
+
+                      labelStyle:
+                      TextStyle( fontSize:15),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Card(
+                  elevation: 0,
+
+                  child: TextFormField(
+                    controller: description,
+                    style: TextStyle( fontSize: 15),
+                    maxLines: 5,
+
+                    cursorHeight: 35,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "whats it about ?",
+                      helperText: 'Whats it about?',
+
+                      labelStyle:
+                      TextStyle( fontSize: 15),
+                    ),
+
+                  ),
+                ),
+
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Card(
+                  elevation: 0,
+
+                  child: TextFormField(
+
+                    controller: whatsInItForYou,
+                    style: TextStyle( fontSize: 15),
+
+                    cursorHeight: 35,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "Incentives",
+                      helperText: "What's in it for students",
+
+                      labelStyle:
+                      TextStyle( fontSize: 15),
+                    ),
+
+                  ),
+                ),
+
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Card(
+                  elevation: 0,
+
+                  child: TextFormField(
+                    controller: link,
+                    style: TextStyle( fontSize: 10),
+
+                    cursorHeight: 35,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 4),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide( width: 3),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      labelText: "link to more details/website/meeting",
+
+
+                      labelStyle:
+                      TextStyle( fontSize: 20),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ):Scaffold(
+      backgroundColor: Color(0xff6F6E6E),
 
 
 
@@ -216,7 +537,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     dateTime,
                     timeOfDay,
                     _image);
-                scf.fetchListOfEvents(context);
+
 
                 print('3');
                 showDialog(
@@ -229,6 +550,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         ),
                       );
                     });
+                Navigator.of(context).pushReplacementNamed('/loading');
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Creating Event"),duration: Duration(milliseconds: 1000),));
+
 
                 if (resp <= 205) {
                   Navigator.of(context).pop();
@@ -250,14 +574,14 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   ))
       ],
       appBar: AppBar(
-        backgroundColor: Color(0xffF2EFE4),
+        backgroundColor: Color(0xff6F6E6E),
 
         title: Text(type == 1
             ? 'add event 🙂'
             :type==2?'stories':
                  'projects +'
                 ,style: TextStyle(
-            color: Colors.black
+            color: Colors.white
           ),),
       ),
       body: Container(
@@ -275,10 +599,19 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   title: Text('No image selected.'),
                   onTap: () => _showPicker(context, ratio),
                 )
-              : Container(
-                  child: Image.file(_image),
-                  height: 100,
-                ),
+              : Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.add_a_photo_outlined),
+                    title: Text('Replace Selected Image?'),
+                    onTap: () => _showPicker(context, ratio),
+                  ),
+                  Container(
+                      child: Image.file(_image),
+                      height: 100,
+                    ),
+                ],
+              ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
                 elevation: 0,
@@ -483,7 +816,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
         ),
       ),
     ):Scaffold(
-      backgroundColor: Color(0xffF2EFE4),
+      backgroundColor: Color(0xff6F6E6E),
 
       persistentFooterButtons: [
 
@@ -530,9 +863,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     });
 
 
-                  Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Creating Project"),duration: Duration(milliseconds: 1000),));
 
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Creating Project"),duration: Duration(milliseconds: 1000),));
+                Navigator.of(context).pushReplacementNamed('/loading');
               }
               setState(() {
                 waiting = false;
@@ -550,10 +883,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
             ))
       ],
       appBar: AppBar(
-        foregroundColor: Colors.black,
-        backgroundColor: Color(0xffF2EFE4),
+        foregroundColor: Colors.white,
+        backgroundColor: Color(0xff6F6E6E),
 
-        title: Text( '+ Projects',style: TextStyle(color: Colors.black),),
+        title: Text( '+ Projects',style: TextStyle(color: Colors.white),),
       ),
       body: Container(
 
@@ -579,12 +912,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xffF2EFE4),
+                  primary: Color(0xff6F6E6E),
                     elevation: 0,
 
                     side: BorderSide( width: 2)),
                 child: Text(
-                  'Pick A Date',style: TextStyle(color: Colors.black),
+                  'Pick A Date',style: TextStyle(color: Colors.white),
 
                 ),
                 autofocus: true,
@@ -601,7 +934,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
               ElevatedButton(
 
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xffF2EFE4),
+                  primary: Color(0xff6F6E6E),
 
                     elevation: 0,
 
@@ -614,7 +947,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   print('$timeOfDay');
                 },
                 child: Text(
-                  "startingTime?",style: TextStyle(color: Colors.black),
+                  "startingTime?",style: TextStyle(color: Colors.white),
 
                 ),
               ),
@@ -650,7 +983,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Card(
-                  color: Color(0xffF2EFE4),
+                  color: Color(0xff6F6E6E),
                   elevation: 0,
 
                   child: TextField(
@@ -685,7 +1018,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Card(
-                  color: Color(0xffF2EFE4),
+                  color: Color(0xff6F6E6E),
 
                   elevation: 0,
 
@@ -720,7 +1053,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Card(
-                  color: Color(0xffF2EFE4),
+                  color: Color(0xff6F6E6E),
                   elevation: 0,
 
                   child: TextField(
@@ -753,7 +1086,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                 child: Card(
-                  color: Color(0xffF2EFE4),
+                  color: Color(0xff6F6E6E),
                   elevation: 0,
 
                   child: TextField(

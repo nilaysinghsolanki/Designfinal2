@@ -21,8 +21,8 @@ class _DurationPickerState extends State<DurationPicker> {
     return Container(
 
       decoration: BoxDecoration(
-        color: Color(0xffF2EFE4),
-        border: Border.all(color: Colors.black,style: BorderStyle.solid,width: 2),
+        color: Color(0xff6F6E6E),
+        border: Border.all(color: Colors.white,style: BorderStyle.solid,width: 2),
 
           ),
       child: SingleChildScrollView(
@@ -39,7 +39,7 @@ class _DurationPickerState extends State<DurationPicker> {
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xffF2EFE4),
+                  primary: Color(0xff6F6E6E),
                     elevation: 0,
 
                     side: BorderSide(width: 2)
@@ -55,7 +55,7 @@ class _DurationPickerState extends State<DurationPicker> {
 
                   Navigator.of(context).pop();
                 },
-                child: Text('ok',style: TextStyle(color: Colors.black),))
+                child: Text('ok',style: TextStyle(color: Colors.white),))
           ],
         ),
       ),

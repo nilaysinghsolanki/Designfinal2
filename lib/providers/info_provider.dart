@@ -361,6 +361,7 @@ class UsernameData with ChangeNotifier {
     notifyListeners();
   }
 
+
   Future<void> fetchAndSetData() async {
     print('fetching username');
     var usernameData = await DbHelper.getUsernameData();

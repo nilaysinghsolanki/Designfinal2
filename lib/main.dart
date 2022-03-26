@@ -2,10 +2,13 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:http/http.dart' as http;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:timelines/timelines.dart';
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nilay_dtuotg_2/Screens/galleryView.dart';
@@ -53,6 +56,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import 'Designs/Projectlist.dart';
 import 'Screens/eventsdetailsDESIGN.dart';
+import 'helper/db_helper.dart';
 
 void main() => runApp(MyApp());
 
@@ -137,143 +141,115 @@ class MyApp extends StatelessWidget {
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/homeScreen';
+  ScreenArguments args;
   HomeScreen({Key key}) : super(key: key);
+
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-  List<Widget> _children=[Text("1")];
+
+
 
   double width;
   double height;
+
 
   bool initialized = false;
 
   var scf;
   List<Event> sheduledToday = [];
 
+  List<AssetImage> listofimages=[
+AssetImage('Assets/expertrons.jpg'),
+    AssetImage('Assets/finotize.png'),
+    AssetImage('Assets/Finstreet.png'),
+    AssetImage('Assets/icreate.jpg'),
+    AssetImage('Assets/inmo.png'),
+    AssetImage('Assets/Learning_While_Travelling_TM_png.png'),
+    AssetImage('Assets/myways.png'),
+    AssetImage('Assets/niyo.png'),
+    AssetImage('Assets/jetbrains.png'),
+    AssetImage('Assets/duexpress.webp'),
+    AssetImage('Assets/adcom.jpg'),
+
+
+
+
+
+
+  ];
+  List<String> listofimageslinks=[
+    "https://ecelldtu.in/",
+    "https://ecelldtu.in/",
+    "https://ecelldtu.in/","https://ecelldtu.in/",
+    "https://ecelldtu.in/",
+    "https://ecelldtu.in/",
+    "https://ecelldtu.in/",
+    "https://ecelldtu.in/",
+    "https://ecelldtu.in/",
+    "https://ecelldtu.in/",
+    "https://ecelldtu.in/",
+    "https://ecelldtu.in/",
+
+  ];
+
+
   bool eventsInitialized = false;
   bool storycontinues = false;
   int j = 1;
+  List<Widget> _children;
 
   @override
   void didChangeDependencies() async {
-    if (!initialized) {
-      if (!Provider.of<EventsData>(context, listen: false)
-          .getOnceDownloaded()) {
-        scf = Provider.of<SCF>(context, listen: false).get();
-        await scf.fetchListOfEvents(context);
-
-        Provider.of<EventsData>(context, listen: false).setOnceDownloaded(true);
-
-        // Provider.of<EventsImages>(context, listen: false).fetchList(
-        //     Provider.of<EventsData>(context, listen: false).getEvents(),
-        //     Provider.of<AccessTokenData>(context, listen: false)
-        //         .getAccessToken());
-      }
-      sheduledToday =
-          Provider.of<EventsData>(context, listen: false).getEvents();
-
-      setState(() {
-        initialized = true;
-      });
-      if (!Provider.of<ProjectData>(context, listen: false)
-          .getOnceDownloaded()) {
-        scf = Provider.of<SCF>(context, listen: false).get();
-        scf.fetchListOfProjects(context);
-        Provider.of<ProjectData>(context, listen: false).setOnceDownloaded(true);
-
-        // Provider.of<EventsImages>(context, listen: false).fetchList(
-        //     Provider.of<EventsData>(context, listen: false).getEvents(),
-        //     Provider.of<AccessTokenData>(context, listen: false)
-        //         .getAccessToken());
-      }
-    }
-    List<List<Event>> ownersEvents = [];
-
-    List<Event> storiesFiltered = [];
-    ScreenArguments args = ModalRoute.of(context).settings.arguments;
-    if (j != 1) {
-      storycontinues = true;
-    }
-    sheduledToday.forEach((element) {
-      if (element.eventType == "Society") storiesFiltered.add(element);
-    });
-
-    for (int i = 0; i < storiesFiltered.length; i++) {
-      if (ownersEvents.indexWhere(
-              (element) => element[0].owner == storiesFiltered[i].owner) !=
-          -1) {
-        ownersEvents[ownersEvents.indexWhere(
-                (element) => element[0].owner == storiesFiltered[i].owner)]
-            .add(storiesFiltered[i]);
-      } else {
-        ownersEvents.add([storiesFiltered[i]]);
-      }
-    }
     _children = [
       Column(
         children: [
-          Container(
-            margin:EdgeInsets.fromLTRB(10, 25, 0, 0),
+          SafeArea(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height/10,
+              child: Center(
 
-            alignment: Alignment.topLeft,
+                child: CarouselSlider.builder(
+                    itemCount: listofimages.length,
+                    itemBuilder: (context, itemIndex, pageViewIndex) {
+                      return GestureDetector(
+                        onTap: () {
+                          launch(listofimageslinks[itemIndex]);
 
-            height: MediaQuery.of(context).size.height / 7,
-            child: SingleChildScrollView(
 
-              scrollDirection: Axis.horizontal,
-              child: ListView.builder(
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fitHeight,
 
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: ownersEvents.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    GestureDetector(
-                      onTap: () {
-                        j = 0;
-                        j++;
-
-                        Navigator.of(context).pushNamed(
-                          StoryViewScreen.routeName,
-                          arguments: ScreenArguments(
-                              id: !storycontinues ? index : args.id,
-                              eves: !storycontinues
-                                  ? ownersEvents[index]
-                                  : ownersEvents[args.id],
-                              ownerlist:
-                              ownersEvents), // sheduledToday[index].event_image,
-                        );
-                      },
-                      child: Container(
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.all(3),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.purple,
-                          radius: 30,
-                          child: CircleAvatar(
-                            backgroundColor: Color(0xffF2EFE4),
-                            radius: 27,
-                            backgroundImage: storiesFiltered.isNotEmpty
-                                ? CachedNetworkImageProvider(
-                                ownersEvents[index][0].owner_image,
-                                scale: 0.5)
-                                : AssetImage("Assets/newframe.png"),
-                          ),
+                                  image: listofimages[itemIndex])),
+                          child:
+                          Container(),
                         ),
-                      ),
-                    ),
+                      );
+                    },
+                    options: CarouselOptions(
+                      viewportFraction: 1,
+                      autoPlay: listofimages.length != 0 ? true : false,
+                      enlargeCenterPage: false,
+                      autoPlayInterval: Duration(seconds: 5),
+                      height: 200,
+                    )),
               ),
             ),
           ),
-              HomePage()
+
+          Expanded(child: HomePage())
         ],
       ),
-      InternshipsPage(),AddingPage(),EventsPage(),ProjectsPage()
+      InternshipsPage(),AddingPage()
     ];
+
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
@@ -295,130 +271,137 @@ class _HomeScreenState extends State<HomeScreen> {
           leading: CircleAvatar(
             backgroundColor: Colors.transparent,
             child: Icon(
-              Icons.logout,
-              color: Colors.black,
+              Icons.lightbulb,
+              color: Colors.white,
             ),
           ),
           title: Text(
-            "log out",
+
+            "Our Initiatives",
+            style:TextStyle(color:Colors.white ),
           ),
         ),
       ),
     ),
-    Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Builder(
-        builder: (_) => ListTile(
-          onTap: () async {
-            print('.patch profile..');
-            Navigator.of(_).pushNamed('patchProfileScreen');
-          },
-          leading: CircleAvatar(
-            backgroundColor: Colors.transparent,
-          ),
-          title: Text(
-            "edit profile",
-            style: TextStyle(fontSize: 20),
-          ),
-        ),
-      ),
-    ),
-    Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Builder(
-        builder: (_) => ListTile(
-          onTap: () {
-            Navigator.of(_).pushNamed('/schedule');
-          },
-          leading: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: Hero(
-                tag: "tag1",
-                child: Icon(
-                  Icons.calendar_today,
-                  color: Colors.black,
-                )),
-          ),
-          title: Text(
-            "Schedule",
-            style: TextStyle(fontSize: 20),
-          ),
-        ),
-      ),
-    ),
-    Builder(
-      builder: (_) => ListTile(
-        onTap: () {
-          Navigator.of(_).pushNamed('inviteScreen');
-        },
-        leading: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          child: Hero(
-              tag: "inviteherotag",
-              child: Icon(
-                Icons.face_retouching_natural,
-                color: Colors.black,
-              )),
-        ),
-        title: Text(
-          "invite friends",
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-    ),
-    ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        child: Icon(
-          Icons.motorcycle_rounded,
-          color: Colors.black,
-        ),
-      ),
-      title: Text(
-        "Catch-A-Ride",
-        style: TextStyle(fontSize: 20),
-      ),
-    ),
-    ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        child: Icon(
-          Icons.report,
-        ),
-      ),
-      title: Text(
-        "Emergency",
-        style: TextStyle(fontSize: 20),
-      ),
-    ),
-    ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        child: Icon(
-          Icons.work,
-          color: Colors.black,
-        ),
-      ),
-      title: Text(
-        "Active Projects",
-        style: TextStyle(fontSize: 20),
-      ),
-    ),
-    Container(
-      alignment: Alignment.bottomCenter,
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.transparent,
-        ),
-        title: Text("I have a B-Plan , for selling DTU"),
-        subtitle: Text("-Every Entrepreneur at E-cell"),
-      ),
-    )
+    // Container(
+    //   decoration: BoxDecoration(
+    //     borderRadius: BorderRadius.circular(20),
+    //   ),
+    //   child: Builder(
+    //     builder: (_) => ListTile(
+    //       onTap: () async {
+    //         print('.patch profile..');
+    //         Navigator.of(_).pushNamed('patchProfileScreen');
+    //       },
+    //       leading: CircleAvatar(
+    //         backgroundColor: Colors.transparent,
+    //       ),
+    //       title: Text(
+    //         "edit profile",
+    //         style: TextStyle(fontSize: 20),
+    //       ),
+    //     ),
+    //   ),
+    // ),
+    // Container(
+    //   decoration: BoxDecoration(
+    //     borderRadius: BorderRadius.circular(20),
+    //   ),
+    //   child: Builder(
+    //     builder: (_) => ListTile(
+    //       onTap: () {
+    //         Navigator.of(_).pushNamed('/schedule');
+    //       },
+    //       leading: CircleAvatar(
+    //         backgroundColor: Colors.transparent,
+    //         child: Hero(
+    //             tag: "tag1",
+    //             child: Icon(
+    //               Icons.calendar_today,
+    //               color: Colors.white,
+    //             )),
+    //       ),
+    //       title: Text(
+    //         "Schedule",
+    //         style: TextStyle(fontSize: 20),
+    //       ),
+    //     ),
+    //   ),
+    // ),
+    // Builder(
+    //   builder: (_) => ListTile(
+    //     onTap: () {
+    //       Navigator.of(_).pushNamed('inviteScreen');
+    //     },
+    //     leading: CircleAvatar(
+    //       backgroundColor: Colors.transparent,
+    //       child: Hero(
+    //           tag: "inviteherotag",
+    //           child: Icon(
+    //             Icons.face_retouching_natural,
+    //             color: Colors.white,
+    //           )),
+    //     ),
+    //     title: Text(
+    //       "invite friends",
+    //       style: TextStyle(fontSize: 20),
+    //     ),
+    //   ),
+    // ),
+    // ListTile(
+    //   leading: CircleAvatar(
+    //     backgroundColor: Colors.transparent,
+    //     child: Icon(
+    //       Icons.motorcycle_rounded,
+    //       color: Colors.white,
+    //     ),
+    //   ),
+    //   title: Text(
+    //     "Catch-A-Ride",
+    //     style: TextStyle(fontSize: 20),
+    //   ),
+    // ),
+    // ListTile(
+    //   leading: CircleAvatar(
+    //     backgroundColor: Colors.transparent,
+    //     child: Icon(
+    //
+    //
+    //       Icons.report,
+    //       color: Colors.white,
+    //     ),
+    //   ),
+    //   title: Text(
+    //     "Emergency",
+    //     style: TextStyle(fontSize: 20),
+    //   ),
+    // ),
+    // ListTile(
+    //   leading: CircleAvatar(
+    //     backgroundColor: Colors.transparent,
+    //     child: Icon(
+    //       Icons.work,
+    //       color: Colors.white,
+    //     ),
+    //   ),
+    //   title: Text(
+    //     "Active Projects",
+    //     style: TextStyle(fontSize: 20),
+    //   ),
+    // ),
+    // Container(
+    //   alignment: Alignment.bottomCenter,
+    //   child: ListTile(
+    //     leading: CircleAvatar(
+    //       backgroundColor: Colors.transparent,
+    //     ),
+    //     title: Text("I have a B-Plan , for selling DTU"),
+    //     subtitle: Text("-Every Entrepreneur at E-cell"),
+    //   ),
+
   ];
+  int _currentIndex =0;
+
 
   void onTabTapped(int index) {
     setState(() {
@@ -429,9 +412,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return showDialog(
       context: context,
       builder: (context) => new AlertDialog(
-        backgroundColor: Color(0xffF2EFE4),
+        backgroundColor: Color(0xff6F6E6E),
         title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit an App'),
+        content: new Text('Do you want to exit an App?'),
         actions: <Widget>[
           new GestureDetector(
             onTap: () => Navigator.of(context).pop(false),
@@ -449,6 +432,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    RiveAnimationController _controller = OneShotAnimation('active', autoplay:true);
+    RiveAnimationController _controller1 = OneShotAnimation('Idle', autoplay:true);
+
 
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -456,51 +442,73 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
 
           bottomNavigationBar: BottomNavigationBar(
-            fixedColor: Colors.black,
-            backgroundColor: Color(0xffF2EFE4),
-            type:BottomNavigationBarType.fixed ,
+            elevation: 0,
+            fixedColor: Colors.white,
+            backgroundColor: Color(0xff6F6E6E),
+            type:BottomNavigationBarType.fixed,
             onTap: onTabTapped, // new
-            currentIndex: _currentIndex,  // this will be set when a new tab is tapped
+            currentIndex:_currentIndex,  // this will be set when a new tab is tapped
             items: [
               BottomNavigationBarItem(
-                activeIcon:new Icon(Icons.home,color: Colors.black,) ,
-                backgroundColor: Color(0xffF2EFE4),
-                icon: new Icon(Icons.home_outlined,color: Colors.black,),
+                activeIcon:GestureDetector(
+                  onTap:()=> _controller.isActive=true,
+                  child: Container(
+
+                    width: MediaQuery.of(context).size.width/8,
+                    height: MediaQuery.of(context).size.height/20,
+                    child:  RiveAnimation.asset('Assets/home_animation.riv',fit:BoxFit.contain,animations: ['active'],artboard: "HOME",controllers:[_controller],)    ),
+                )
+                ,
+                backgroundColor: Color(0xff6F6E6E),
+                icon: Container(
+                    width: MediaQuery.of(context).size.width/8,
+                    height: MediaQuery.of(context).size.height/20,child:RiveAnimation.asset('Assets/home_animation.riv',fit:BoxFit.contain,animations: ['reverse'],artboard: "HOME",),
+                )
+                ,
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                activeIcon:new Icon(Icons.photo_size_select_actual,color: Colors.black,),
-                backgroundColor: Color(0xffF2EFE4),
-                icon: new Icon(Icons.photo_size_select_actual_outlined,color: Colors.black,),
-                  label:'Posts',
+                activeIcon:GestureDetector(
+                  onTap:()=> _controller1.isActive=true,
+                  child: Container(
+                    alignment: Alignment.topCenter,
+
+                      width: MediaQuery.of(context).size.width/4,
+                      height: MediaQuery.of(context).size.height/10,
+                      child:  RiveAnimation.asset('Assets/SIJF_ICON.riv',fit:BoxFit.contain,animations: ['still'],artboard: "Design_Animate",controllers:[_controller1],)    ),
+                )
+                ,
+                backgroundColor: Color(0xff6F6E6E),
+                icon: Container(
+                  width: MediaQuery.of(context).size.width/4,
+                  height: MediaQuery.of(context).size.height/10,child:RiveAnimation.asset('Assets/SIJF_ICON.riv',fit:BoxFit.contain,animations: ['still'],artboard: "Design_Animate",),
+                )
+                ,
+                label: 'SIJF',
               ),
+
               BottomNavigationBarItem(
-                  activeIcon:new Icon(Icons.add_circle,color: Colors.black,),
-                  backgroundColor: Color(0xffF2EFE4),
-                  icon: Icon(Icons.add,color: Colors.black,),
-                  label:'Add'
-              ),
-              BottomNavigationBarItem(
-                  activeIcon:new Icon(Icons.star,color: Colors.black,),
-                  backgroundColor: Color(0xffF2EFE4),
-                  icon: Icon(Icons.star_border,color: Colors.black,),
+                  activeIcon:GestureDetector(
+                    onTap:()=> _controller.isActive=true,
+                    child: Container(
+                        width: MediaQuery.of(context).size.width/8,
+                        height: MediaQuery.of(context).size.height/20,child: RiveAnimation.asset('Assets/start_animation.riv',fit:BoxFit.contain,animations: ['idle'],artboard: "LIKE/STAR",controllers:[_controller])),
+                  )
+                  ,
+                  backgroundColor: Color(0xff6F6E6E),
+                  icon: Container(
+                      width: MediaQuery.of(context).size.width/8,
+                      height: MediaQuery.of(context).size.height/20,child: RiveAnimation.asset('Assets/start_animation.riv',fit:BoxFit.contain,animations: ['idle'],artboard: "LIKE/STAR",))
+                  ,
                   label:'Events'
               ),
-              BottomNavigationBarItem(
-                  activeIcon:new Icon(Icons.person,color: Colors.black,),
-                  backgroundColor: Color(0xffF2EFE4),
-                  icon: Icon(Icons.person_outline_sharp,color: Colors.black),
-                  label:'Profile'
-              )
+
             ],
           ),
           drawer: Drawer(
             child: Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("Assets/newframe.png"),
-                      fit: BoxFit.cover),
-                  borderRadius: BorderRadius.circular(20)),
+              color:Color(0xff6F6E6E) ,
+
               child: Center(
                 child: ListView(
                   children: ScatteredListtiles,
@@ -508,10 +516,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ), // Populate the Drawer in the next step.
           ),
-           body: Container(decoration: BoxDecoration(
-             image: DecorationImage(
-                 image: AssetImage("Assets/newframe.png",),
-                 fit: BoxFit.fitHeight),),child: _children[_currentIndex]),
+           body: Container(color:Color(0xff6F6E6E),child: _children[_currentIndex]),
         ),
       ),
     );
@@ -529,190 +534,288 @@ class _HomePageState extends State<HomePage> {
   PlusAnimation _plusAnimation;
 
   Artboard _riveArtboard;
-  List<Event> evesForSchedule = [];
-  List<Event> sheduled = [];
+  List<Project> evesForSchedule = [];
+  List<Project> sheduled = [];
   double width = 500;
   int weekDayIndex = 1;
   bool loading = true;
 
   double height = 200;
-  List<Event> sheduledToday = [];
-  List<Event> eventsedRegester = [];
-  List<Event> eventfiltered = [];
+  List<Project> sheduledToday = [];
+  List<Project> eventsedRegester = [];
+  List<Project> eventfiltered = [];
   List<NetworkImage> CachedImages = [];
 
   @override
-  void initState() {
-    super.initState();
-    scf = Provider.of<SCF>(context, listen: false).get();
-    eventsedRegester =
-        Provider.of<EventsData>(context, listen: false).getEvents();
 
-    eventsedRegester.forEach((element) {
-      if (element.eventType == "University") {
-        print("/////////////////////EVENT TYPE IS HERE ${element.eventType}");
-        eventfiltered.add(element);
-      }
-    });
 
-    // TODO: implement initState
-    super.initState();
-    LoadData();
 
-    // Load the animation file from the bundle, note that you could also
-    // download this. The RiveFile just expects a list of bytes.
-    rootBundle.load('Assets/BT_animation.riv').then(
-      (data) async {
-        // Load the RiveFile from the binary data.
-        final file = RiveFile.import(data);
-
-        // The artboard is the root of the animation and gets drawn in the
-        // Rive widget.
-        final artboard = file.mainArtboard;
-
-        // Add a controller to play back a known animation on the main/default
-        // artboard. We store a reference to it so we can toggle playback.
-
-        setState(() => _riveArtboard = artboard);
-        _riveArtboard
-            .addController(_plusAnimation = PlusAnimation('Animation 1'));
-        _plusAnimation.instance.animation.loop = Loop.loop;
-      },
-    );
-  }
-
-  Future LoadData() async {
-    setState(() {
-      loading = false;
-    });
-  }
 
   var scf;
-  bool eventsInitialized = false;
+  void initState() {
+    if (!Provider.of<ProjectData>(context, listen: false)
+        .getOnceDownloaded()) {
+      scf = Provider.of<SCF>(context, listen: false).get();
+      scf.fetchListOfProjects(context);
+      Provider.of<ProjectData>(context, listen: false).setOnceDownloaded(true);
 
-  void didChangeDependencies() async {
-    print('home init');
-    if (!eventsInitialized) {
-      if (!Provider.of<EventsData>(context, listen: false)
-          .getOnceDownloaded()) {
-        scf = Provider.of<SCF>(context, listen: false).get();
-        await scf.fetchListOfEvents(context);
-        Provider.of<EventsData>(context, listen: false).setOnceDownloaded(true);
-
-        // Provider.of<EventsImages>(context, listen: false).fetchList(
-        //     Provider.of<EventsData>(context, listen: false).getEvents(),
-        //     Provider.of<AccessTokenData>(context, listen: false)
-        //         .getAccessToken());
-      }
-
-      setState(() {
-        eventsInitialized = true;
-      });
+      // Provider.of<EventsImages>(context, listen: false).fetchList(
+      //     Provider.of<EventsData>(context, listen: false).getEvents(),
+      //     Provider.of<AccessTokenData>(context, listen: false)
+      //         .getAccessToken());
     }
 
+
+    eventsedRegester =
+        Provider.of<ProjectData>(context, listen: false).getProjects();
+
+    eventsedRegester.forEach((element) {
+      eventfiltered.add(element);
+    });
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
+
+
+  void didChangeDependencies() async{
+
+
+
+    var accessToken =
+        Provider.of<AccessTokenData>(context, listen: false).accessToken;
+    var accessTokenValue = accessToken[0];
+    Map<String, String> headersEventDetails = {
+      "Content-type": "application/json",
+      "accept": "application/json",
+      "Authorization": "Bearer $accessTokenValue"
+    };
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
+  bool eventsInitialized = false;
+
+
 
   @override
   Widget build(BuildContext context) {
     List<Widget> ScatteredListtiles = [
-      Column(
-        children: [
-          SingleChildScrollView(
-            child: !eventsInitialized
-                ? Rive(
-                    artboard: _riveArtboard,
-                    alignment: Alignment.bottomCenter,
-                    useArtboardSize: true,
-                  )
-                : ListTile(
-                    trailing: Text("Projects"),
-                  ),
-          ),
-        ],
-      ),
-      DateTime.now().hour <= 17 && DateTime.now().hour >= 8
-          ? TimeTableHomeScreenListTile()
-          : ListTile(),
-      loading == false
-          ? Center(
-              child: CarouselSlider.builder(
-                  itemCount: eventfiltered.length,
-                  itemBuilder: (context, itemIndex, pageViewIndex) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushNamed('/eventdetailsdesign',
-                            arguments: ScreenArguments(
-                                id: eventfiltered[itemIndex].id,
-                                scf: scf,
-                                context: context));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                fit: BoxFit.fitHeight,
-                                image: eventfiltered.length != 0
-                                    ? CachedNetworkImageProvider(
-                                        eventfiltered[itemIndex]
-                                            .event_image
-                                            .toString())
-                                    : AssetImage("Assets/newframe.png"))),
-                        child: eventfiltered.length == 0
-                            ? Container(child: Text("No Upcoming events"))
-                            : Container(),
-                      ),
-                    );
-                  },
-                  options: CarouselOptions(
-                      autoPlay: eventfiltered.length != 0 ? true : false,
-                      enlargeCenterPage: false,
-                      autoPlayInterval: Duration(seconds: 5),
-                      height: 500,
-                      viewportFraction: 1)),
-            )
-          : Rive(
-              artboard: _riveArtboard,
-              alignment: Alignment.bottomCenter,
-              useArtboardSize: true,
-            ),
-      ListTile(
-        title: Text("Internship/Job Opportunities"),
-        trailing: Icon(Icons.work_outline),
-      ),
-    ];
 
-    return Flexible(
-      child: StaggeredGridView.countBuilder(
-        physics: NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-        crossAxisCount: 4,
-        itemCount: 4,
-        itemBuilder: (BuildContext context, int index) =>
-            AnimationConfiguration.staggeredGrid(
-          position: index,
-          columnCount: 0,
-          duration: const Duration(milliseconds: 500),
-          child: SlideAnimation(
-            horizontalOffset: 100.0,
-            child: FlipAnimation(
-              flipAxis: FlipAxis.y,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color(0xffF2EFE4),
-                  borderRadius: BorderRadius.circular(5.0),
+      Card(
+        elevation: 0,
+        child: Center(
+            child: Container(
+              child: Text("DAY 1 CONTENT CREATORS!!!"),
+                )),
+      ),
+      Card(
+        elevation: 0,
+        child: Center(
+            child: Container(
+              child: Text("DAY 2 COMEDY NIGHT!!!!!"),
+            )),
+      ),
+      Card(
+        elevation: 0,
+        child: Center(
+            child: Container(
+              child: Text("DAY 3 BAND NIGHT!!!!!!"),
+            )),
+      ),
+      Card(
+        elevation: 0,
+        child: Center(
+            child: Container(
+              child: Text("DAY 1 CONTENT CREATORS!!!"),
+            )),
+      ),
+
+
+
+
+
+
+      // Column(
+      //   children: [
+      //     SingleChildScrollView(
+      //       child: !eventsInitialized
+      //           ? Rive(
+      //               artboard: _riveArtboard,
+      //               alignment: Alignment.bottomCenter,
+      //               useArtboardSize: true,
+      //             )
+      //           : ListTile(
+      //               trailing: Text("Projects"),
+      //             ),
+      //     ),
+      //   ],
+      // ),
+      // DateTime.now().hour <= 17 && DateTime.now().hour >= 8
+      //     ? TimeTableHomeScreenListTile()
+      //     : ListTile(),
+      // loading == false
+      //     ? Center(
+      //         child: CarouselSlider.builder(
+      //             itemCount: eventfiltered.length,
+      //             itemBuilder: (context, itemIndex, pageViewIndex) {
+      //               return GestureDetector(
+      //                 onTap: () {
+      //                   Navigator.of(context).pushNamed('/eventdetailsdesign',
+      //                       arguments: ScreenArguments(
+      //                           id: eventfiltered[itemIndex].id,
+      //                           scf: scf,
+      //                           context: context));
+      //                 },
+      //                 child: Container(
+      //                   decoration: BoxDecoration(
+      //                       image: DecorationImage(
+      //                           fit: BoxFit.fitHeight,
+      //                           image: eventfiltered.length != 0
+      //                               ? CachedNetworkImageProvider(
+      //                                   eventfiltered[itemIndex]
+      //                                       .event_image
+      //                                       .toString())
+      //                               : AssetImage("Assets/newframe.png"))),
+      //                   child: eventfiltered.length == 0
+      //                       ? Container(child: Text("No Upcoming events"))
+      //                       : Container(),
+      //                 ),
+      //               );
+      //             },
+      //             options: CarouselOptions(
+      //                 autoPlay: eventfiltered.length != 0 ? true : false,
+      //                 enlargeCenterPage: false,
+      //                 autoPlayInterval: Duration(seconds: 5),
+      //                 height: 500,
+      //                 viewportFraction: 1)),
+      //       )
+      //     : Rive(
+      //         artboard: _riveArtboard,
+      //         alignment: Alignment.bottomCenter,
+      //         useArtboardSize: true,
+      //       ),
+      // ListTile(
+      //   title: Text("Internship/Job Opportunities"),
+      //   trailing: Icon(Icons.work_outline),
+      // ),
+    ];
+    int columnCount = 1;
+
+    return SingleChildScrollView(
+
+      child: Container(
+
+        child:ListView.builder(
+          physics: BouncingScrollPhysics(),
+          shrinkWrap: true,
+
+          itemCount: 3,
+          itemBuilder: (context,index){
+           return
+                AnimationConfiguration.staggeredGrid(
+
+                  position: index,
+                  duration: const Duration(milliseconds: 375),
+                  columnCount: columnCount,
+                  child: ScaleAnimation(
+                    child: FadeInAnimation(
+                        child:
+                        SingleChildScrollView(
+                          child: Container(
+
+
+
+
+                            child: Column(
+
+                              children: [
+                                DotIndicator(size: 40,
+                                    color: Colors.greenAccent),
+                                SizedBox(height:20, child: SolidLineConnector(
+                                    color: Colors.grey)),
+                                DotIndicator(size: 40,
+                                    color: Colors.black),
+                                SizedBox(height:20, width: 10,child: SolidLineConnector(
+                                    color: Colors.white)),
+                                DotIndicator(size: 40,
+                                    color: Colors.grey),
+                                SizedBox(height:60, width: 10,child: SolidLineConnector(
+                                    color: Colors.grey)),
+
+                              ],
+                            ),
+                            // child: Padding(
+                            //   padding: const EdgeInsets.all(0.0),
+                            //   child: SlideAnimation(
+                            //     child:
+                            //
+                            //         Timeline.tileBuilder(
+                            //
+                            //           controller: ScrollController(),
+                            //           theme: TimelineThemeData(
+                            //             indicatorTheme: IndicatorThemeData(
+                            //               color: index%2 ==0?Colors.white:Colors.red
+                            //             ),
+                            //             color: index%2!=0?Colors.white:Colors.red
+                            //           ),
+                            // builder: TimelineTileBuilder.fromStyle(
+                            //
+                            //
+                            //         indicatorStyle: index%2!=0?IndicatorStyle.outlined:IndicatorStyle.dot,
+                            //           contentsAlign: ContentsAlign.alternating,
+                            //           contentsBuilder: (context, index) => Padding(
+                            //             padding: const EdgeInsets.all(8.0),
+                            //             child: Text('Timeline Event $index'),
+                            //           ),
+                            //           itemCount: 5),
+                            //
+                            //     ),
+                            //   )
+                            // ),
+                          ),
+                        )
+
+                    ),
+
                 ),
-                child: Center(child: ScatteredListtiles[index]),
-              ),
-            ),
-          ),
+
+           );
+          },
         ),
-        staggeredTileBuilder: (int index) =>
-            StaggeredTile.count(2, index.isEven ? 4 : 1),
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
       ),
     );
+
+    // return Flexible(
+    //   child: StaggeredGridView.countBuilder(
+    //     physics: NeverScrollableScrollPhysics(),
+    //     padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+    //     crossAxisCount: 4,
+    //     itemCount: 4,
+    //     itemBuilder: (BuildContext context, int index) =>
+    //         AnimationConfiguration.staggeredGrid(
+    //       position: index,
+    //       columnCount: 0,
+    //       duration: const Duration(milliseconds: 500),
+    //       child: SlideAnimation(
+    //         horizontalOffset: 100.0,
+    //         child: FlipAnimation(
+    //           flipAxis: FlipAxis.y,
+    //           child: Container(
+    //             decoration: BoxDecoration(
+    //               color: Color(0xff6F6E6E),
+    //               borderRadius: BorderRadius.circular(5.0),
+    //             ),
+    //             child: Center(child: ScatteredListtiles[index]),
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //     staggeredTileBuilder: (int index) =>
+    //         StaggeredTile.count(2, index.isEven ? 4 : 1),
+    //     mainAxisSpacing: 4.0,
+    //     crossAxisSpacing: 4.0,
+    //   ),
+    // );
   }
 }
 
@@ -956,15 +1059,15 @@ class _ProjectsPageState extends State<ProjectsPage> {
       MaterialPageRoute(
         builder: (ctx) => Scaffold(
           appBar:AppBar(
-            iconTheme:IconThemeData(color:Colors.black),
+            iconTheme:IconThemeData(color:Colors.white),
             elevation:0,
-            backgroundColor: Color(0xffF2EFE4),
+            backgroundColor: Color(0xff6F6E6E),
 
 
           ),
 
           body: Container(
-            color:Color(0xffF2EFE4),
+            color:Color(0xff6F6E6E),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -1182,7 +1285,7 @@ print(data);
         child: !initialized
             ? Center(
                 child: Container(
-                    child: RiveAnimation.asset('Assets/BT_animation.riv',fit:BoxFit.contain)
+                    child: RiveAnimation.asset('Assets/ecell_logo.riv',fit:BoxFit.contain,animations: ['Animation 2'],)
                 ),
               )
             : Container(
@@ -1203,7 +1306,7 @@ print(data);
                       color: Colors.transparent,
                       height: MediaQuery.of(context).size.height / 5,
                       child: CircleAvatar(
-                        backgroundColor: Color(0xffF2EFE4),
+                        backgroundColor: Color(0xff6F6E6E),
                         radius: 40,
                         backgroundImage: CachedNetworkImageProvider(data['image'].toString(),),
 
@@ -1222,9 +1325,9 @@ print(data);
                           context: context,
                           builder: (BuildContext context) => Container(
 
-                            decoration: const BoxDecoration(color: Color(0xffF2EFE4),
+                            decoration: const BoxDecoration(color: Color(0xff6F6E6E),
 
-                              border: Border(top: BorderSide(color: Colors.black12)),
+                              border: Border(top: BorderSide(color: Colors.white12)),
                             ),
                             child: ListView(
                               shrinkWrap: true,
@@ -1263,7 +1366,7 @@ print(data);
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color:Colors.black,
+                              color:Colors.white,
                                 fontStyle: FontStyle.normal,
                                 fontFamily: 'DancingScript',
                                 fontSize: 20)),
@@ -1514,10 +1617,11 @@ class _InternshipsPageState extends State<InternshipsPage> {
   List<Project> eventsedRegester;
   List<String> imagesstring = [];
   List<Project> eventfiltered = [];
+  List<String> username = [];
 
   Response response;
   var dio = Dio();
-
+  var fltrNotification = new FlutterLocalNotificationsPlugin();
   @override
   void initState() {
     if (!Provider.of<ProjectData>(context, listen: false)
@@ -1541,11 +1645,46 @@ class _InternshipsPageState extends State<InternshipsPage> {
     });
     // TODO: implement initState
     super.initState();
+    var androidInitilize = new AndroidInitializationSettings('ecelldtu_logo2');
+    var iOSinitilize = new IOSInitializationSettings();
+    var initilizationsSettings =
+    new InitializationSettings(android: androidInitilize, iOS: iOSinitilize);
+
+    fltrNotification.initialize(initilizationsSettings,
+        onSelectNotification: notificationSelected);
   }
   @override
+  Future notificationSelected(String payload) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text("Notification : $payload"),
+      ),
+    );
+  }
+  Future _showNotification() async {
+    var scheduledTime= DateTime.now().add(Duration(seconds : 5));
+
+    var androidDetails = new AndroidNotificationDetails(
+        "Channel ID", "Desi programmer",
+        importance: Importance.max);
+    var iSODetails = new IOSNotificationDetails();
+    var generalNotificationDetails =
+    new NotificationDetails(android: androidDetails, iOS: iSODetails);
+
+    await fltrNotification.show(
+        0, "Task", "You created a Task",
+        generalNotificationDetails, payload: "Task");
+
+  }
 
 
   void didChangeDependencies() async{
+
+    var usernameData = await DbHelper.getUsernameData();
+    username = [(usernameData[0]['username'])];
+    print(username[0]);
+
     var accessToken =
         Provider.of<AccessTokenData>(context, listen: false).accessToken;
     var accessTokenValue = accessToken[0];
@@ -1558,6 +1697,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
     super.didChangeDependencies();
   }
   void _showSecondPage(BuildContext context,Project projects) {
+
 
 
 
@@ -1581,21 +1721,23 @@ class _InternshipsPageState extends State<InternshipsPage> {
       if (!await launch(urllinkfinal)) throw 'Could not launch ${urllinkfinal
       }';
     }
+    _showNotification();
     Navigator.of(context).push(
 
       MaterialPageRoute(
+
         builder: (ctx) => Scaffold(
-          backgroundColor: Color(0xffF2EFE4),
+          backgroundColor: Color(0xff6F6E6E),
           appBar:AppBar(
-            iconTheme:IconThemeData(color:Colors.black),
+            iconTheme:IconThemeData(color:Colors.white),
             elevation:0,
-            backgroundColor: Color(0xffF2EFE4),
+            backgroundColor: Color(0xff6F6E6E),
 
 
           ),
 
           body: Container(
-            color:Color(0xffF2EFE4),
+            color:Color(0xff6F6E6E),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -1624,11 +1766,11 @@ class _InternshipsPageState extends State<InternshipsPage> {
                           child: Container(
                             alignment:Alignment.topLeft,
                             child: CircleAvatar(
-                              backgroundColor: Colors.black,
+                              backgroundColor: Colors.white,
 
                               radius: 30,
                               child: CircleAvatar(
-                                  backgroundColor: Colors.black,
+                                  backgroundColor: Colors.white,
                                   radius: 28,
                                   child: Container(
 
@@ -1648,28 +1790,53 @@ class _InternshipsPageState extends State<InternshipsPage> {
                         child: Text(
                           projects.name,
                           style: TextStyle(
-                              color:Colors.black,
+                              color:Colors.white,
                               fontSize: 19,
                               fontFamily: 'DancingScript'),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () async {
+                username[0]==projects.owner?Row(
+                  children: [
+                    IconButton(
+                      onPressed: () async {
 
 
 
-                          await http.delete(
-                            Uri.https('dtuotgbeta.azurewebsites.net', 'projects/delete/$projects.id'),
+                      /*  var scf = Provider.of<SCF>(context, listen: false).get();
+                        await scf.deleteproject(projects.id, context);
 
-                          );
-                          Navigator.of(context).pop();
+                        Navigator.of(context).pushReplacementNamed('/loading',arguments: ScreenArguments(id: 1));*/
+
 
 
                       },
-                        color: Colors.black,
-                        icon:Icon(Icons.delete),
+                      color: Colors.white,
+                      icon:Icon(Icons.auto_fix_normal),
 
-                      )
+                    ),
+
+                    IconButton(
+                            onPressed: () async {
+
+
+
+                              var scf = Provider.of<SCF>(context, listen: false).get();
+                              await scf.deleteproject(projects.id, context);
+                              scf.fetchListOfProjects(context);
+
+
+                              Navigator.of(context).pushReplacementNamed('/homeScreen',arguments: ScreenArguments(id: 1));
+
+
+
+
+                            },
+                            color: Colors.white,
+                            icon:Icon(Icons.delete),
+
+                          ),
+                  ],
+                ):Container()
 
 
                     ],
@@ -1699,7 +1866,7 @@ class _InternshipsPageState extends State<InternshipsPage> {
 
                                   ),
                                 ),
-                                Text(projects.description
+                                SelectableText(projects.description
                                     .toString()
                                     .substring(
                                     0,
@@ -1962,7 +2129,7 @@ owner:eventfiltered[index].owner.toString(),name:eventfiltered[index].name.toStr
                                         title: Text(
                                           eventfiltered[index].name,
                                           style: TextStyle(
-                                            color:Colors.black,
+                                            color:Colors.white,
                                               fontSize: 19,
                                               fontFamily: 'DancingScript'),
                                         )),
@@ -2038,15 +2205,15 @@ class _EventsPageState extends State<EventsPage> {
       MaterialPageRoute(
         builder: (ctx) => Scaffold(
           appBar:AppBar(
-            iconTheme:IconThemeData(color:Colors.black),
+            iconTheme:IconThemeData(color:Colors.white),
             elevation:0,
-            backgroundColor: Color(0xffF2EFE4),
+            backgroundColor: Color(0xff6F6E6E),
 
 
           ),
 
           body: Container(
-            color:Color(0xffF2EFE4),
+            color:Color(0xff6F6E6E),
             child: Column(
               children: [
                 Hero(
@@ -2074,11 +2241,11 @@ class _EventsPageState extends State<EventsPage> {
                       child: Container(
                         alignment:Alignment.topLeft,
                         child: CircleAvatar(
-                          backgroundColor: Colors.black,
+                          backgroundColor: Colors.white,
 
                           radius: 30,
                           child: CircleAvatar(
-                              backgroundColor: Colors.black,
+                              backgroundColor: Colors.white,
                               radius: 28,
                               child: Container(
 
@@ -2095,9 +2262,47 @@ class _EventsPageState extends State<EventsPage> {
                     Text(
                       projects.name,
                       style: TextStyle(
-                          color:Colors.black,
+                          color:Colors.white,
                           fontSize: 19,
                           fontFamily: 'DancingScript'),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+
+
+                        /*  var scf = Provider.of<SCF>(context, listen: false).get();
+                        await scf.deleteproject(projects.id, context);
+
+                        Navigator.of(context).pushReplacementNamed('/loading',arguments: ScreenArguments(id: 1));*/
+
+
+
+                      },
+                      color: Colors.white,
+                      icon:Icon(Icons.auto_fix_normal),
+
+                    ),
+
+                    IconButton(
+                      onPressed: () async {
+
+
+
+                        var scf = Provider.of<SCF>(context, listen: false).get();
+                        await scf.deleteevent(projects.id, context);
+                        scf.fetchListOfEvents(context);
+
+
+
+                        Navigator.of(context).pushReplacementNamed('/homeScreen',arguments: ScreenArguments(id: 1,));
+
+
+
+
+                      },
+                      color: Colors.white,
+                      icon:Icon(Icons.delete),
+
                     ),
                   ],
                 ),
@@ -2296,7 +2501,7 @@ class _EventsPageState extends State<EventsPage> {
                                         title: Text(
                                           eventfiltered[index].name,
                                           style: TextStyle(
-                                              color:Colors.black,
+                                              color:Colors.white,
                                               fontSize: 19,
                                               fontFamily: 'DancingScript'),
                                         )),
@@ -2520,49 +2725,43 @@ class _AddingPageState extends State<AddingPage> {
           "Update via this feature to let people know the details of any projects in DTU, looking for Volunteers"),
     ];
     List<Card> AddingButtons = [
-      Card(
-
-        elevation: 0,
+      Card(color: Color(0xff6F6E6E),elevation: 0,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Creating"),duration: Duration(milliseconds: 1000),));
 
-              //  Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => CustomPage()));
-              Navigator.of(context).pushNamed('AddEventScreen', arguments: 1);
             },
             leading: Icon(
               FontAwesomeIcons.star,
             ),
-            title: Text("Add to Events"),
+            title: Text("Add to Events",style: TextStyle(color: Colors.white),),
             subtitle: Text(
-                "Update via this feature to let people know the details of any event"),
+                "Update via this feature to let people know the details of any event",style: TextStyle(color: Colors.white),),
           ),
         ),
       ),
       Card(
+        color: Color(0xff6F6E6E),
+
+
         elevation: 0,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Creating"),duration: Duration(milliseconds: 1000),));
-              //  Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => CustomPage()));
-              Navigator.of(context).pushNamed('AddEventScreen', arguments: 2);
-            },
+                 },
             leading: Icon(
               Icons.update,
             ),
-            title: Text("Add to Stories"),
+            title: Text("Add to Story",style: TextStyle(color: Colors.white),),
             subtitle: Text(
-                "Update about various public events and achievements your society "),
+                "Update about various public events and achievements your society ",style: TextStyle(color: Colors.white),),
           ),
         ),
       ),
       Card(
+        color: Color(0xff6F6E6E),
         elevation: 0,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -2571,14 +2770,14 @@ class _AddingPageState extends State<AddingPage> {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Creating"),duration: Duration(milliseconds: 1000),));
               //  Navigator.push(context,
               //     MaterialPageRoute(builder: (context) => CustomPage()));
-              Navigator.of(context).pushNamed('AddEventScreen', arguments: 3);
+              Navigator.of(context).pushNamed('AddEventScreen', arguments: ScreenArguments(id: 3));
             },
             leading: Icon(
               Icons.work_outline,
             ),
-            title: Text("Add to internships/jobs"),
+            title: Text("Add to internships/jobs",style: TextStyle(color: Colors.white),),
             subtitle: Text(
-                "Update via this feature to let people know the details about various internships/Jobs/Projects related opportunities for students"),
+                "Update via this feature to let people know the details about various internships/Jobs/Projects related opportunities for students",style: TextStyle(color: Colors.white),),
           ),
         ),
       ),
@@ -2613,11 +2812,12 @@ class _AddingPageState extends State<AddingPage> {
         itemCount: 3,
         itemBuilder: (BuildContext context, int index) {
           return AnimationConfiguration.staggeredList(
+
             position: index,
             duration: const Duration(milliseconds: 350),
             child: SlideAnimation(
               verticalOffset: 100.0,
-              child: FlipAnimation(child: AddingButtons[index]),
+              child: SlideAnimation(child: FlipAnimation(child: AddingButtons[index])),
             ),
           );
         },
@@ -2805,12 +3005,7 @@ _plusAnimation.start();
     print(ownersEvents.length);
 
     return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("Assets/newframe.png"),
-          fit: BoxFit.cover,
-        ),
-      ),
+
       alignment: Alignment.center,
       child: !initialized
           ? Center(
@@ -2825,56 +3020,7 @@ _plusAnimation.start();
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (_adding_to_app_pressed == false &&
-                    _events_pressed == false &&
-                    _project_pressed == false &&
-                    _internship_pressed == false)
-                  Container(
-                    height: MediaQuery.of(context).size.height / 5,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: ownersEvents.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            GestureDetector(
-                          onTap: () {
-                            j = 0;
-                            j++;
-
-                            Navigator.of(context).pushNamed(
-                              StoryViewScreen.routeName,
-                              arguments: ScreenArguments(
-                                  id: !storycontinues ? index : args.id,
-                                  eves: !storycontinues
-                                      ? ownersEvents[index]
-                                      : ownersEvents[args.id],
-                                  ownerlist:
-                                      ownersEvents), // sheduledToday[index].event_image,
-                            );
-                          },
-                          child: Container(
-                            margin: EdgeInsets.all(3),
-                            child: CircleAvatar(
-                              backgroundColor: Colors.purple,
-                              radius: 30,
-                              child: CircleAvatar(
-                                backgroundColor: Color(0xffF2EFE4),
-                                radius: 27,
-                                backgroundImage: storiesFiltered.isNotEmpty
-                                    ? CachedNetworkImageProvider(
-                                        ownersEvents[index][0].owner_image,
-                                        scale: 0.5)
-                                    : AssetImage("Assets/newframe.png"),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                else if (_adding_to_app_pressed == true)
+                if (_adding_to_app_pressed == true)
                   Container(
                     height: 200,
                   ),

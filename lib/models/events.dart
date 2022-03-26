@@ -7,6 +7,7 @@ class Event with ChangeNotifier {
   String owner;
   DateTime dateime;
   String eventType;
+  String description;
 
   String eventImageUri;
 
@@ -16,6 +17,7 @@ class Event with ChangeNotifier {
   Event(
       {this.dateime,
       this.eventType,
+        this.description,
       this.owner_image,
       this.event_image,
       this.id,

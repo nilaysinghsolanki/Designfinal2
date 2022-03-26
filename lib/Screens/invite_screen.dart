@@ -81,7 +81,7 @@ class _InviteScreenState extends State<InviteScreen> {
                       ? CircularProgressIndicator(
 
                         )
-                      : Hero(tag: "inviteherotag",child: CircleAvatar(backgroundColor:Colors.transparent,child:Icon(Icons.face_retouching_natural,color: Colors.black, ), )))
+                      : Hero(tag: "inviteherotag",child: CircleAvatar(backgroundColor:Colors.transparent,child:Icon(Icons.face_retouching_natural,color: Colors.white, ), )))
             ],
           ),
         ),

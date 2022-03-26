@@ -80,7 +80,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 Padding(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Color(0xffF2EFE4),
+                      color: Color(0xff6F6E6E),
                       borderRadius: BorderRadius.circular(25.0)
                     ),
 
@@ -93,7 +93,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       cursorHeight: 35,
                       decoration: InputDecoration(
 
-                        fillColor: Color(0xffF2EFE4),
+                        fillColor: Color(0xff6F6E6E),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                           BorderSide( width: 4),
@@ -106,7 +106,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                         labelText: "email id ",
                         labelStyle:
-                        TextStyle( fontSize: 20,color: Colors.black),
+                        TextStyle( fontSize: 20,color: Colors.white),
                       ),
 
                     ),
@@ -119,7 +119,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
                 child: Container(
                   decoration: BoxDecoration(
-                      color: Color(0xffF2EFE4),
+                      color: Color(0xff6F6E6E),
                       borderRadius: BorderRadius.circular(25.0)
                   ),
                   child: TextField(
@@ -131,7 +131,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     cursorHeight: 35,
                     decoration: InputDecoration(
 
-                      fillColor: Color(0xffF2EFE4),
+                      fillColor: Color(0xff6F6E6E),
                       focusedBorder: OutlineInputBorder(
                         borderSide:
                         BorderSide( width: 4),
@@ -145,7 +145,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       labelText: "Username",
 
                       labelStyle:
-                      TextStyle( fontSize: 20,color: Colors.black),
+                      TextStyle( fontSize: 20,color: Colors.white),
                     ),
 
                   ),
@@ -157,7 +157,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 Padding(
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Color(0xffF2EFE4),
+                        color: Color(0xff6F6E6E),
                         borderRadius: BorderRadius.circular(25.0)
                     ),
                     child: TextField(
@@ -170,7 +170,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       cursorHeight: 35,
                       decoration: InputDecoration(
 
-                        fillColor: Color(0xffF2EFE4),
+                        fillColor: Color(0xff6F6E6E),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                           BorderSide( width: 4),
@@ -185,7 +185,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
 
                         labelStyle:
-                        TextStyle( fontSize: 20,color: Colors.black),
+                        TextStyle( fontSize: 20,color: Colors.white),
                       ),
 
                     ),
@@ -198,7 +198,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 Padding(
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Color(0xffF2EFE4),
+                        color: Color(0xff6F6E6E),
                         borderRadius: BorderRadius.circular(25.0)
                     ),
 
@@ -213,7 +213,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       cursorHeight: 35,
                       decoration: InputDecoration(
 
-                        fillColor: Color(0xffF2EFE4),
+                        fillColor: Color(0xff6F6E6E),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                           BorderSide( width: 4),
@@ -228,7 +228,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
 
                         labelStyle:
-                        TextStyle( fontSize: 20,color: Colors.black),
+                        TextStyle( fontSize: 20,color: Colors.white),
                       ),
 
                     ),
@@ -243,7 +243,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 Padding(
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Color(0xffF2EFE4),
+                        color: Color(0xff6F6E6E),
                         borderRadius: BorderRadius.circular(25.0)
                     ),
                     child: TextField(
@@ -254,7 +254,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       cursorHeight: 35,
                       decoration: InputDecoration(
 
-                        fillColor: Color(0xffF2EFE4),
+                        fillColor: Color(0xff6F6E6E),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                           BorderSide( width: 4),
@@ -269,7 +269,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
 
                         labelStyle:
-                        TextStyle( fontSize: 20,color: Colors.black),
+                        TextStyle( fontSize: 20,color: Colors.white),
                       ),
 
                     ),
@@ -326,7 +326,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     child: Text(
                       obscureText ? 'show password' : 'hide password',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
 
                           ),
                     )),
@@ -346,7 +346,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
                         signingUp ? 'OR LOG IN' : 'OR SIGN UP',
                         style:TextStyle(
-                          color:Colors.black,
+                          color:Colors.white,
                         ),
 
                       )),
@@ -355,7 +355,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 padding: EdgeInsets.only(left: 22, top: 0, bottom: 20, right: 22),
                 child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black),
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
 
                       enableFeedback: true,
                       // elevation: MaterialStateProperty.all(0),XXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -377,8 +377,8 @@ class _AuthScreenState extends State<AuthScreen> {
                             "Content-type": "application/json"
                           };
                           Map mapjsonnlogin = {
-                            "username": "${username.text}",
-                            "password": "${pswd.text}"
+                            "username": "admin",
+                            "password": "admin123"
                           };
                           http.Response response = await http.post(
                               Uri.https(

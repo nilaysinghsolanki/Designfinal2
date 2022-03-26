@@ -337,7 +337,7 @@ class _PatchProfileScreenState extends State<PatchProfileScreen> {
                         color: Colors.transparent,
                         height: MediaQuery.of(context).size.height / 5,
                         child: CircleAvatar(
-                          backgroundColor: Color(0xffF2EFE4),
+                          backgroundColor: Color(0xff6F6E6E),
                           radius: 40,
                           backgroundImage: CachedNetworkImageProvider(data['image'].toString(),),
 
